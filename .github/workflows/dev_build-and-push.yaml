@@ -17,14 +17,17 @@ jobs:
       - name: Determine Version
         id: versioning
         run: |
-          if [[ "${{ github.event.pull_request.labels.*.name }}" == "breaking-changes" ]]; then
+          labels=$(echo "${{ toJson(github.event.pull_request.labels) }}" | jq -r '.[].name')
+          bump=""
+
+          if echo "$labels" | grep -q 'breaking-changes'; then
             bump="major"
-          elif [[ "${{ github.event.pull_request.labels.*.name }}" == "feature" ]]; then
+          elif echo "$labels" | grep -q 'feature'; then
             bump="minor"
-          elif [[ "${{ github.event.pull_request.labels.*.name }}" == "bugfix" ]]; then
+          elif echo "$labels" | grep -q 'bugfix'; then
             bump="patch"
           else
-            echo "No version bump found"
+            echo "No valid label found for version bump."
             exit 1
           fi
 
