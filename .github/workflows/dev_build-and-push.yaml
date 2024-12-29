@@ -14,30 +14,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Debug Labels
-        run: |
-          echo "::group::Pull Request Labels raw"
-          echo "${{ github.event.pull_request.labels }}"
-          echo "::endgroup::"
-      
-          echo "::group::Pull Request Labels via toJson"
-          echo "${{ toJson(github.event.pull_request.labels) }}"
-          echo "::endgroup::"
-    
       - name: Determine Version
         id: versioning
         run: |
-          labels=$(echo "${{ toJson(github.event.pull_request.labels) }}" | jq -r '.[].name')
+          raw_labels='${{ github.event.pull_request.labels }}'
+          echo "Raw labels: $raw_labels"
+      
+          labels=$(echo "$raw_labels" | jq -r '.[].name' 2>/dev/null || true)
+      
+          if [ -z "$labels" ]; then
+            echo "No labels or not JSON parseable."
+            exit 1
+          fi
+      
           bump=""
-
-          for label in $labels; do
-            if [[ "$label" == "breaking-changes" ]]; then
-              bump="major"
-            elif [[ "$label" == "feature" ]]; then
-              bump="minor"
-            elif [[ "$label" == "bugfix" ]]; then
-              bump="patch"
-            fi
+            for label in $labels; do
+              case "$label" in
+                "breaking-changes") bump="major" ;;
+                "feature")          bump="minor" ;;
+                "bugfix")           bump="patch" ;;
+            esac
           done
 
           if [[ -z "$bump" ]]; then
