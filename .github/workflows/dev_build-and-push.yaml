@@ -17,11 +17,11 @@ jobs:
       - name: Determine Version
         id: versioning
         run: |
-          if [[ "${{ github.event.pull_request.labels.*.name }}" == *breaking-changes* ]]; then
+          if [[ "${{ github.event.pull_request.labels.*.name }}" == "breaking-changes" ]]; then
             bump="major"
-          elif [[ "${{ github.event.pull_request.labels.*.name }}" == *feature* ]]; then
+          elif [[ "${{ github.event.pull_request.labels.*.name }}" == "feature" ]]; then
             bump="minor"
-          elif [[ "${{ github.event.pull_request.labels.*.name }}" == *bugfix* ]]; then
+          elif [[ "${{ github.event.pull_request.labels.*.name }}" == "bugfix" ]]; then
             bump="patch"
           else
             echo "No version bump found"
