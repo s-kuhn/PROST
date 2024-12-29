@@ -56,7 +56,7 @@ jobs:
           echo "next_version=$next_version" >> $GITHUB_ENV
 
       - name: Update Maven Version
-        run: mvn versions:set -DnewVersion=$next_version
+        run: mvn versions:set -DnewVersion=$next_version -f backend/pom.xml
 
       - name: Commit and Push Updated pom.xml
         run: |
