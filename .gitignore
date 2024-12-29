@@ -34,4 +34,5 @@ build/
 
 .env
 .env.prod
-.env.test
+.env.dev
+docker/data/

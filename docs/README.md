@@ -48,3 +48,14 @@ also aimed at associations that want to keep track of their members' debts and c
 - Start the database in the [docker-compose.yaml](../docker/docker-compose.yaml)
 - Load maven project
 - Run the application
+
+## Versioning and Branch-Strategy
+Branch-conventions:
+  - `main`: Contains stabile version for production.
+  - `dev`: Contains features and bugfixes used for testing.
+Versioning strategie:
+  - `MAJOR.MINOR.PATCH`:
+    - **PATCH** is incremented for bugfixes.
+    - **MINOR** is incremented for new features without breaking changes.
+    - **MAJOR** is incremented manually for breaking changes.
+  - Automatic incrementation via labels on PRs into `dev`.

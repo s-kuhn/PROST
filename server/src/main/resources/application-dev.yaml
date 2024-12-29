@@ -1,9 +1,16 @@
 # Not in use yet
 spring:
   profiles:
-    test
+    active: dev
+
+  config:
+    import: optional:file:.env.dev[.properties]
 
   datasource:
     url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
+
+logging:
+  level:
+    edu.swa.gwl: DEBUG

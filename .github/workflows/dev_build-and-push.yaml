@@ -1,0 +1,62 @@
+name: Build and Tag Docker Image
+
+on:
+  pull_request:
+    branches:
+      - dev
+    types: [closed]
+
+jobs:
+  build-and-tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Determine Version
+        id: versioning
+        run: |
+          if [[ "${{ github.event.pull_request.labels.*.name }}" == *breaking-changes* ]]; then
+            bump="major"
+          elif [[ "${{ github.event.pull_request.labels.*.name }}" == *feature* ]]; then
+            bump="minor"
+          elif [[ "${{ github.event.pull_request.labels.*.name }}" == *bugfix* ]]; then
+            bump="patch"
+          else
+            echo "No version bump found"
+            exit 1
+          fi
+
+          current_version=$(git describe --tags --abbrev=0 || echo "0.0.0")
+          next_version=$(npx semver $current_version -i $bump)
+
+          echo "next_version=$next_version" >> $GITHUB_ENV
+
+      - name: Update Maven Version
+        run: mvn versions:set -DnewVersion=$next_version
+
+      - name: Commit and Push Updated pom.xml
+        run: |
+          git fetch origin dev
+          git checkout dev
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add pom.xml
+          git commit -m "Set version to $next_version for PR #${{ github.event.pull_request.number }}"
+          git push origin dev
+
+      - name: Login to GitHub container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/prost_backend_dev:${{ env.next_version }}
