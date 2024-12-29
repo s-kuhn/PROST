@@ -30,13 +30,17 @@ jobs:
           labels=$(echo "${{ toJson(github.event.pull_request.labels) }}" | jq -r '.[].name')
           bump=""
 
-          if echo "$labels" | grep -q 'breaking-changes'; then
-            bump="major"
-          elif echo "$labels" | grep -q 'feature'; then
-            bump="minor"
-          elif echo "$labels" | grep -q 'bugfix'; then
-            bump="patch"
-          else
+          for label in $labels; do
+            if [[ "$label" == "breaking-changes" ]]; then
+              bump="major"
+            elif [[ "$label" == "feature" ]]; then
+              bump="minor"
+            elif [[ "$label" == "bugfix" ]]; then
+              bump="patch"
+            fi
+          done
+
+          if [[ -z "$bump" ]]; then
             echo "No valid label found for version bump."
             exit 1
           fi

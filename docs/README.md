@@ -59,3 +59,7 @@ Versioning strategie:
     - **MINOR** is incremented for new features without breaking changes.
     - **MAJOR** is incremented manually for breaking changes.
   - Automatic incrementation via labels on PRs into `dev`.
+  - Only one of the following labels can be set at a time:
+    - `breaking-changes`
+    - `feature`
+    - `bugfix`
