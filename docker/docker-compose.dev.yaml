@@ -14,7 +14,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
   backend:
-    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/prost_backend:${VERSION_TAG}
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/prost_backend_dev:${VERSION_TAG}
     container_name: dev_prost_backend
     environment:
       - SPRING_PROFILES_ACTIVE=dev
