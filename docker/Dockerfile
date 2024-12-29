@@ -2,7 +2,7 @@ FROM maven:3.9.9-eclipse-temurin-23 AS build
 WORKDIR /build
 COPY server/pom.xml .
 COPY server/src/ src/
-RUN ["mvn", "--no-transfer-progress", "package"]
+RUN ["mvn", "-ntp -DskipTests", "clean package"]
 
 FROM eclipse-temurin:23-jre
 WORKDIR /app
