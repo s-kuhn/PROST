@@ -14,13 +14,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up GitHub CLI
+        uses: actions/setup-gh-cli@v2
+
+      - name: Authenticate GH
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
       - name: Determine Version
         id: versioning
         run: |
-          raw_labels='${{ github.event.pull_request.labels }}'
-          echo "Raw labels: $raw_labels"
+          pr_number=${{ github.event.pull_request.number }}
       
-          labels=$(echo "$raw_labels" | jq -r '.[].name' 2>/dev/null || true)
+          labels_json=$(gh api \
+          repos/${{ github.repository }}/issues/$pr_number/labels \
+          --jq '.')
+      
+          echo "Labels JSON from GH API: $labels_json"
+      
+          labels=$(echo "$labels_json" | jq -r '.[].name')
       
           if [ -z "$labels" ]; then
             echo "No labels or not JSON parseable."
