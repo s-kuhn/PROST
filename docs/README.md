@@ -63,3 +63,13 @@ Versioning strategie:
     - `breaking-changes`
     - `feature`
     - `bugfix`
+
+## How to start dev env local
+```bash
+docker compose --env-file .env.dev -p "dev_prost" -f "./docker/docker-compose.dev.yaml" up
+```
+
+## How to start prod env local
+```bash
+docker compose --env-file .env.prod -p "prod_prost" -f "./docker/docker-compose.prod.yaml" up
+```

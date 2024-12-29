@@ -1,8 +1,5 @@
 # Not in use yet
 spring:
-  profiles:
-    active: prod
-
   config:
     import: optional:file:.env.prod[.properties]
 
