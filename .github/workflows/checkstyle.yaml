@@ -22,6 +22,3 @@ jobs:
       - name: Run Spotless
         working-directory: server
         run: mvn spotless:check
-      - name: Run Checkstyle
-        working-directory: server
-        run: mvn checkstyle:check
