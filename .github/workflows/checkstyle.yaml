@@ -13,7 +13,7 @@ jobs:
           java-version: 23
           distribution: 'temurin'
       - name: Install dependencies
-        run: mvn install
+        run: mvn -f server/pom.xml install
       - name: Run Spotless
         run: mvn spotless:check
       - name: Run Checkstyle
