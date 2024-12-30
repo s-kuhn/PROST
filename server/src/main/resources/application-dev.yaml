@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: prost-dev
+
+logging:
+  level:
+    edu.swa.gwl: DEBUG
