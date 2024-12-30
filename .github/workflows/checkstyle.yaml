@@ -1,6 +1,10 @@
 name: Checkstyle
 on:
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 jobs:
   checkstyle:
@@ -13,7 +17,7 @@ jobs:
           java-version: 23
           distribution: 'temurin'
       - name: Install dependencies
-        run: mvn -f server/pom.xml install
+        run: mvn -f server/pom.xml install -ntp -DskipTests
       - name: Run Spotless
         run: mvn spotless:check
       - name: Run Checkstyle
