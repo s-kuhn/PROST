@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 @Entity
 @Table(name = "test")
 @RequiredArgsConstructor
-
 public class Test {
 
   @Id
@@ -20,5 +19,4 @@ public class Test {
   private UUID id;
 
   private String name;
-
 }

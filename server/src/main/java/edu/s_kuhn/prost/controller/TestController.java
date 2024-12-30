@@ -17,8 +17,10 @@ public class TestController {
 
   @GetMapping("/test/{id}")
   public String test(@PathVariable UUID id) {
-    Test test = testRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Test not found"));
+    Test test =
+        testRepository
+            .findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Test not found"));
     return test.getName();
   }
 }
