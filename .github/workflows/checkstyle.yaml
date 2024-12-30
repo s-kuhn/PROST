@@ -16,8 +16,10 @@ jobs:
         with:
           java-version: 23
           distribution: 'temurin'
+      - name: Change to server directory
+        run: cd server
       - name: Install dependencies
-        run: mvn -f server/pom.xml install -ntp -DskipTests
+        run: mvn install -ntp -DskipTests
       - name: Run Spotless
         run: mvn spotless:check
       - name: Run Checkstyle
