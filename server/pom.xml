@@ -15,7 +15,7 @@
   <artifactId>prost</artifactId>
   <version>0.0.1</version>
   <name>prost</name>
-  <description>Manage Provisioning for volunteer associations</description>
+  <description>Manage provisioning for volunteer associations</description>
   <url>https://github.com/s-kuhn/PROST</url>
 
   <developers>
