@@ -1,12 +1,6 @@
-# Not in use yet
 spring:
-  config:
-    import: optional:file:.env.dev[.properties]
-
-  datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+  application:
+    name: prost-dev
 
 logging:
   level:
