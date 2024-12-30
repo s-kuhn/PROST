@@ -33,6 +33,11 @@ jobs:
           labels_json=$(gh api \
           repos/${{ github.repository }}/issues/$pr_number/labels \
           --jq '.')
+          
+          if [ "$labels_json" == "[]" ]; then
+            echo "Failed to fetch labels for PR #$pr_number."
+            exit 1
+          fi
       
           echo "Labels JSON from GH API: $labels_json"
       
@@ -61,7 +66,7 @@ jobs:
           echo "next_version=$next_version" >> $GITHUB_ENV
 
       - name: Update Maven Version
-        run: mvn -ntp versions:set -DnewVersion=$next_version -f server/pom.xml
+        run: mvn -ntp versions:set -DnewVersion=$next_version -f server/pom.xml || exit 1
 
       - name: Commit and Push Updated pom.xml
         run: |
