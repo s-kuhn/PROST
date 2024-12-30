@@ -34,4 +34,4 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/prost_backend:${{ env.latest_version }}
-            ghcr.io/${{ github.repository_owner }}/prost_backend:$latest
+            ghcr.io/${{ github.repository_owner }}/prost_backend:latest
