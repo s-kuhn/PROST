@@ -1,0 +1,8 @@
+# Not in use yet
+spring:
+  application:
+    name: prost-prod
+
+logging:
+  level:
+    edu.swa.gwl: INFO

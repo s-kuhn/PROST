@@ -1,0 +1,44 @@
+services:
+  database:
+    image: 'postgres:latest'
+    container_name: prod_prost_database
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    restart: unless-stopped
+    networks:
+      - database
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  backend:
+    image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/prost_backend:${VERSION_TAG}
+    container_name: prod_prost_backend
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "80:8080"
+    networks:
+      - database
+      - webproxy
+
+networks:
+  database:
+  webproxy:
+    external: true
+
+volumes:
+  postgres-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./data/db-prod
+      o: bind
