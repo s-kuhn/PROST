@@ -27,7 +27,7 @@ also aimed at associations that want to keep track of their members' debts and c
   - Kotlin
   - Spring Boot Modulith & WebFlux
   - Maven
-  - Auth via [Supertokens](https://supertokens.com/docs/emailpassword/quickstart/backend-setup)
+  - Auth via [Keycloak](https://www.keycloak.org/)
   - OpenAPI
 - Frontend:
   - tbd (Angular, Vue, Flutter)
