@@ -25,7 +25,7 @@ also aimed at associations that want to keep track of their members' debts and c
 ## Technologies:
 - Backend:
   - Kotlin
-  - Spring Boot Modulith & WebFlux
+  - Spring Boot Modulith & WebMVC
   - Maven
   - Auth via [Keycloak](https://www.keycloak.org/)
   - OpenAPI
