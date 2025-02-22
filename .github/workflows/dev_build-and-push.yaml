@@ -25,7 +25,10 @@ jobs:
         id: versioning
         run: |
           git fetch --tags
-          current_version=$(git tag -l | sort -V | tail -n 1 || echo "0.0.0")
+          current_version=$(git tag -l | sort -V | tail -n 1)
+          if [ -z "$current_version" ]; then
+            current_version="0.0.0"
+          fi
           echo "Current version: $current_version"
           
           pr_number=${{ github.event.pull_request.number }}
