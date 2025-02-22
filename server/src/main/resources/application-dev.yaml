@@ -2,6 +2,16 @@ spring:
   application:
     name: prost-dev
 
+  security:
+    oauth2:
+      provider:
+        keycloak:
+          issuer-uri: http://keycloak:8080/realms/prost
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak:8080/realms/prost
+          jwk-set-uri: http://keycloak:8080/realms/prost/protocol/openid-connect/certs
+
 logging:
   level:
     edu.swa.gwl: DEBUG

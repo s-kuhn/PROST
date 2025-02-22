@@ -1,7 +1,16 @@
-# Not in use yet
 spring:
   application:
     name: prost-prod
+
+  security:
+    oauth2:
+      provider:
+        keycloak:
+          issuer-uri: http://keycloak:8080/realms/prost
+      resourceserver:
+        jwt:
+          issuer-uri: http://keycloak:8080/realms/prost
+          jwk-set-uri: http://keycloak:8080/realms/prost/protocol/openid-connect/certs
 
 logging:
   level:
