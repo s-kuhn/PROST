@@ -12,6 +12,17 @@ spring:
 
   security:
     oauth2:
+      client: # Only till dedicated frontend
+        registration:
+          keycloak:
+            client-id: ${KEYCLOAK_CLIENT_ID}
+            client-secret: ${KEYCLOAK_CLIENT_SECRET}
+            scope: openid, profile, roles
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/${KEYCLOAK_CLIENT_ID}"
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/prost
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8080/realms/prost
@@ -22,14 +33,11 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
 
-server:
-  port: 8081
-
 jwt:
   auth:
     converter:
-      resource_id: prost-rest-api
-      principal_attribute: preferred_username
+      principle_attribute: preferred_username
+      resource_id: ${KEYCLOAK_CLIENT_ID}
 
 logging:
   level:
