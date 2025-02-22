@@ -1,4 +1,4 @@
-package edu.s_kuhn.prost
+package de.s_kuhn.prost
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
