@@ -14,6 +14,40 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+  keycloak:
+    build:
+      context: .
+      dockerfile: Dockerfile.keycloak
+    container_name: prod_prost_keycloak
+    command: start --import-realm
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_DB: postgres
+      KC_DB_URL_HOST: database
+      KC_DB_URL_DATABASE: ${POSTGRES_DB}
+      KC_DB_URL_PORT: ${POSTGRES_PORT}
+      KC_DB_USERNAME: ${POSTGRES_USER}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      - database
+    networks:
+      - database
+      - webproxy
+    ports:
+      - "8081:8080"
+    restart: unless-stopped
+
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - prost-vnet
+    restart: unless-stopped
+
   backend:
     image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/prost_backend:${VERSION_TAG}
     container_name: prod_prost_backend

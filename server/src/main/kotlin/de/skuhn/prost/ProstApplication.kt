@@ -1,4 +1,4 @@
-package edu.s_kuhn.prost
+package de.skuhn.prost
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class ProstApplication
 
 fun main(args: Array<String>) {
-	runApplication<ProstApplication>(*args)
+    runApplication<ProstApplication>(*args)
 }

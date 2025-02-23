@@ -36,3 +36,5 @@ build/
 .env.prod
 .env.dev
 docker/data/
+docker/runconfig/
+keycloak/

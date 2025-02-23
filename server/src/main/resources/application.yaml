@@ -10,7 +10,35 @@ spring:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
 
+  security:
+    oauth2:
+      client: # Only till dedicated frontend
+        registration:
+          keycloak:
+            client-id: ${KEYCLOAK_CLIENT_ID}
+            client-secret: ${KEYCLOAK_CLIENT_SECRET}
+            scope: openid, profile, roles
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/${KEYCLOAK_CLIENT_ID}"
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/prost
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/prost
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
   flyway:
     enabled: true
     locations: classpath:db/migration
     baseline-on-migrate: true
+
+jwt:
+  auth:
+    converter:
+      principle_attribute: preferred_username
+      resource_id: ${KEYCLOAK_CLIENT_ID}
+
+logging:
+  level:
+    edu.swa.gwl: DEBUG

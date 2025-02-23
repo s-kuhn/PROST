@@ -25,9 +25,9 @@ also aimed at associations that want to keep track of their members' debts and c
 ## Technologies:
 - Backend:
   - Kotlin
-  - Spring Boot Modulith & WebFlux
+  - Spring Boot Modulith & WebMVC
   - Maven
-  - Auth via [Supertokens](https://supertokens.com/docs/emailpassword/quickstart/backend-setup)
+  - Auth via [Keycloak](https://www.keycloak.org/)
   - OpenAPI
 - Frontend:
   - tbd (Angular, Vue, Flutter)
