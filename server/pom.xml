@@ -8,7 +8,7 @@
         <version>3.4.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>de.s-kuhn</groupId>
+    <groupId>de.skuhn</groupId>
     <artifactId>prost</artifactId>
     <version>0.0.0</version>
     <name>prost</name>

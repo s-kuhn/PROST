@@ -1,4 +1,4 @@
-package de.s_kuhn.prost.config
+package de.skuhn.prost.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

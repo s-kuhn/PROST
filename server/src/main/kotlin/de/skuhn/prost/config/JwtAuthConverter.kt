@@ -1,4 +1,4 @@
-package de.s_kuhn.prost.config
+package de.skuhn.prost.config
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.core.convert.converter.Converter
