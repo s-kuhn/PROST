@@ -1,4 +1,4 @@
-package de.s_kuhn.prost.config
+package de.skuhn.prost.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -11,9 +11,8 @@ import org.springframework.security.web.SecurityFilterChain
 @EnableWebSecurity
 @EnableMethodSecurity
 class SecurityConfig(
-    private val jwtAuthConverter: JwtAuthConverter
+    private val jwtAuthConverter: JwtAuthConverter,
 ) {
-
     @Bean
     fun securityFilterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
         httpSecurity

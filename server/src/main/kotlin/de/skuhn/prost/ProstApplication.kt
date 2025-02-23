@@ -1,4 +1,4 @@
-package de.s_kuhn.prost
+package de.skuhn.prost
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
