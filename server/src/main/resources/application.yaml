@@ -22,10 +22,10 @@ spring:
             redirect-uri: "{baseUrl}/login/oauth2/code/${KEYCLOAK_CLIENT_ID}"
         provider:
           keycloak:
-            issuer-uri: http://localhost:8080/realms/prost
+            issuer-uri: http://localhost:8081/realms/prost
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8080/realms/prost
+          issuer-uri: http://localhost:8081/realms/prost
           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 
   flyway:
