@@ -7,11 +7,11 @@ spring:
       client:
         provider:
           keycloak:
-            issuer-uri: http://keycloak:8080/realms/prost
+            issuer-uri: http://keycloak:8081/realms/prost
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:8080/realms/prost
-          jwk-set-uri: http://keycloak:8080/realms/prost/protocol/openid-connect/certs
+          issuer-uri: http://keycloak:8081/realms/prost
+          jwk-set-uri: http://keycloak:8081/realms/prost/protocol/openid-connect/certs
 
 logging:
   level:

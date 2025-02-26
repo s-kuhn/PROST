@@ -19,33 +19,38 @@ services:
       context: .
       dockerfile: Dockerfile.keycloak
     container_name: prod_prost_keycloak
-    command: start --import-realm
+    command: start
     environment:
-      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
+      KC_SPI_SCRIPT_UPLOAD_ENABLED: true
       KC_DB: postgres
-      KC_DB_URL_HOST: database
+      KC_DB_URL_HOST: ${POSTGRES_HOST}
       KC_DB_URL_DATABASE: ${POSTGRES_DB}
       KC_DB_URL_PORT: ${POSTGRES_PORT}
       KC_DB_USERNAME: ${POSTGRES_USER}
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KC_HTTP_PORT: 8081
+      KEYCLOAK_IMPORT: /opt/keycloak/imports/prost-realm-export.json
+    volumes:
+      - ./keycloak/realm:/opt/keycloak/data/import
     depends_on:
       - database
     networks:
       - database
       - webproxy
     ports:
-      - "8081:8080"
+      - "8081:8081"
     restart: unless-stopped
 
   mailhog:
     image: mailhog/mailhog
-    container_name: mailhog
+    container_name: prod_mailhog
     ports:
       - "1025:1025"
       - "8025:8025"
     networks:
-      - prost-vnet
+      - webproxy
     restart: unless-stopped
 
   backend:
@@ -58,16 +63,20 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID}
     ports:
       - "80:8080"
     networks:
       - database
       - webproxy
+    depends_on:
+      - database
+      - keycloak
+    restart: unless-stopped
 
 networks:
   database:
   webproxy:
-    external: true
 
 volumes:
   postgres-data:
