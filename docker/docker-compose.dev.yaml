@@ -1,21 +1,59 @@
+x-database-env: &database_env
+  POSTGRES_USER: ${POSTGRES_USER}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  POSTGRES_DB: ${POSTGRES_DB}
+
+x-db-healthcheck: &db_healthcheck
+  test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
+  interval: 5s
+  timeout: 5s
+  retries: 5
+
+x-keycloak-env: &keycloak_env
+  # Admin account
+  KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
+  KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
+  # Database connection
+  KC_DB: postgres
+  KC_DB_URL_HOST: database
+  KC_DB_URL_DATABASE: ${POSTGRES_DB}
+  KC_DB_URL_PORT: ${POSTGRES_PORT}
+  KC_DB_USERNAME: ${POSTGRES_USER}
+  KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+  # Keycloak settings
+  KC_SPI_SCRIPT_UPLOAD_ENABLED: true
+  KC_HTTP_PORT: 8081
+  KC_HOSTNAME: ${KEYCLOAK_HOSTNAME}
+  KC_HOSTNAME_STRICT: "false"
+  # Variables for the event listener provider
+  BACKEND_HOSTNAME: ${BACKEND_HOSTNAME}
+  KEYCLOAK_HOSTNAME: ${KEYCLOAK_HOSTNAME}
+  KEYCLOAK_EVENT_LISTENER_SECRET: ${KEYCLOAK_EVENT_LISTENER_SECRET}
+
+x-backend-env: &backend_env
+  # Database connection
+  POSTGRES_HOST: ${POSTGRES_HOST}
+  POSTGRES_PORT: ${POSTGRES_PORT}
+  POSTGRES_DB: ${POSTGRES_DB}
+  POSTGRES_USER: ${POSTGRES_USER}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  # Keycloak settings
+  KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+  KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
+  KEYCLOAK_HOSTNAME: ${KEYCLOAK_HOSTNAME}
+
 services:
   database:
     image: 'postgres:latest'
     container_name: dev_prost_database
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      <<: *database_env
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     networks:
-      - database
+      - prost-vnet
     restart: unless-stopped
-    healthcheck:
-      test: [ 'CMD', 'pg_isready', '-U', '${POSTGRES_USER}', '-d', '${POSTGRES_DB}' ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+    healthcheck: *db_healthcheck
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
@@ -24,26 +62,16 @@ services:
       context: .
       dockerfile: Dockerfile.keycloak
     container_name: dev_prost_keycloak
-    command: start-dev --verbose
+    command: start-dev --verbose --import-realm --file=/opt/keycloak/data/import/prost-realm.json
     environment:
-      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
-      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
-      KC_SPI_SCRIPT_UPLOAD_ENABLED: true
-      KC_DB: postgres
-      KC_DB_URL_HOST: ${POSTGRES_HOST}
-      KC_DB_URL_DATABASE: ${POSTGRES_DB}
-      KC_DB_URL_PORT: ${POSTGRES_PORT}
-      KC_DB_USERNAME: ${POSTGRES_USER}
-      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
-      KC_HTTP_PORT: 8081
-      KEYCLOAK_IMPORT: /opt/keycloak/imports/prost-realm-export.json
+      <<: *keycloak_env
     volumes:
       - ./keycloak/realm:/opt/keycloak/data/import
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     networks:
-      - database
-      - webproxy
+      - prost-vnet
     ports:
       - "8081:8081"
     restart: unless-stopped
@@ -55,33 +83,30 @@ services:
       - "1025:1025"
       - "8025:8025"
     networks:
-      - webproxy
+      - prost-vnet
     restart: unless-stopped
 
   backend:
     image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/prost_backend_dev:${VERSION_TAG}
     container_name: dev_prost_backend
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
-      - POSTGRES_HOST=${POSTGRES_HOST}
-      - POSTGRES_PORT=${POSTGRES_PORT}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - KEYCLOAK_CLIENT_ID=${KEYCLOAK_CLIENT_ID}
+      SPRING_PROFILES_ACTIVE: dev
+      <<: *backend_env
+    extra_hosts:
+      - "${KEYCLOAK_HOSTNAME}:host-gateway"
     ports:
       - "8080:8080"
     networks:
-      - database
-      - webproxy
+      - prost-vnet
     depends_on:
-      - database
-      - keycloak
+      database:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
     restart: unless-stopped
 
 networks:
-  database:
-  webproxy:
+  prost-vnet:
 
 volumes:
   postgres-data:
