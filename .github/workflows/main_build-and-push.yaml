@@ -79,6 +79,7 @@ jobs:
           port: 22
           debug: true
           script: |
+            export PATH=$PATH:/snap/bin
             cd ${{ secrets.DEPLOY_SERVER_PATH }}
             docker image prune -a --force
             cat > .env <<EOF
