@@ -67,6 +67,7 @@ jobs:
           target: ${{ secrets.DEPLOY_SERVER_PATH }}
           strip_components: 1
           overwrite: true
+          debug: true
 
       - name: Deploy to server via SSH
         uses: appleboy/ssh-action@v1.2.2
