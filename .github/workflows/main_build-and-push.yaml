@@ -56,6 +56,12 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Dump TARGET_PATH for debugging
+        env:
+          TARGET_PATH: ${{ secrets.DEPLOY_SERVER_PATH }}
+        run: |
+          echo ">> TARGET_PATH is: '$TARGET_PATH'"
+
       - name: Copy Compose Files to Server
         uses: appleboy/scp-action@v1.0.0
         with:
