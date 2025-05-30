@@ -95,18 +95,27 @@ services:
     extra_hosts:
       - "${KEYCLOAK_HOSTNAME}:host-gateway"
     ports:
-      - "8080:8080"
+      - "443:8080"
     networks:
       - prost-vnet
+      - frontend
     depends_on:
       database:
         condition: service_healthy
       keycloak:
         condition: service_started
     restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.prost-dev-backend.tls=true
+      - traefik.http.routers.prost-dev-backend.tls.certresolver=cloudflare
+      - traefik.http.routers.prost-dev-backend.rule=Host(`dev.prost.home.s-kuhn.de`)
+      - traefik.http.routers.prost-dev-backend.entrypoints=websecure
 
 networks:
   prost-vnet:
+  frontend:
+    external: true
 
 volumes:
   postgres-data:

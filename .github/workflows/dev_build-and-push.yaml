@@ -111,10 +111,12 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/prost_backend_dev:${{ env.next_version }}
-  deploy:
+
+  deploy-dev:
     needs: build-and-tag
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged == true }}
+
     steps:
       - name: Copy Compose Files to Server
         uses: appleboy/scp-action@master
@@ -135,6 +137,7 @@ jobs:
           port: 22
           script: |
             cd ${{ secrets.DEPLOY_SERVER_PATH }}
+            docker image prune -a --force
             cat > .env <<EOF
             POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
@@ -149,5 +152,5 @@ jobs:
             BACKEND_HOSTNAME=${{ secrets.BACKEND_HOSTNAME }}
             KEYCLOAK_EVENT_LISTENER_SECRET=${{ secrets.KEYCLOAK_EVENT_LISTENER_SECRET }}
             EOF
-            docker-compose pull
-            docker-compose up -d
+            docker compose pull
+            docker compose up -d --remove-orphans

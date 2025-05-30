@@ -46,3 +46,46 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository_owner }}/prost_backend:${{ env.latest_version }}
             ghcr.io/${{ github.repository_owner }}/prost_backend:latest
+
+  deploy-prod:
+    needs: sync-main
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.merged == true }}
+
+    steps:
+      - name: Copy Compose Files to Server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.DEPLOY_SERVER_HOST }}
+          username: ${{ secrets.DEPLOY_SERVER_USER }}
+          key: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
+          port: 22
+          source: "docker/docker-compose.prod.yaml"
+          target: ${{ secrets.DEPLOY_SERVER_PATH }}
+
+      - name: Deploy to server via SSH
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.DEPLOY_SERVER_HOST }}
+          username: ${{ secrets.DEPLOY_SERVER_USER }}
+          key: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
+          port: 22
+          script: |
+            cd ${{ secrets.DEPLOY_SERVER_PATH }}
+            docker image prune -a --force
+            cat > .env <<EOF
+            POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+            POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}
+            POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
+            KEYCLOAK_CLIENT_ID=${{ secrets.KEYCLOAK_CLIENT_ID }}
+            KEYCLOAK_CLIENT_SECRET=${{ secrets.KEYCLOAK_CLIENT_SECRET }}
+            KC_BOOTSTRAP_ADMIN_USERNAME=${{ secrets.KC_BOOTSTRAP_ADMIN_USERNAME }}
+            KC_BOOTSTRAP_ADMIN_PASSWORD=${{ secrets.KC_BOOTSTRAP_ADMIN_PASSWORD }}
+            KEYCLOAK_HOSTNAME=${{ secrets.KEYCLOAK_HOSTNAME }}
+            BACKEND_HOSTNAME=${{ secrets.BACKEND_HOSTNAME }}
+            KEYCLOAK_EVENT_LISTENER_SECRET=${{ secrets.KEYCLOAK_EVENT_LISTENER_SECRET }}
+            EOF
+            docker compose pull
+            docker compose up -d --remove-orphans
