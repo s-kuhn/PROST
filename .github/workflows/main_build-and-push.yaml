@@ -71,11 +71,9 @@ jobs:
           overwrite: true
 
       - name: Log in to the Container registry
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }}
+        run: |
+          export CR_PAT=${{ secrets.GHCR_TOKEN }}
+          echo $CR_PAT | docker login ghcr.io -u ${{ secrets.GH_REPOSITORY_OWNER }} --password-stdin
 
       - name: Deploy to server via SSH
         uses: appleboy/ssh-action@v1.2.2
