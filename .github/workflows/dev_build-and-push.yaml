@@ -10,6 +10,8 @@ jobs:
   build-and-tag:
     environment: dev
     runs-on: ubuntu-latest
+    outputs:
+      next_version: ${{ steps.versioning.outputs.next_version }}
 
     steps:
       - name: Checkout code
@@ -68,6 +70,7 @@ jobs:
           next_version=$(npx semver $current_version -i $bump)
           echo "Next version: $next_version"
           echo "next_version=$next_version" >> $GITHUB_ENV
+          echo "next_version=$next_version" >> $GITHUB_OUTPUT
 
       - name: Update Maven Version
         run: mvn -ntp versions:set -DnewVersion=$next_version -f server/pom.xml || exit 1
@@ -118,6 +121,8 @@ jobs:
     needs: build-and-tag
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged == true }}
+    env:
+      VERSION_TAG: ${{ needs.build-and-tag.outputs.next_version }}
 
     steps:
       - name: Checkout repo
@@ -146,6 +151,8 @@ jobs:
             cd ${{ secrets.DEPLOY_SERVER_PATH }}
             docker image prune -a --force
             cat > .env <<EOF
+            VERSION_TAG=$VERSION_TAG
+            GH_REPOSITORY_OWNER=${{ secrets.GH_REPOSITORY_OWNER }}
             POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
             POSTGRES_DB=${{ secrets.POSTGRES_DB }}
@@ -159,5 +166,5 @@ jobs:
             BACKEND_HOSTNAME=${{ secrets.BACKEND_HOSTNAME }}
             KEYCLOAK_EVENT_LISTENER_SECRET=${{ secrets.KEYCLOAK_EVENT_LISTENER_SECRET }}
             EOF
-            docker compose pull
-            docker compose up -d --remove-orphans
+            docker compose -f docker-compose.prod.yaml --env-file .env pull
+            docker compose -f docker-compose.prod.yaml --env-file .env up -d --remove-orphans
