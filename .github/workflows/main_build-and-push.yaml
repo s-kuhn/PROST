@@ -54,7 +54,7 @@ jobs:
 
     steps:
       - name: Copy Compose Files to Server
-        uses: appleboy/scp-action@master
+        uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
           username: ${{ secrets.DEPLOY_SERVER_USER }}
