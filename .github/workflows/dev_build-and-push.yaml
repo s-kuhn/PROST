@@ -8,6 +8,7 @@ on:
 
 jobs:
   build-and-tag:
+    environment: dev
     runs-on: ubuntu-latest
 
     steps:
@@ -113,6 +114,7 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/prost_backend_dev:${{ env.next_version }}
 
   deploy-dev:
+    environment: dev
     needs: build-and-tag
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged == true }}
@@ -128,7 +130,7 @@ jobs:
           username: ${{ secrets.DEPLOY_SERVER_USER }}
           key: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
           port: 22
-          source: "docker/docker-compose.dev.yaml"
+          source: docker/docker-compose.dev.yaml
           target: ${{ secrets.DEPLOY_SERVER_PATH }}
           strip_components: 1
           overwrite: true

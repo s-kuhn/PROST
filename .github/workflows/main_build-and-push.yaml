@@ -8,6 +8,7 @@ on:
 
 jobs:
   sync-main:
+    environment: prod
     runs-on: ubuntu-latest
 
     steps:
@@ -48,6 +49,7 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/prost_backend:latest
 
   deploy-prod:
+    environment: prod
     needs: sync-main
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged == true }}
