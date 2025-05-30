@@ -56,7 +56,7 @@ Branch-conventions:
 
 - `main`: Contains stabile version for production.
 - `dev`: Contains features and bugfixes used for testing.
-  Versioning strategie:
+  Versioning strategies:
 - `MAJOR.MINOR.PATCH`:
     - **PATCH** is incremented for bugfixes.
     - **MINOR** is incremented for new features without breaking changes.
