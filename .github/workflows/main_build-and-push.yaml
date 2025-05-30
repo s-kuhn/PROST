@@ -64,7 +64,7 @@ jobs:
           key: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
           port: 22
           source: docker/docker-compose.prod.yaml
-          target: /home/sascha/prost-prod/ # ${{ secrets.DEPLOY_SERVER_PATH }}
+          target: ${{ secrets.DEPLOY_SERVER_PATH }}
           strip_components: 1
           overwrite: true
           debug: true
