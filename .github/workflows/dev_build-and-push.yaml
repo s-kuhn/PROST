@@ -122,7 +122,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Copy Compose Files to Server
-        uses: appleboy/scp-action@v0.1.5
+        uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
           username: ${{ secrets.DEPLOY_SERVER_USER }}
@@ -130,9 +130,11 @@ jobs:
           port: 22
           source: "docker/docker-compose.dev.yaml"
           target: ${{ secrets.DEPLOY_SERVER_PATH }}
+          strip_components: 1
+          overwrite: true
       
       - name: Deploy to server via SSH
-        uses: appleboy/ssh-action@v0.1.7
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
           username: ${{ secrets.DEPLOY_SERVER_USER }}
