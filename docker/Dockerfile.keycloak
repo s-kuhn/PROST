@@ -1,4 +1,5 @@
 FROM quay.io/keycloak/keycloak:26.1.2
-COPY --chmod=644 ./keycloak /opt/keycloak/providers
-COPY ./keycloak/prost-realm-export.json /opt/keycloak/data/import/realm-export.json
+
+COPY --chmod=644 ./keycloak/providers /opt/keycloak/providers
+
 RUN /opt/keycloak/bin/kc.sh build

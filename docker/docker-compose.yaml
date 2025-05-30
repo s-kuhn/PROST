@@ -1,21 +1,47 @@
+x-database-env: &database_env
+  POSTGRES_USER: ${POSTGRES_USER}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  POSTGRES_DB: ${POSTGRES_DB}
+
+x-db-healthcheck: &db_healthcheck
+  test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
+  interval: 5s
+  timeout: 5s
+  retries: 5
+
+x-keycloak-env: &keycloak_env
+  # Admin account
+  KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
+  KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
+  # Database connection
+  KC_DB: postgres
+  KC_DB_URL_HOST: database
+  KC_DB_URL_DATABASE: ${POSTGRES_DB}
+  KC_DB_URL_PORT: ${POSTGRES_PORT}
+  KC_DB_USERNAME: ${POSTGRES_USER}
+  KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+  # Keycloak settings
+  KC_SPI_SCRIPT_UPLOAD_ENABLED: true
+  KC_HTTP_PORT: 8081
+  KC_HOSTNAME: ${KEYCLOAK_HOSTNAME}
+  KC_HOSTNAME_STRICT: "false"
+  # Variables for the event listener provider
+  BACKEND_HOSTNAME: ${BACKEND_HOSTNAME}
+  KEYCLOAK_HOSTNAME: ${KEYCLOAK_HOSTNAME}
+  KEYCLOAK_EVENT_LISTENER_SECRET: ${KEYCLOAK_EVENT_LISTENER_SECRET}
+
 services:
   database:
     image: postgres:latest
     container_name: prost_database
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      <<: *database_env
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     networks:
       - prost-vnet
     restart: unless-stopped
-    healthcheck:
-      test: [ 'CMD', 'pg_isready', '-U', '${POSTGRES_USER}', '-d', '${POSTGRES_DB}' ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+    healthcheck: *db_healthcheck
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
@@ -24,22 +50,18 @@ services:
       context: .
       dockerfile: Dockerfile.keycloak
     container_name: keycloak
-    command: start-dev --import-realm
+    command: start-dev --verbose --import-realm --file=/opt/keycloak/data/import/prost-realm.json
     environment:
-      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
-      KC_DB: postgres
-      KC_DB_URL_HOST: database
-      KC_DB_URL_DATABASE: ${POSTGRES_DB}
-      KC_DB_URL_PORT: ${POSTGRES_PORT}
-      KC_DB_USERNAME: ${POSTGRES_USER}
-      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      <<: *keycloak_env
+    volumes:
+      - ./keycloak/realm:/opt/keycloak/data/import
     depends_on:
-      - database
-    ports:
-      - "8081:8080"
+      database:
+        condition: service_healthy
     networks:
       - prost-vnet
+    ports:
+      - "8081:8081"
     restart: unless-stopped
 
   mailhog:
