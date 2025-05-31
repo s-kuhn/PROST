@@ -72,16 +72,16 @@ services:
         condition: service_healthy
     networks:
       - prost-vnet
-    ports:
-      - "8081:8081"
+#    ports:
+#      - "8081:8081"
     restart: unless-stopped
 
   mailhog:
     image: mailhog/mailhog
     container_name: dev_mailhog
-    ports:
-      - "1025:1025"
-      - "8025:8025"
+#    ports:
+#      - "1025:1025"
+#      - "8025:8025"
     networks:
       - prost-vnet
     restart: unless-stopped
@@ -94,8 +94,8 @@ services:
       <<: *backend_env
     extra_hosts:
       - "${KEYCLOAK_HOSTNAME}:host-gateway"
-    ports:
-      - "443:8080"
+#    ports:
+#      - "443:8080"
     networks:
       - prost-vnet
       - frontend

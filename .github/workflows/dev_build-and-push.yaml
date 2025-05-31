@@ -135,7 +135,7 @@ jobs:
           username: ${{ secrets.DEPLOY_SERVER_USER }}
           key: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
           port: 22
-          source: docker/docker-compose.dev.yaml
+          source: "docker/docker-compose.dev.yaml, docker/keycloak/realm/"
           target: ${{ secrets.DEPLOY_SERVER_PATH }}
           strip_components: 1
           overwrite: true
@@ -144,7 +144,7 @@ jobs:
         run: |
           export CR_PAT=${{ secrets.GHCR_TOKEN }}
           echo $CR_PAT | docker login ghcr.io -u ${{ secrets.GH_REPOSITORY_OWNER }} --password-stdin
-      
+
       - name: Deploy to server via SSH
         uses: appleboy/ssh-action@v1.2.2
         with:
@@ -172,5 +172,5 @@ jobs:
             BACKEND_HOSTNAME=${{ secrets.BACKEND_HOSTNAME }}
             KEYCLOAK_EVENT_LISTENER_SECRET=${{ secrets.KEYCLOAK_EVENT_LISTENER_SECRET }}
             EOF
-            docker compose -f docker-compose.prod.yaml --env-file .env pull
-            docker compose -f docker-compose.prod.yaml --env-file .env up -d --remove-orphans
+            docker compose -f docker-compose.dev.yaml --env-file .env pull
+            docker compose -f docker-compose.dev.yaml --env-file .env up -d --remove-orphans
