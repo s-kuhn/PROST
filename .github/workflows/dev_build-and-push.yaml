@@ -135,7 +135,7 @@ jobs:
           username: ${{ secrets.DEPLOY_SERVER_USER }}
           key: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
           port: 22
-          source: "docker/docker-compose.dev.yaml, docker/keycloak/realm/"
+          source: "docker/docker-compose.dev.yaml, Dockerfile.keycloak, docker/keycloak/realm/"
           target: ${{ secrets.DEPLOY_SERVER_PATH }}
           strip_components: 1
           overwrite: true
