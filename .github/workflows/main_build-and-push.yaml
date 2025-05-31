@@ -58,14 +58,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Copy Compose Files to Server
+      - name: Copy needed Files to Server
         uses: appleboy/scp-action@v1.0.0
         with:
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
           username: ${{ secrets.DEPLOY_SERVER_USER }}
           key: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
           port: 22
-          source: "docker/docker-compose.prod.yaml, Dockerfile.keycloak, docker/keycloak/realm/"
+          source: "docker/docker-compose.prod.yaml, docker/Dockerfile.keycloak, docker/keycloak/realm/"
           target: ${{ secrets.DEPLOY_SERVER_PATH }}
           strip_components: 1
           overwrite: true
