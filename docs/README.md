@@ -68,7 +68,7 @@ Branch-conventions:
     - `bugfix`
 
 ## How to start dev env local
-
+TODO: update
 ```bash
 docker compose --env-file .env.dev -p "dev_prost" -f "./docker/docker-compose.dev.yaml" up
 ```
