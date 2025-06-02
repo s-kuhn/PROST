@@ -31,7 +31,7 @@ class CustomEventListenerProvider : EventListenerProvider {
 
     private fun sendAuthenticatedRequest() {
         val token = getAccessToken() ?: return
-        logger.info { "Access Token: $token" }
+        logger.info { "Access Token: ${token.take(4)}****${token.takeLast(4)}" }
 
         val backendHostname = System.getenv("BACKEND_HOSTNAME") ?: "backend"
         val request = HttpRequest.newBuilder()
