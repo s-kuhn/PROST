@@ -58,6 +58,17 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Copy Docker Files to Server
+        uses: appleboy/scp-action@v1.0.0
+        with:
+          host: ${{ secrets.DEPLOY_SERVER_HOST }}
+          username: ${{ secrets.DEPLOY_SERVER_USER }}
+          key: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
+          port: 22
+          source: "docker/docker-compose.prod.yaml, docker/Dockerfile.keycloak, docker/keycloak/"
+          target: ${{ secrets.DEPLOY_SERVER_PATH }}/docker
+          strip_components: 1
+          overwrite: true
       - name: Copy needed Files to Server
         uses: appleboy/scp-action@v1.0.0
         with:
@@ -65,8 +76,8 @@ jobs:
           username: ${{ secrets.DEPLOY_SERVER_USER }}
           key: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
           port: 22
-          source: "docker/docker-compose.prod.yaml, docker/Dockerfile.keycloak, docker/keycloak/realm/"
-          target: ${{ secrets.DEPLOY_SERVER_PATH }}
+          source: "/keycloak-webhook-event-listener/"
+          target: ${{ secrets.DEPLOY_SERVER_PATH }}/keycloak-webhook-event-listener
           strip_components: 1
           overwrite: true
 
@@ -104,4 +115,4 @@ jobs:
             KEYCLOAK_EVENT_LISTENER_SECRET=${{ secrets.KEYCLOAK_EVENT_LISTENER_SECRET }}
             EOF
             docker compose -f docker-compose.prod.yaml --env-file .env pull
-            docker compose -f docker-compose.prod.yaml --env-file .env up -d --remove-orphans
+            docker compose -f docker-compose.prod.yaml --env-file .env up --build -d --remove-orphans
