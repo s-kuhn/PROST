@@ -171,7 +171,7 @@ jobs:
             export PATH=$PATH:/snap/bin
             cd ${{ secrets.DEPLOY_SERVER_PATH }}
             docker image prune -a --force
-            cat > .env <<EOF
+            cat > docker/.env <<EOF
             VERSION_TAG=$VERSION_TAG
             GH_REPOSITORY_OWNER=${{ secrets.GH_REPOSITORY_OWNER }}
             POSTGRES_USER=${{ secrets.POSTGRES_USER }}
@@ -187,5 +187,5 @@ jobs:
             BACKEND_HOSTNAME=${{ secrets.BACKEND_HOSTNAME }}
             KEYCLOAK_EVENT_LISTENER_SECRET=${{ secrets.KEYCLOAK_EVENT_LISTENER_SECRET }}
             EOF
-            docker compose -f docker-compose.dev.yaml --env-file .env pull
-            docker compose -f docker-compose.dev.yaml --env-file .env up --build -d --remove-orphans
+            docker compose -f docker/docker-compose.dev.yaml --env-file .env pull
+            docker compose -f docker/docker-compose.dev.yaml --env-file .env up --build -d --remove-orphans

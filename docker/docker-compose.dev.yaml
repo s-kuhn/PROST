@@ -44,7 +44,7 @@ x-backend-env: &backend_env
 
 services:
   database:
-    image: 'postgres:latest'
+    image: 'postgres:17.5'
     container_name: dev_prost_database
     environment:
       <<: *database_env
