@@ -8,7 +8,7 @@
         <relativePath>../pom.xml/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>de.s_kuhn.keycloak</groupId>
+    <groupId>de.skuhn.keycloak</groupId>
     <artifactId>webhook-event-listener</artifactId>
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
