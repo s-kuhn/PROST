@@ -44,7 +44,7 @@ x-backend-env: &backend_env
 
 services:
   database:
-    image: 'postgres:latest'
+    image: 'postgres:17.5'
     container_name: dev_prost_database
     environment:
       <<: *database_env
@@ -61,7 +61,7 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile.keycloak
-    image: ghcr.io/${GH_REPOSITORY_OWNER}/prost_keycloak:latest
+    image: ghcr.io/${GH_REPOSITORY_OWNER}/prost_keycloak:0.0.1
     container_name: dev_prost_keycloak
     command: start-dev --verbose --import-realm --file=/opt/keycloak/data/import/prost-realm.json
     environment:
