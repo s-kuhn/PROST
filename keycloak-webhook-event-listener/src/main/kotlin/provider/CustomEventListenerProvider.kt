@@ -52,8 +52,8 @@ class CustomEventListenerProvider : EventListenerProvider {
 
     private fun getAccessToken(): String? {
         val clientId = "event-listener"
-        val clientSecret = System.getenv("KEYCLOAK_EVENT_LISTENER_SECRET") ?: "aoMZPaak7P7jjUwJ4ja3Zqjys2ZTqd7y"
-        val tokenHostname = System.getenv("KEYCLOAK_HOSTNAME") ?: "dev-keycloak.local"
+        val clientSecret = System.getenv("KEYCLOAK_EVENT_LISTENER_SECRET")
+        val tokenHostname = System.getenv("KEYCLOAK_HOSTNAME")
         val tokenUrl = "http://$tokenHostname:8081/realms/prost/protocol/openid-connect/token" // Keycloak calls itself
 
         val requestBody = "grant_type=client_credentials&client_id=$clientId&client_secret=$clientSecret"
