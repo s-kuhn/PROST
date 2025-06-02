@@ -6,6 +6,10 @@ on:
       - dev
     types: [closed]
 
+concurrency:
+  group: "dev-build-and-tag-${{ github.event.pull_request.number || github.ref }}"
+  cancel-in-progress: true
+
 jobs:
   build-and-tag:
     environment: dev
