@@ -80,7 +80,7 @@ jobs:
           username: ${{ secrets.DEPLOY_SERVER_USER }}
           key: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
           port: 22
-          source: "/keycloak-webhook-event-listener/"
+          source: "keycloak-webhook-event-listener/"
           target: ${{ secrets.DEPLOY_SERVER_PATH }}/keycloak-webhook-event-listener
           strip_components: 1
           overwrite: true
