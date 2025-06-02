@@ -97,7 +97,6 @@ jobs:
           username: ${{ secrets.DEPLOY_SERVER_USER }}
           key: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
           port: 22
-          debug: true
           script: |
             export PATH=$PATH:/snap/bin
             cd ${{ secrets.DEPLOY_SERVER_PATH }}
