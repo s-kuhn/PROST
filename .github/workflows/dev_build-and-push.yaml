@@ -187,4 +187,4 @@ jobs:
             BACKEND_HOSTNAME=${{ secrets.BACKEND_HOSTNAME }}
             KEYCLOAK_EVENT_LISTENER_SECRET=${{ secrets.KEYCLOAK_EVENT_LISTENER_SECRET }}
             EOF
-            docker compose -f docker/docker-compose.dev.yaml --env-file .env -p "dev_prost" up --build -d --remove-orphans
+            docker compose -f docker/docker-compose.dev.yaml -p "dev_prost" --env-file docker/.env up --build -d --remove-orphans
