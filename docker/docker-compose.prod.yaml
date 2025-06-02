@@ -4,7 +4,7 @@ x-database-env: &database_env
   POSTGRES_DB: ${POSTGRES_DB}
 
 x-db-healthcheck: &db_healthcheck
-  test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
+  test: [ "CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}" ]
   interval: 5s
   timeout: 5s
   retries: 5
@@ -22,7 +22,6 @@ x-keycloak-env: &keycloak_env
   KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
   # Keycloak settings
   KC_SPI_SCRIPT_UPLOAD_ENABLED: true
-  KC_HTTP_PORT: 8081
   KC_HOSTNAME: ${KEYCLOAK_HOSTNAME}
   KC_HOSTNAME_STRICT: "false"
   # Variables for the event listener provider
@@ -48,8 +47,8 @@ services:
     container_name: prod_prost_database
     environment:
       <<: *database_env
-#    ports:
-#      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    #    ports:
+    #      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     networks:
       - prost-vnet
     restart: unless-stopped
@@ -63,7 +62,14 @@ services:
       dockerfile: docker/Dockerfile.keycloak
     image: ghcr.io/${GH_REPOSITORY_OWNER}/prost_keycloak:0.0.1
     container_name: prod_prost_keycloak
-    command: start --import-realm --file=/opt/keycloak/data/import/prost-realm.json
+    command: >
+      start
+        --http-port=8081
+        --http-enabled=true
+        --hostname=keycloak
+        --hostname-strict=false
+        --import-realm 
+        --file=/opt/keycloak/data/import/prost-realm.json
     environment:
       <<: *keycloak_env
     volumes:
@@ -73,16 +79,16 @@ services:
         condition: service_healthy
     networks:
       - prost-vnet
-#    ports:
-#      - "8081:8081"
+    #    ports:
+    #      - "8081:8081"
     restart: unless-stopped
 
   mailhog:
     image: mailhog/mailhog
     container_name: prod_mailhog
-#    ports:
-#      - "1025:1025"
-#      - "8025:8025"
+    #    ports:
+    #      - "1025:1025"
+    #      - "8025:8025"
     networks:
       - prost-vnet
     restart: unless-stopped
@@ -93,10 +99,8 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       <<: *backend_env
-    extra_hosts:
-      - "${KEYCLOAK_HOSTNAME}:host-gateway"
-#    ports:
-#      - "443:8080"
+    #    ports:
+    #      - "443:8080"
     networks:
       - prost-vnet
       - frontend

@@ -97,7 +97,6 @@ jobs:
           username: ${{ secrets.DEPLOY_SERVER_USER }}
           key: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
           port: 22
-          debug: true
           script: |
             export PATH=$PATH:/snap/bin
             cd ${{ secrets.DEPLOY_SERVER_PATH }}
@@ -118,4 +117,4 @@ jobs:
             BACKEND_HOSTNAME=${{ secrets.BACKEND_HOSTNAME }}
             KEYCLOAK_EVENT_LISTENER_SECRET=${{ secrets.KEYCLOAK_EVENT_LISTENER_SECRET }}
             EOF
-            docker compose -f docker/docker-compose.prod.yaml --env-file .env up --build -d --remove-orphans
+            docker compose -f docker/docker-compose.prod.yaml -p "prod_prost" --env-file .env up --build -d --remove-orphans
