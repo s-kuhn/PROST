@@ -45,7 +45,7 @@ class CustomEventListenerProvider : EventListenerProvider {
                 logger.info { "Successfully called /test3, Response Code: ${response.statusCode()}" }
             }
             .exceptionally { error ->
-                logger.info { "Error calling /test3: ${error.message}, ${request.uri().host}" }
+                logger.error { "Error calling /test3: ${error.message}, ${request.uri().host}" }
                 null
             }
     }
