@@ -6,6 +6,10 @@ on:
       - synchronize
       - reopened
 
+concurrency:
+  group: "checkstyle-${{ github.event.pull_request.number || github.ref }}"
+  cancel-in-progress: true
+
 jobs:
   checkstyle:
     runs-on: ubuntu-latest
