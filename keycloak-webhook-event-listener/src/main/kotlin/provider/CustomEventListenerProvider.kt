@@ -32,20 +32,20 @@ class CustomEventListenerProvider : EventListenerProvider {
     private fun sendAuthenticatedRequest() {
         val token = getAccessToken() ?: return
         logger.info { "Access Token: ${token.take(4)}****${token.takeLast(4)}" }
-
-        val backendHostname = System.getenv("BACKEND_HOSTNAME") ?: "backend"
+        val backendHostname = System.getenv("BACKEND_HOSTNAME") ?: "backend" // TODO: exception
+        val fullUrl = "http://$backendHostname:8080/prost/test3"
         val request = HttpRequest.newBuilder()
-            .uri(URI.create("http://$backendHostname:8080/test3"))
+            .uri(URI.create(fullUrl))
             .header("Authorization", "Bearer $token")
             .GET()
             .build()
 
         httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenAccept { response ->
-                logger.info { "Successfully called /test3, Response Code: ${response.statusCode()}" }
+                logger.info { "Successfully called $fullUrl, Response Code: ${response.statusCode()}" }
             }
             .exceptionally { error ->
-                logger.error { "Error calling /test3: ${error.message}, ${request.uri().host}" }
+                logger.error { "Error calling $fullUrl: ${error.message}" }
                 null
             }
     }

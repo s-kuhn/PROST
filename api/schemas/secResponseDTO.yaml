@@ -1,0 +1,5 @@
+type: object
+description: sec response
+properties:
+  data:
+    type: string
