@@ -155,8 +155,8 @@
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
+                <artifactId>spring-boot-maven-plugin</artifactId>                <configuration>
+                    <mainClass>de.skuhn.prost.ProstApplicationKt</mainClass>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -220,6 +220,8 @@
                                 <dateLibrary>java8</dateLibrary>
                                 <serializationLibrary>jackson</serializationLibrary>
                                 <reactive>false</reactive>
+                                <skipDefaultInterface>true</skipDefaultInterface>
+                                <interfaceOnly>true</interfaceOnly>
                             </configOptions>
                             <importMappings>
                                 <DateTime>java.time.ZonedDateTime</DateTime>
