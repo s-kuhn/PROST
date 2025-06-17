@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 
 @Component
-class SecRestDelegate() : SecApiDelegate {
+class SecRestDelegate : SecApiDelegate {
     private val logger = KotlinLogging.logger {}
 
     override fun getSec(): ResponseEntity<SecResponseDTO> {

@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 
 @Component
-class TestRestDelegate() : TestApiDelegate {
+class TestRestDelegate : TestApiDelegate {
     private val logger = KotlinLogging.logger {}
 
     override fun getTest(): ResponseEntity<TestResponseDTO> {

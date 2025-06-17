@@ -20,11 +20,12 @@ class SecurityConfig(
     private val jwtAuthConverter: JwtAuthConverter,
 ) {
     companion object {
-        private val PUBLIC_ENDPOINTS = arrayOf(
-            "/swagger-ui/**",
-            "/error",
-            "/v3/api-docs/**",
-        )
+        private val PUBLIC_ENDPOINTS =
+            arrayOf(
+                "/swagger-ui/**",
+                "/error",
+                "/v3/api-docs/**",
+            )
     }
 
     @Bean
@@ -33,26 +34,23 @@ class SecurityConfig(
             // 1) stateless API, kein CSRF
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-
             .formLogin { it.disable() }
             .oauth2Login { it.disable() }
             .httpBasic { it.disable() }
             .oauth2Client { it.disable() }
-
             .authorizeHttpRequests { auth ->
                 auth
-                    .requestMatchers(HttpMethod.GET, "/api/v1/test").permitAll()
-                    .requestMatchers(*PUBLIC_ENDPOINTS).permitAll()
-                    .anyRequest().authenticated()
-            }
-
-            .exceptionHandling { exceptions ->
+                    .requestMatchers(HttpMethod.GET, "/api/v1/test")
+                    .permitAll()
+                    .requestMatchers(*PUBLIC_ENDPOINTS)
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated()
+            }.exceptionHandling { exceptions ->
                 exceptions
                     .authenticationEntryPoint(BearerTokenAuthenticationEntryPoint())
                     .accessDeniedHandler(BearerTokenAccessDeniedHandler())
-            }
-
-            .oauth2ResourceServer { oAuth2 ->
+            }.oauth2ResourceServer { oAuth2 ->
                 oAuth2
                     .jwt { jwtSpec ->
                         jwtSpec.jwtAuthenticationConverter(jwtAuthConverter)

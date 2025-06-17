@@ -5,9 +5,9 @@ import org.springframework.boot.runApplication
 
 @SpringBootApplication(
     scanBasePackages = [
-        "de.skuhn.prost",      // Dein Config- und Controller-Package
-        "de.skuhn.prost_api"   // das OpenAPI-Package
-    ]
+        "de.skuhn.prost",
+        "de.skuhn.prost_api",
+    ],
 )
 class ProstApplication
 
