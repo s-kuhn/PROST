@@ -41,8 +41,6 @@ class SecurityConfig(
 
             .authorizeHttpRequests { auth ->
                 auth
-                    .requestMatchers(HttpMethod.GET, "/test3").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/hello").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/v1/test").permitAll()
                     .requestMatchers(*PUBLIC_ENDPOINTS).permitAll()
                     .anyRequest().authenticated()

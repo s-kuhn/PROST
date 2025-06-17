@@ -16,11 +16,8 @@ class CustomEventListenerProvider : EventListenerProvider {
     private val logger = KotlinLogging.logger {}
 
     override fun onEvent(event: Event) {
-        if (EventType.REGISTER == event.type) {
+        if (EventType.VERIFY_EMAIL == event.type) {
             logger.info { "User with id ${event.userId} registered" }
-            sendAuthenticatedRequest()
-        } else if (EventType.VERIFY_EMAIL == event.type) {
-            logger.info { "User with id ${event.userId} verified email" }
             sendAuthenticatedRequest()
         }
     }
@@ -33,7 +30,7 @@ class CustomEventListenerProvider : EventListenerProvider {
         val token = getAccessToken() ?: return
         logger.info { "Access Token: ${token.take(4)}****${token.takeLast(4)}" }
         val backendHostname = System.getenv("BACKEND_HOSTNAME") ?: "backend" // TODO: exception
-        val fullUrl = "http://$backendHostname:8080/prost/test3"
+        val fullUrl = "http://$backendHostname:8080/prost/api/v1/sec"
         val request = HttpRequest.newBuilder()
             .uri(URI.create(fullUrl))
             .header("Authorization", "Bearer $token")
