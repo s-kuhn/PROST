@@ -1,0 +1,12 @@
+get:
+  summary: sec Endpoint
+  operationId: getSec
+  tags:
+    - Sec
+  responses:
+    200:
+      description: success
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/secResponseDTO.yaml"
