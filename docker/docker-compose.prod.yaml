@@ -45,7 +45,6 @@ x-frontend-env: &frontend_env
   KEYCLOAK_URL: /auth
   KEYCLOAK_REALM: ${KEYCLOAK_REALM:-prost}
   KEYCLOAK_CLIENT_ID: prost-frontend
-  VERSION: ${VERSION_TAG:-latest}
 
 services:
   database:
@@ -100,7 +99,7 @@ services:
     restart: unless-stopped
 
   backend:
-    image: ghcr.io/${GH_REPOSITORY_OWNER}/prost_backend:${VERSION_TAG}
+    image: ghcr.io/${GH_REPOSITORY_OWNER}/prost_backend:${VERSION_TAG_BACKEND}
     container_name: prod_prost_backend
     environment:
       SPRING_PROFILES_ACTIVE: prod
@@ -117,7 +116,7 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: ghcr.io/${GH_REPOSITORY_OWNER}/prost_frontend:${VERSION_TAG}
+    image: ghcr.io/${GH_REPOSITORY_OWNER}/prost_frontend:${VERSION_TAG_FRONTEND}
     container_name: prod_prost_frontend
     environment:
       <<: *frontend_env

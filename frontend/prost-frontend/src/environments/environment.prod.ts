@@ -5,5 +5,4 @@ export const environment = {
   keycloakUrl: '__KEYCLOAK_URL__',
   keycloakRealm: '__KEYCLOAK_REALM__',
   keycloakClientId: '__KEYCLOAK_CLIENT_ID__',
-  version: '__VERSION__'
 };

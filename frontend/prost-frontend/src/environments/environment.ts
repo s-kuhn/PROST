@@ -5,5 +5,4 @@ export const environment = {
   keycloakUrl: 'http://localhost:8081',
   keycloakRealm: 'prost',
   keycloakClientId: 'prost-frontend',
-  version: 'development'
 };
