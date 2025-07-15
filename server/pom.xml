@@ -10,7 +10,7 @@
     </parent>
     <groupId>de.skuhn</groupId>
     <artifactId>prost</artifactId>
-    <version>0.0.18</version>
+    <version>0.0.19</version>
     <name>prost</name>
     <description>Manage provisioning for volunteer associations</description>
     <url>https://github.com/s-kuhn/PROST</url>
