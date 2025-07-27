@@ -7,13 +7,13 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install dependencies (including devDependencies for Angular CLI)
+RUN npm ci
 
 # Copy source code
 COPY . .
 
-# Build the application
+# Build the application - defaults to prod but can be overridden
 ARG BUILD_CONFIGURATION=prod
 RUN npm run build:${BUILD_CONFIGURATION}
 
@@ -26,8 +26,8 @@ RUN apk add --no-cache gettext
 # Copy nginx template
 COPY nginx.conf.template /etc/nginx/nginx.conf.template
 
-# Copy built application
-COPY --from=build /app/dist/prost-frontend /usr/share/nginx/html
+# Copy built application - Angular 20 puts files in browser/ subdirectory
+COPY --from=build /app/dist/prost-frontend/browser /usr/share/nginx/html
 
 # Copy and make executable the entrypoint script
 COPY docker-entrypoint.sh /docker-entrypoint.sh
