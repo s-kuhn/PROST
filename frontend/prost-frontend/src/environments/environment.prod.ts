@@ -1,8 +1,10 @@
 // Environment for production stage (container deployment)
 export const environment = {
   production: true,
-  apiUrl: '__API_URL__',
-  keycloakUrl: '__KEYCLOAK_URL__',
-  keycloakRealm: '__KEYCLOAK_REALM__',
-  keycloakClientId: '__KEYCLOAK_CLIENT_ID__',
+  keycloak: {
+    uri: 'http://keycloak:8081',
+    realm: 'prost',
+    clientId: 'prost-frontend',
+  },
+  apiUrl: 'http://backend:8080/prost/api',
 };
