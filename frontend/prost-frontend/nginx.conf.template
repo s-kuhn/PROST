@@ -5,7 +5,7 @@ events {
 
 http {
     include       /etc/nginx/mime.types;
-    default_type  application/octet-stream;
+    # default_type  application/octet-stream;
 
     # Gzip compression
     gzip on;
@@ -30,16 +30,16 @@ http {
 
     # Upstream servers - mit Environment-Variablen
     upstream backend {
-        server ${BACKEND_HOST};
+        server ${BACKEND_HOSTNAME};
     }
 
     upstream keycloak {
-        server ${KEYCLOAK_HOST};
+        server ${KEYCLOAK_HOSTNAME};
     }
 
     server {
-        listen 80;
-        server_name localhost;
+        listen 80; # TODO: Change to 443 with SSL
+        server_name ${FRONTEND_HOSTNAME};
         root /usr/share/nginx/html;
         index index.html;
 
@@ -49,31 +49,31 @@ http {
         }
 
         # API Proxy zum Backend
-        location /api/ {
-            proxy_pass http://backend/prost/api/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_set_header X-Forwarded-Host $host;
-            proxy_set_header X-Forwarded-Port $server_port;
-        }
+        #location /api/ {
+        #    proxy_pass http://backend/prost/api/;
+        #    proxy_set_header Host $host;
+        #    proxy_set_header X-Real-IP $remote_addr;
+        #    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        #    proxy_set_header X-Forwarded-Proto $scheme;
+        #    proxy_set_header X-Forwarded-Host $host;
+        #    proxy_set_header X-Forwarded-Port $server_port;
+        #}
 
-        # Keycloak Proxy
-        location /auth/ {
-            proxy_pass http://keycloak/;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_set_header X-Forwarded-Host $host;
-            proxy_set_header X-Forwarded-Port $server_port;
+        ## Keycloak Proxy
+        #location /auth/ {
+        #    proxy_pass http://keycloak/;
+        #    proxy_set_header Host $host;
+        #    proxy_set_header X-Real-IP $remote_addr;
+        #    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        #    proxy_set_header X-Forwarded-Proto $scheme;
+        #    proxy_set_header X-Forwarded-Host $host;
+        #    proxy_set_header X-Forwarded-Port $server_port;
 
-            # Keycloak spezifische Headers
-            proxy_buffer_size 128k;
-            proxy_buffers 4 256k;
-            proxy_busy_buffers_size 256k;
-        }
+        #    # Keycloak spezifische Headers
+        #    proxy_buffer_size 128k;
+        #    proxy_buffers 4 256k;
+        #    proxy_busy_buffers_size 256k;
+        #}
 
         # Cache static assets
         location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {

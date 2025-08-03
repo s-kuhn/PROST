@@ -1,21 +1,17 @@
 #!/bin/sh
 
 # Set default values if not provided
-export BACKEND_HOST=${BACKEND_HOST:-backend:8080}
-export KEYCLOAK_HOST=${KEYCLOAK_HOST:-keycloak:8081}
-
-# Replace environment variables in built Angular files
-find /usr/share/nginx/html -name "*.js" -exec sed -i "s|__API_URL__|${API_URL}|g" {} \;
-find /usr/share/nginx/html -name "*.js" -exec sed -i "s|__KEYCLOAK_URL__|${KEYCLOAK_URL}|g" {} \;
-find /usr/share/nginx/html -name "*.js" -exec sed -i "s|__KEYCLOAK_REALM__|${KEYCLOAK_REALM}|g" {} \;
-find /usr/share/nginx/html -name "*.js" -exec sed -i "s|__KEYCLOAK_CLIENT_ID__|${KEYCLOAK_CLIENT_ID}|g" {} \;
+export BACKEND_HOSTNAME=${BACKEND_HOSTNAME:-backend:8080}
+export KEYCLOAK_HOSTNAME=${KEYCLOAK_HOSTNAME:-localhost:8081}
+export FRONTEND_HOSTNAME=${FRONTEND_HOSTNAME:-localhost:80}
 
 # Generate nginx.conf from template
-envsubst '${BACKEND_HOST} ${KEYCLOAK_HOST}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
+envsubst '${BACKEND_HOSTNAME} ${KEYCLOAK_HOSTNAME} ${FRONTEND_HOSTNAME}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 
 echo "Generated nginx.conf with:"
-echo "  BACKEND_HOST=${BACKEND_HOST}"
-echo "  KEYCLOAK_HOST=${KEYCLOAK_HOST}"
+echo "  BACKEND_HOSTNAME=${BACKEND_HOSTNAME}"
+echo "  KEYCLOAK_HOSTNAME=${KEYCLOAK_HOSTNAME}"
+echo "  FRONTEND_HOSTNAME=${FRONTEND_HOSTNAME}"
 echo "Environment variables replaced in Angular build"
 
 # Start nginx
