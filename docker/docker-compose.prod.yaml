@@ -40,14 +40,17 @@ x-backend-env: &backend_env
   KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
   KEYCLOAK_HOSTNAME: ${KEYCLOAK_HOSTNAME}
 
+x-frontend-env: &frontend_env
+  FRONTEND_HOSTNAME: ${FRONTEND_HOSTNAME}
+
 services:
   database:
     image: postgres:17.5
     container_name: prod_prost_database
     environment:
       <<: *database_env
-    #    ports:
-    #      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+#    ports:
+#      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     networks:
       - prost-vnet
     restart: unless-stopped
@@ -63,14 +66,18 @@ services:
     container_name: prod_prost_keycloak
     command: >
       start
-        --http-port=8081
-        --http-enabled=true
-        --hostname=keycloak
+        --hostname=keycloak.prost.home.s-kuhn.de
         --hostname-strict=false
         --import-realm 
         --file=/opt/keycloak/data/import/prost-realm.json
     environment:
       <<: *keycloak_env
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.prost-dev-keycloak.tls=true
+      - traefik.http.routers.prost-dev-keycloak.tls.certresolver=cloudflare
+      - traefik.http.routers.prost-dev-keycloak.rule=Host(`keycloak.prost.home.s-kuhn.de`)
+      - traefik.http.routers.prost-dev-keycloak.entrypoints=websecure
     volumes:
       - ./keycloak:/opt/keycloak/data/import
     depends_on:
@@ -78,8 +85,8 @@ services:
         condition: service_healthy
     networks:
       - prost-vnet
-    #    ports:
-    #      - "8081:8081"
+    ports:
+      - "443:443"
     restart: unless-stopped
 
   mailhog:
@@ -93,7 +100,7 @@ services:
     restart: unless-stopped
 
   backend:
-    image: ghcr.io/${GH_REPOSITORY_OWNER}/prost_backend:${VERSION_TAG}
+    image: ghcr.io/${GH_REPOSITORY_OWNER}/prost_backend:${VERSION_TAG_BACKEND}
     container_name: prod_prost_backend
     environment:
       SPRING_PROFILES_ACTIVE: prod
@@ -102,19 +109,38 @@ services:
     #      - "443:8080"
     networks:
       - prost-vnet
-      - frontend
     depends_on:
       database:
         condition: service_healthy
       keycloak:
         condition: service_started
     restart: unless-stopped
+
+  frontend:
+#    build:
+#      context: ../frontend/prost-frontend
+#      dockerfile: Dockerfile
+#      args:
+#        BUILD_CONFIGURATION: prod
+    image: ghcr.io/${GH_REPOSITORY_OWNER}/prost_frontend:${VERSION_TAG_FRONTEND}
+    container_name: prod_prost_frontend
+    environment:
+      <<: *frontend_env
+    networks:
+      - prost-vnet
+      - frontend
+    ports:
+      - "443:443"
+    depends_on:
+      - backend
+      - keycloak
+    restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.prost-backend.tls=true
-      - traefik.http.routers.prost-backend.tls.certresolver=cloudflare
-      - traefik.http.routers.prost-backend.rule=Host(`prost.home.s-kuhn.de`)
-      - traefik.http.routers.prost-backend.entrypoints=websecure
+      - traefik.http.routers.prost-frontend.tls=true
+      - traefik.http.routers.prost-frontend.tls.certresolver=cloudflare
+      - traefik.http.routers.prost-frontend.rule=Host(`prost.home.s-kuhn.de`)
+      - traefik.http.routers.prost-frontend.entrypoints=websecure
 
 networks:
   prost-vnet:

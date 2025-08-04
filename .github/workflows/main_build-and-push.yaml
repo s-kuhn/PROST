@@ -41,7 +41,7 @@ jobs:
           driver: docker-container
           install: true
 
-      - name: Build and push
+      - name: Build and push Backend
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -51,6 +51,19 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository_owner }}/prost_backend:${{ env.latest_version }}
             ghcr.io/${{ github.repository_owner }}/prost_backend:latest
+
+      - name: Build and push Frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend/prost-frontend
+          file: ./frontend/prost-frontend/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/prost_frontend:${{ env.latest_version }}
+            ghcr.io/${{ github.repository_owner }}/prost_frontend:latest
+          build-args: |
+            BUILD_CONFIGURATION=prod
 
   deploy-prod:
     environment: prod
