@@ -66,8 +66,7 @@ services:
     container_name: dev_prost_keycloak
     command: >
       start
-        --http-enabled=true
-        --hostname=keycloak
+        --hostname=keycloak.dev.prost.home.s-kuhn.de
         --hostname-strict=false
         --import-realm 
         --file=/opt/keycloak/data/import/prost-realm.json
