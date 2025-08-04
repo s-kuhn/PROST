@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Set default values if not provided
-export BACKEND_HOSTNAME=${BACKEND_HOSTNAME:-backend:8080}
-export KEYCLOAK_HOSTNAME=${KEYCLOAK_HOSTNAME:-localhost:8081}
+export BACKEND_HOSTNAME=${BACKEND_HOSTNAME:-backend}
+export KEYCLOAK_HOSTNAME=${KEYCLOAK_HOSTNAME:-localhost}
 export FRONTEND_HOSTNAME=${FRONTEND_HOSTNAME:-localhost:80}
 
 # Generate nginx.conf from template

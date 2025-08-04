@@ -30,11 +30,11 @@ http {
 
     # Upstream servers - mit Environment-Variablen
     upstream backend {
-        server ${BACKEND_HOSTNAME};
+        server ${BACKEND_HOSTNAME}:8080;
     }
 
     upstream keycloak {
-        server ${KEYCLOAK_HOSTNAME};
+        server ${KEYCLOAK_HOSTNAME}:8081;
     }
 
     server {

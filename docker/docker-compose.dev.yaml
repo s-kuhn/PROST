@@ -23,7 +23,6 @@ x-keycloak-env: &keycloak_env
   # Keycloak settings
   KC_SPI_SCRIPT_UPLOAD_ENABLED: true
   KC_HOSTNAME: ${KEYCLOAK_HOSTNAME}
-  KC_HOSTNAME_STRICT: "false"
   # Variables for the event listener provider
   BACKEND_HOSTNAME: ${BACKEND_HOSTNAME}
   KEYCLOAK_HOSTNAME: ${KEYCLOAK_HOSTNAME}
@@ -41,11 +40,8 @@ x-backend-env: &backend_env
   KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
   KEYCLOAK_HOSTNAME: ${KEYCLOAK_HOSTNAME}
 
-#x-frontend-env: &frontend_env
-#  API_URL: /api
-#  KEYCLOAK_URL: /auth
-#  KEYCLOAK_REALM: ${KEYCLOAK_REALM:-prost}
-#  KEYCLOAK_CLIENT_ID: prost-frontend
+x-frontend-env: &frontend_env
+  FRONTEND_HOSTNAME: ${FRONTEND_HOSTNAME}
 
 services:
   database:
@@ -53,8 +49,8 @@ services:
     container_name: dev_prost_database
     environment:
       <<: *database_env
-    ports:
-      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+#    ports:
+#      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     networks:
       - prost-vnet
     restart: unless-stopped
@@ -69,13 +65,20 @@ services:
     image: ghcr.io/${GH_REPOSITORY_OWNER}/prost_keycloak:0.0.1
     container_name: dev_prost_keycloak
     command: >
-      start-dev 
-        --http-port=8081 
-        --verbose 
+      start
+        --http-enabled=true
+        --hostname=keycloak
+        --hostname-strict=false
         --import-realm 
         --file=/opt/keycloak/data/import/prost-realm.json
     environment:
       <<: *keycloak_env
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.prost-dev-keycloak.tls=true
+      - traefik.http.routers.prost-dev-keycloak.tls.certresolver=cloudflare
+      - traefik.http.routers.prost-dev-keycloak.rule=Host(`keycloak.dev.prost.home.s-kuhn.de`)
+      - traefik.http.routers.prost-dev-keycloak.entrypoints=websecure
     volumes:
       - ./keycloak:/opt/keycloak/data/import
     depends_on:
@@ -83,8 +86,8 @@ services:
         condition: service_healthy
     networks:
       - prost-vnet
-#    ports:
-#      - "8081:8081"
+    ports:
+      - "443:443"
     restart: unless-stopped
 
   mailhog:
@@ -122,13 +125,13 @@ services:
 #        BUILD_CONFIGURATION: dev
     image: ghcr.io/${GH_REPOSITORY_OWNER}/prost_frontend_dev:${VERSION_TAG_FRONTEND}
     container_name: dev_prost_frontend
-#    environment:
-#      <<: *frontend_env
+    environment:
+      <<: *frontend_env
     networks:
       - prost-vnet
       - frontend
-#    ports:
-#      - "4201:80"
+    ports:
+      - "443:443"
     depends_on:
       - backend
       - keycloak

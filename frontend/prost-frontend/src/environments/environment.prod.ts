@@ -2,7 +2,7 @@
 export const environment = {
   production: true,
   keycloak: {
-    uri: 'http://keycloak:8081',
+    uri: 'https://keycloak.prost.home.s-kuhn.de', // Switch to 'http://localhost:8081' for locally starting the dev environment
     realm: 'prost',
     clientId: 'prost-frontend',
   },
