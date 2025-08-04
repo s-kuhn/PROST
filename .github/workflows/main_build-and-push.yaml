@@ -129,5 +129,6 @@ jobs:
             KEYCLOAK_HOSTNAME=${{ secrets.KEYCLOAK_HOSTNAME }}
             BACKEND_HOSTNAME=${{ secrets.BACKEND_HOSTNAME }}
             KEYCLOAK_EVENT_LISTENER_SECRET=${{ secrets.KEYCLOAK_EVENT_LISTENER_SECRET }}
+            FRONTEND_HOSTNAME=${{ secrets.FRONTEND_HOSTNAME }}
             EOF
             docker compose -f docker/docker-compose.prod.yaml -p "prod_prost" --env-file docker/.env up --build -d --remove-orphans
