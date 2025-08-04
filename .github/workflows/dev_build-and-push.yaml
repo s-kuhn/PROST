@@ -32,10 +32,10 @@ jobs:
   build-and-tag-backend:
     environment: dev
     needs: changes
-    if: needs.changes.outputs.backend == 'true'
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.get_version.outputs.version }}
+      has_changes: ${{ needs.changes.outputs.backend }}
 
     steps:
       - name: Checkout code
@@ -51,6 +51,7 @@ jobs:
           echo "version=$version" >> $GITHUB_OUTPUT
 
       - name: Create Git Tag
+        if: needs.changes.outputs.backend == 'true'
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
@@ -74,6 +75,7 @@ jobs:
           install: true
 
       - name: Build and push backend
+        if: needs.changes.outputs.backend == 'true'
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -84,14 +86,22 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/prost_backend_dev:${{ steps.get_version.outputs.version }}
             ghcr.io/${{ github.repository_owner }}/prost_backend_dev:latest-dev
 
+      - name: Log backend deployment info
+        run: |
+          if [ "${{ needs.changes.outputs.backend }}" == "true" ]; then
+            echo "Backend changes detected - new image built with version ${{ steps.get_version.outputs.version }}"
+          else
+            echo "No backend changes - will use existing version ${{ steps.get_version.outputs.version }}"
+          fi
+
   # Build und Tag für Frontend
   build-and-tag-frontend:
     environment: dev
     needs: changes
-    if: needs.changes.outputs.frontend == 'true'
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.get_version.outputs.version }}
+      has_changes: ${{ needs.changes.outputs.frontend }}
 
     steps:
       - name: Checkout code
@@ -121,6 +131,7 @@ jobs:
           install: true
 
       - name: Build and push frontend
+        if: needs.changes.outputs.frontend == 'true'
         uses: docker/build-push-action@v6
         with:
           context: ./frontend/prost-frontend
@@ -133,16 +144,30 @@ jobs:
           build-args: |
             BUILD_CONFIGURATION=dev
 
+      - name: Log frontend deployment info
+        run: |
+          if [ "${{ needs.changes.outputs.frontend }}" == "true" ]; then
+            echo "Frontend changes detected - new image built with version ${{ steps.get_version.outputs.version }}"
+          else
+            echo "No frontend changes - will use existing version ${{ steps.get_version.outputs.version }}"
+          fi
+
   deploy-dev:
     environment: dev
     needs: [build-and-tag-backend, build-and-tag-frontend]
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true && (needs.build-and-tag-backend.result == 'success' || needs.build-and-tag-frontend.result == 'success')
+    if: github.event.pull_request.merged == true
     env:
       VERSION_TAG_BACKEND: ${{ needs.build-and-tag-backend.outputs.version }}
       VERSION_TAG_FRONTEND: ${{ needs.build-and-tag-frontend.outputs.version }}
 
     steps:
+      - name: Log deployment info
+        run: |
+          echo "Deploying with versions:"
+          echo "Backend: ${{ env.VERSION_TAG_BACKEND }} (Changes: ${{ needs.build-and-tag-backend.outputs.has_changes }})"
+          echo "Frontend: ${{ env.VERSION_TAG_FRONTEND }} (Changes: ${{ needs.build-and-tag-frontend.outputs.has_changes }})"
+
       - name: Checkout repo
         uses: actions/checkout@v4
 
