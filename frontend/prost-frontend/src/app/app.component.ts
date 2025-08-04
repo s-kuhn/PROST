@@ -11,6 +11,6 @@ import {FaviconService} from './services/favicon.service';
 })
 export class AppComponent {
   constructor(private faviconService: FaviconService) {
-    // Der Service wird automatisch initialisiert und stellt das Favicon wieder her
+    // The service is automatically initialized and restores the favicon
   }
 }
