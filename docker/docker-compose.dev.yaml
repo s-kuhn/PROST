@@ -38,7 +38,7 @@ x-backend-env: &backend_env
   # Keycloak settings
   KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
   KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
-  KEYCLOAK_HOSTNAME: ${KEYCLOAK_HOSTNAME}
+  KEYCLOAK_HOSTNAME_INTERNAL: ${KEYCLOAK_HOSTNAME_INTERNAL}
 
 x-frontend-env: &frontend_env
   FRONTEND_HOSTNAME: ${FRONTEND_HOSTNAME}
@@ -66,19 +66,23 @@ services:
     container_name: dev_prost_keycloak
     command: >
       start
-        --hostname=keycloak.dev.prost.home.s-kuhn.de
+        --hostname=keycloak.prost.home.s-kuhn.de
         --hostname-strict=false
         --import-realm 
         --file=/opt/keycloak/data/import/prost-realm.json
         --optimized
+        --http-enabled=true
+        --http-port=8081
+        --hostname-port=443
     environment:
       <<: *keycloak_env
     labels:
       - traefik.enable=true
-      - traefik.http.routers.prost-dev-keycloak.tls=true
-      - traefik.http.routers.prost-dev-keycloak.tls.certresolver=cloudflare
-      - traefik.http.routers.prost-dev-keycloak.rule=Host(`keycloak.dev.prost.home.s-kuhn.de`)
-      - traefik.http.routers.prost-dev-keycloak.entrypoints=websecure
+      - traefik.http.routers.prost-prod-keycloak.tls=true
+      - traefik.http.routers.prost-prod-keycloak.tls.certresolver=cloudflare
+      - traefik.http.routers.prost-prod-keycloak.rule=Host(`keycloak.prost.home.s-kuhn.de`)
+      - traefik.http.routers.prost-prod-keycloak.entrypoints=websecure
+      - traefik.http.services.prost-prod-keycloak.loadbalancer.server.port=8080
     volumes:
       - ./keycloak:/opt/keycloak/data/import
     depends_on:
