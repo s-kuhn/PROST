@@ -133,7 +133,8 @@ jobs:
             cd ${{ secrets.DEPLOY_SERVER_PATH }}
             docker image prune -a --force
             cat > docker/.env <<EOF
-            VERSION_TAG=${{ needs.sync-main.outputs.version_tag }}
+            VERSION_TAG_BACKEND=${{ needs.sync-main.outputs.version_tag }}
+            VERSION_TAG_FRONTEND=${{ needs.sync-main.outputs.version_tag }}
             GH_REPOSITORY_OWNER=${{ secrets.GH_REPOSITORY_OWNER }}
             POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
