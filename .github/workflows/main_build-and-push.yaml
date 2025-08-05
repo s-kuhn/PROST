@@ -14,10 +14,30 @@ jobs:
   sync-main:
     environment: prod
     runs-on: ubuntu-latest
+    outputs:
+      version_tag: ${{ steps.get_version.outputs.version }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get version for production
+        id: get_version
+        run: |
+          git fetch origin dev --tags
+          # Try to get latest tag, fallback to "latest" if no tags exist
+          latest_version=$(git tag -l "v*" | sort -V | tail -n 1 | sed 's/^v//')
+          if [ -z "$latest_version" ]; then
+            echo "No version tags found, using 'latest'"
+            version_tag="latest"
+          else
+            echo "Found latest version: $latest_version"
+            version_tag="$latest_version"
+          fi
+          echo "version=$version_tag" >> $GITHUB_OUTPUT
+          echo "Will deploy with version: $version_tag"
 
       - name: Login to GitHub container registry
         uses: docker/login-action@v3
@@ -25,12 +45,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GHCR_TOKEN }}
-
-      - name: Fetch latest tag from dev
-        run: |
-          git fetch origin dev --tags
-          latest_version=$(git tag -l | sort -V | tail -n 1)
-          echo "latest_version=$latest_version" >> $GITHUB_ENV
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -41,7 +55,7 @@ jobs:
           driver: docker-container
           install: true
 
-      - name: Build and push
+      - name: Build and push Backend
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -49,8 +63,21 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/prost_backend:${{ env.latest_version }}
+            ghcr.io/${{ github.repository_owner }}/prost_backend:${{ steps.get_version.outputs.version }}
             ghcr.io/${{ github.repository_owner }}/prost_backend:latest
+
+      - name: Build and push Frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend/prost-frontend
+          file: ./frontend/prost-frontend/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/prost_frontend:${{ steps.get_version.outputs.version }}
+            ghcr.io/${{ github.repository_owner }}/prost_frontend:latest
+          build-args: |
+            BUILD_CONFIGURATION=prod
 
   deploy-prod:
     environment: prod
@@ -59,6 +86,10 @@ jobs:
     if: ${{ github.event.pull_request.merged == true }}
 
     steps:
+      - name: Log deployment info
+        run: |
+          echo "Deploying production with version: ${{ needs.sync-main.outputs.version_tag }}"
+
       - name: Checkout repo
         uses: actions/checkout@v4
 
@@ -102,7 +133,7 @@ jobs:
             cd ${{ secrets.DEPLOY_SERVER_PATH }}
             docker image prune -a --force
             cat > docker/.env <<EOF
-            VERSION_TAG=${{ secrets.VERSION_TAG }}
+            VERSION_TAG=${{ needs.sync-main.outputs.version_tag }}
             GH_REPOSITORY_OWNER=${{ secrets.GH_REPOSITORY_OWNER }}
             POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
@@ -116,5 +147,7 @@ jobs:
             KEYCLOAK_HOSTNAME=${{ secrets.KEYCLOAK_HOSTNAME }}
             BACKEND_HOSTNAME=${{ secrets.BACKEND_HOSTNAME }}
             KEYCLOAK_EVENT_LISTENER_SECRET=${{ secrets.KEYCLOAK_EVENT_LISTENER_SECRET }}
+            FRONTEND_HOSTNAME=${{ secrets.FRONTEND_HOSTNAME }}
+            KEYCLOAK_HOSTNAME_INTERNAL=${{ secrets.KEYCLOAK_HOSTNAME_INTERNAL }}
             EOF
             docker compose -f docker/docker-compose.prod.yaml -p "prod_prost" --env-file docker/.env up --build -d --remove-orphans

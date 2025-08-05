@@ -11,88 +11,69 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-tag:
-    environment: dev
+  changes:
     runs-on: ubuntu-latest
     outputs:
-      next_version: ${{ steps.versioning.outputs.next_version }}
+      backend: ${{ steps.changed-files.outputs.backend_any_changed }}
+      frontend: ${{ steps.changed-files.outputs.frontend_any_changed }}
+    if: github.event.pull_request.merged == true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files_yaml: |
+            backend:
+              - 'server/**'
+            frontend:
+              - 'frontend/**'
+
+  build-and-tag-backend:
+    environment: dev
+    needs: changes
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+      has_changes: ${{ needs.changes.outputs.backend }}
+      deploy_tag: ${{ steps.set_deploy_tag.outputs.tag }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Authenticate GH
+      - name: Read Version from POM
+        id: get_version
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+          version=$(mvn -f server/pom.xml -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+          echo "Current version from POM: $version"
+          echo "version=$version" >> $GITHUB_OUTPUT
 
-      - name: Install semver
-        run: npm install -g semver
-
-      - name: Determine Version
-        id: versioning
+      - name: Set deployment tag
+        id: set_deploy_tag
         run: |
-          git fetch --tags
-          current_version=$(git tag -l | sort -V | tail -n 1)
-          if [ -z "$current_version" ]; then
-            current_version="0.0.0"
+          if [ "${{ needs.changes.outputs.backend }}" == "true" ]; then
+            echo "tag=${{ steps.get_version.outputs.version }}" >> $GITHUB_OUTPUT
+            echo "Will use version tag: ${{ steps.get_version.outputs.version }}"
+          else
+            echo "tag=latest-dev" >> $GITHUB_OUTPUT
+            echo "Will use latest-dev tag (no changes detected)"
           fi
-          echo "Current version: $current_version"
-          
-          pr_number=${{ github.event.pull_request.number }}
-      
-          labels_json=$(gh api \
-          repos/${{ github.repository }}/issues/$pr_number/labels \
-          --jq '.')
-          
-          if [ "$labels_json" == "[]" ]; then
-            echo "Failed to fetch labels for PR #$pr_number."
-            exit 1
-          fi
-      
-          echo "Labels JSON from GH API: $labels_json"
-      
-          labels=$(echo "$labels_json" | jq -r '.[].name')
-      
-          if [ -z "$labels" ]; then
-            echo "No labels or not JSON parseable."
-            exit 1
-          fi
-      
-          bump=""
-            for label in $labels; do
-              case "$label" in
-                "breaking-changes") bump="major" ;;
-                "feature")          bump="minor" ;;
-                "bugfix")           bump="patch" ;;
-            esac
-          done
 
-          if [[ -z "$bump" ]]; then
-            echo "No valid label found for version bump."
-            exit 1
-          fi
-          next_version=$(npx semver $current_version -i $bump)
-          echo "Next version: $next_version"
-          echo "next_version=$next_version" >> $GITHUB_ENV
-          echo "next_version=$next_version" >> $GITHUB_OUTPUT
-
-      - name: Update Maven Version
-        run: mvn -ntp versions:set -DnewVersion=$next_version -f server/pom.xml || exit 1
-
-      - name: Commit and Push Updated pom.xml
+      - name: Create Git Tag
+        if: needs.changes.outputs.backend == 'true'
         run: |
-          git fetch origin dev
-          git checkout dev
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add server/pom.xml
-          git commit -m "Set version to $next_version for PR #${{ github.event.pull_request.number }}"
-          git push origin dev
-          
-      - name: Create and Push Git Tag
-        run: |
-          git tag -a ${{ env.next_version }} -m "Version ${{ env.next_version }}"
-          git push origin ${{ env.next_version }}
+          # Only create tag if it doesn't exist
+          if ! git rev-parse "v${{ steps.get_version.outputs.version }}" >/dev/null 2>&1; then
+            git tag -a "v${{ steps.get_version.outputs.version }}" -m "Backend version ${{ steps.get_version.outputs.version }} (commit ${{ github.sha }})"
+            git push origin "v${{ steps.get_version.outputs.version }}"
+          else
+            echo "Tag v${{ steps.get_version.outputs.version }} already exists, skipping tag creation"
+          fi
 
       - name: Login to GitHub container registry
         uses: docker/login-action@v3
@@ -110,7 +91,8 @@ jobs:
           driver: docker-container
           install: true
 
-      - name: Build and push
+      - name: Build and push backend
+        if: needs.changes.outputs.backend == 'true'
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -118,17 +100,103 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/prost_backend_dev:${{ env.next_version }}
+            ghcr.io/${{ github.repository_owner }}/prost_backend_dev:${{ steps.get_version.outputs.version }}
+            ghcr.io/${{ github.repository_owner }}/prost_backend_dev:latest-dev
+
+      - name: Log backend deployment info
+        run: |
+          if [ "${{ needs.changes.outputs.backend }}" == "true" ]; then
+            echo "Backend changes detected - new image built with version ${{ steps.get_version.outputs.version }}"
+          else
+            echo "No backend changes - will use existing latest-dev image"
+          fi
+
+  # Build und Tag für Frontend
+  build-and-tag-frontend:
+    environment: dev
+    needs: changes
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+      has_changes: ${{ needs.changes.outputs.frontend }}
+      deploy_tag: ${{ steps.set_deploy_tag.outputs.tag }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Read version from package.json
+        id: get_version
+        run: |
+          version=$(jq -r '.version' frontend/prost-frontend/package.json)
+          echo "Current version from package.json: $version"
+          echo "version=$version" >> $GITHUB_OUTPUT
+
+      - name: Set deployment tag
+        id: set_deploy_tag
+        run: |
+          if [ "${{ needs.changes.outputs.frontend }}" == "true" ]; then
+            echo "tag=${{ steps.get_version.outputs.version }}" >> $GITHUB_OUTPUT
+            echo "Will use version tag: ${{ steps.get_version.outputs.version }}"
+          else
+            echo "tag=latest-dev" >> $GITHUB_OUTPUT
+            echo "Will use latest-dev tag (no changes detected)"
+          fi
+
+      - name: Login to GitHub container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker-container
+          install: true
+
+      - name: Build and push frontend
+        if: needs.changes.outputs.frontend == 'true'
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend/prost-frontend
+          file: ./frontend/prost-frontend/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/prost_frontend_dev:${{ steps.get_version.outputs.version }}
+            ghcr.io/${{ github.repository_owner }}/prost_frontend_dev:latest-dev
+          build-args: |
+            BUILD_CONFIGURATION=dev
+
+      - name: Log frontend deployment info
+        run: |
+          if [ "${{ needs.changes.outputs.frontend }}" == "true" ]; then
+            echo "Frontend changes detected - new image built with version ${{ steps.get_version.outputs.version }}"
+          else
+            echo "No frontend changes - will use existing latest-dev image"
+          fi
 
   deploy-dev:
     environment: dev
-    needs: build-and-tag
+    needs: [build-and-tag-backend, build-and-tag-frontend]
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.merged == true }}
+    if: github.event.pull_request.merged == true
     env:
-      VERSION_TAG: ${{ needs.build-and-tag.outputs.next_version }}
+      VERSION_TAG_BACKEND: ${{ needs.build-and-tag-backend.outputs.deploy_tag }}
+      VERSION_TAG_FRONTEND: ${{ needs.build-and-tag-frontend.outputs.deploy_tag }}
 
     steps:
+      - name: Log deployment info
+        run: |
+          echo "Deploying with tags:"
+          echo "Backend: ${{ env.VERSION_TAG_BACKEND }} (Changes: ${{ needs.build-and-tag-backend.outputs.has_changes }})"
+          echo "Frontend: ${{ env.VERSION_TAG_FRONTEND }} (Changes: ${{ needs.build-and-tag-frontend.outputs.has_changes }})"
+
       - name: Checkout repo
         uses: actions/checkout@v4
 
@@ -172,7 +240,8 @@ jobs:
             cd ${{ secrets.DEPLOY_SERVER_PATH }}
             docker image prune -a --force
             cat > docker/.env <<EOF
-            VERSION_TAG=${{ env.VERSION_TAG }}
+            VERSION_TAG_BACKEND=${{ env.VERSION_TAG_BACKEND }}
+            VERSION_TAG_FRONTEND=${{ env.VERSION_TAG_FRONTEND }}
             GH_REPOSITORY_OWNER=${{ secrets.GH_REPOSITORY_OWNER }}
             POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
@@ -186,5 +255,7 @@ jobs:
             KEYCLOAK_HOSTNAME=${{ secrets.KEYCLOAK_HOSTNAME }}
             BACKEND_HOSTNAME=${{ secrets.BACKEND_HOSTNAME }}
             KEYCLOAK_EVENT_LISTENER_SECRET=${{ secrets.KEYCLOAK_EVENT_LISTENER_SECRET }}
+            FRONTEND_HOSTNAME=${{ secrets.FRONTEND_HOSTNAME }}
+            KEYCLOAK_HOSTNAME_INTERNAL=${{ secrets.KEYCLOAK_HOSTNAME_INTERNAL }}
             EOF
             docker compose -f docker/docker-compose.dev.yaml -p "dev_prost" --env-file docker/.env up --build -d --remove-orphans
