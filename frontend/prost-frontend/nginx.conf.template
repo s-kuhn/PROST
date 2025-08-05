@@ -34,7 +34,7 @@ http {
     }
 
     upstream keycloak {
-        server ${KEYCLOAK_HOSTNAME}:8081;
+        server ${KEYCLOAK_HOSTNAME};
     }
 
     server {
