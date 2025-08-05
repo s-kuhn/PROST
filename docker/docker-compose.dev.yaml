@@ -5,9 +5,10 @@ x-database-env: &database_env
 
 x-db-healthcheck: &db_healthcheck
   test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
-  interval: 5s
-  timeout: 5s
+  interval: 10s
+  timeout: 10s
   retries: 5
+  start_period: 60s
 
 x-keycloak-env: &keycloak_env
   # Admin account
@@ -22,6 +23,10 @@ x-keycloak-env: &keycloak_env
   KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
   # Keycloak settings
   KC_SPI_SCRIPT_UPLOAD_ENABLED: true
+  #KC_HEALTH_ENABLED: 'true'
+  KC_HTTP_ENABLED: 'true'
+  KC_PROXY_HEADERS: 'xforwarded'
+  PROXY_ADDRESS_FORWARDING: 'true'
   KC_HOSTNAME: ${KEYCLOAK_HOSTNAME}
   # Variables for the event listener provider
   BACKEND_HOSTNAME: ${BACKEND_HOSTNAME}
@@ -66,12 +71,9 @@ services:
     container_name: dev_prost_keycloak
     command: >
       start
-        --hostname=keycloak.dev.prost.home.s-kuhn.de
-        --hostname-strict=false
         --import-realm 
         --file=/opt/keycloak/data/import/prost-realm.json
         --optimized
-        --http-enabled=true
         --http-port=8081
     environment:
       <<: *keycloak_env
@@ -82,6 +84,9 @@ services:
       - traefik.http.routers.prost-dev-keycloak.rule=Host(`keycloak.dev.prost.home.s-kuhn.de`)
       - traefik.http.routers.prost-dev-keycloak.entrypoints=websecure
       - traefik.http.services.prost-dev-keycloak.loadbalancer.server.port=8081
+      - traefik.http.routers.prost-dev-keycloak.middlewares=compresstraefik
+      - traefik.http.middlewares.compresstraefik.compress=true
+      - traefik.http.services.prost-dev-keycloak.loadbalancer.passhostheader=true
       - traefik.docker.network=frontend
     volumes:
       - ./keycloak:/opt/keycloak/data/import
@@ -93,6 +98,12 @@ services:
       - dev-prost-vnet
 #    ports: # Not needed, Traefik will handle the routing
 #      - "443:443"
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/8081"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s
     restart: unless-stopped
 
   mailhog:
