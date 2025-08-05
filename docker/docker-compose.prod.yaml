@@ -42,8 +42,6 @@ x-backend-env: &backend_env
 
 x-frontend-env: &frontend_env
   FRONTEND_HOSTNAME: ${FRONTEND_HOSTNAME}
-  KEYCLOAK_HOSTNAME: ${KEYCLOAK_HOSTNAME}
-  BACKEND_HOSTNAME: ${BACKEND_HOSTNAME}
 
 services:
   database:
