@@ -38,7 +38,10 @@ x-backend-env: &backend_env
   # Keycloak settings
   KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
   KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_CLIENT_SECRET}
-  KEYCLOAK_HOSTNAME: ${KEYCLOAK_HOSTNAME}
+  KEYCLOAK_HOSTNAME_INTERNAL: ${KEYCLOAK_HOSTNAME_INTERNAL}
+
+x-frontend-env: &frontend_env
+  FRONTEND_HOSTNAME: ${FRONTEND_HOSTNAME}
 
 services:
   database:
@@ -46,10 +49,10 @@ services:
     container_name: prod_prost_database
     environment:
       <<: *database_env
-    #    ports:
-    #      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+#    ports:
+#      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     networks:
-      - prost-vnet
+      - prod-prost-vnet
     restart: unless-stopped
     healthcheck: *db_healthcheck
     volumes:
@@ -63,23 +66,33 @@ services:
     container_name: prod_prost_keycloak
     command: >
       start
-        --http-port=8081
-        --http-enabled=true
-        --hostname=keycloak
+        --hostname=keycloak.prost.home.s-kuhn.de
         --hostname-strict=false
         --import-realm 
         --file=/opt/keycloak/data/import/prost-realm.json
+        --optimized
+        --http-enabled=true
+        --http-port=8081
     environment:
       <<: *keycloak_env
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.prost-prod-keycloak.tls=true
+      - traefik.http.routers.prost-prod-keycloak.tls.certresolver=cloudflare
+      - traefik.http.routers.prost-prod-keycloak.rule=Host(`keycloak.prost.home.s-kuhn.de`)
+      - traefik.http.routers.prost-prod-keycloak.entrypoints=websecure
+      - traefik.http.services.prost-prod-keycloak.loadbalancer.server.port=8081
+      - traefik.docker.network=frontend
     volumes:
       - ./keycloak:/opt/keycloak/data/import
     depends_on:
       database:
         condition: service_healthy
     networks:
-      - prost-vnet
-    #    ports:
-    #      - "8081:8081"
+      - frontend
+      - prod-prost-vnet
+#    ports: # Not needed, Traefik will handle the routing
+#      - "443:443"
     restart: unless-stopped
 
   mailhog:
@@ -89,11 +102,11 @@ services:
     #      - "1025:1025"
     #      - "8025:8025"
     networks:
-      - prost-vnet
+      - prod-prost-vnet
     restart: unless-stopped
 
   backend:
-    image: ghcr.io/${GH_REPOSITORY_OWNER}/prost_backend:${VERSION_TAG}
+    image: ghcr.io/${GH_REPOSITORY_OWNER}/prost_backend:${VERSION_TAG_BACKEND}
     container_name: prod_prost_backend
     environment:
       SPRING_PROFILES_ACTIVE: prod
@@ -101,25 +114,46 @@ services:
     #    ports:
     #      - "443:8080"
     networks:
-      - prost-vnet
-      - frontend
+      - prod-prost-vnet
     depends_on:
       database:
         condition: service_healthy
       keycloak:
         condition: service_started
     restart: unless-stopped
+
+  frontend:
+#    build:
+#      context: ../frontend/prost-frontend
+#      dockerfile: Dockerfile
+#      args:
+#        BUILD_CONFIGURATION: prod
+    image: ghcr.io/${GH_REPOSITORY_OWNER}/prost_frontend:${VERSION_TAG_FRONTEND}
+    container_name: prod_prost_frontend
+    environment:
+      <<: *frontend_env
+    networks:
+      - frontend
+      - prod-prost-vnet
+#    ports: # Not needed, Traefik will handle the routing
+#      - "443:443"
+    depends_on:
+      - backend
+      - keycloak
+    restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.prost-backend.tls=true
-      - traefik.http.routers.prost-backend.tls.certresolver=cloudflare
-      - traefik.http.routers.prost-backend.rule=Host(`prost.home.s-kuhn.de`)
-      - traefik.http.routers.prost-backend.entrypoints=websecure
+      - traefik.http.routers.prost-frontend.tls=true
+      - traefik.http.routers.prost-frontend.tls.certresolver=cloudflare
+      - traefik.http.routers.prost-frontend.rule=Host(`prost.home.s-kuhn.de`)
+      - traefik.http.routers.prost-frontend.entrypoints=websecure
+      - traefik.http.services.prost-dev-frontend.loadbalancer.server.port=443
+      - traefik.docker.network=frontend
 
 networks:
-  prost-vnet:
   frontend:
     external: true
+  prod-prost-vnet:
 
 volumes:
   postgres-data:

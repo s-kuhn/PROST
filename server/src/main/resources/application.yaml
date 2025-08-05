@@ -16,8 +16,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://${KEYCLOAK_HOSTNAME}:8081/realms/prost
-          jwk-set-uri: http://${KEYCLOAK_HOSTNAME}:8081/realms/prost/protocol/openid-connect/certs
+          issuer-uri: http://${KEYCLOAK_HOSTNAME_INTERNAL}:8081/realms/prost
+          jwk-set-uri: http://${KEYCLOAK_HOSTNAME_INTERNAL}:8081/realms/prost/protocol/openid-connect/certs
 
   flyway:
     enabled: true

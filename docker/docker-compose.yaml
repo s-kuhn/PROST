@@ -29,6 +29,13 @@ x-keycloak-env: &keycloak_env
   KEYCLOAK_HOSTNAME: ${KEYCLOAK_HOSTNAME}
   KEYCLOAK_EVENT_LISTENER_SECRET: ${KEYCLOAK_EVENT_LISTENER_SECRET}
 
+#x-frontend-env: &frontend_env
+#  API_URL: http://localhost:8080/prost/api
+#  KEYCLOAK_URL: http://localhost:8081
+#  KEYCLOAK_REALM: ${KEYCLOAK_REALM:-prost}
+#  KEYCLOAK_CLIENT_ID: prost-frontend
+#  VERSION: ${VERSION:-development}
+
 services:
   database:
     image: postgres:17.5
