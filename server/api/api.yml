@@ -1,0 +1,18 @@
+openapi: 3.0.3
+info:
+  title: PROST
+  description: Planning, Reporting, Ordering, Stock, Tally (web app aimed primarily at volunteer associations)
+  version: 0.0.99
+servers:
+  - url: 'http://localhost:8080/api'
+
+paths:
+  /v1/test:
+    $ref: "./paths/test.yaml"
+  /v1/sec:
+    $ref: "./paths/sec.yaml"
+
+components:
+  schemas:
+    testResponseDTO:
+      $ref: "./schemas/testResponseDTO.yaml"

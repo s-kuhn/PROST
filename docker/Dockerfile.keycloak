@@ -2,17 +2,20 @@ FROM maven:3.9.9-eclipse-temurin-17 AS builder
 
 WORKDIR /build
 
-COPY keycloak-webhook-event-listener/pom.xml /build/
-COPY keycloak-webhook-event-listener/src /build/src
+COPY keycloak-webhook-event-listener/pom.xml .
+RUN mvn dependency:go-offline -B
 
-RUN mvn package -DskipTests
+COPY keycloak-webhook-event-listener/src ./src
+RUN mvn clean package -DskipTests -B
 
 
 FROM quay.io/keycloak/keycloak:26.2.5 AS keycloak-base
-
 WORKDIR /opt/keycloak
 
-COPY --from=builder /build/target/keycloak-webhook-event-listener-*.jar \
+COPY --from=builder /build/target/webhook-event-listener-*.jar \
                 /opt/keycloak/providers/custom-event-listener.jar
 
-RUN /opt/keycloak/bin/kc.sh build
+# Configure build-time options to avoid rebuilding on startup
+RUN /opt/keycloak/bin/kc.sh build \
+    --db=postgres \
+    --spi-script-upload-enabled=true

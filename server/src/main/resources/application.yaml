@@ -1,6 +1,8 @@
 spring:
   application:
     name: prost
+  jpa:
+    open-in-view: false
 
   config:
     import: optional:file:.env[.properties]
@@ -12,21 +14,10 @@ spring:
 
   security:
     oauth2:
-      client: # Only till dedicated frontend
-        registration:
-          keycloak:
-            client-id: ${KEYCLOAK_CLIENT_ID}
-            client-secret: ${KEYCLOAK_CLIENT_SECRET}
-            scope: openid, profile, roles
-            authorization-grant-type: authorization_code
-            redirect-uri: "{baseUrl}/login/oauth2/code/${KEYCLOAK_CLIENT_ID}"
-        provider:
-          keycloak:
-            issuer-uri: http://${KEYCLOAK_HOSTNAME}:8081/realms/prost
       resourceserver:
         jwt:
-          issuer-uri: http://${KEYCLOAK_HOSTNAME}:8081/realms/prost
-          jwk-set-uri: http://${KEYCLOAK_HOSTNAME}:8081/realms/prost/protocol/openid-connect/certs
+          issuer-uri: http://${KEYCLOAK_HOSTNAME_INTERNAL}:8081/realms/prost
+          jwk-set-uri: http://${KEYCLOAK_HOSTNAME_INTERNAL}:8081/realms/prost/protocol/openid-connect/certs
 
   flyway:
     enabled: true
@@ -38,6 +29,13 @@ jwt:
     converter:
       principle_attribute: preferred_username
       resource_id: ${KEYCLOAK_CLIENT_ID}
+
+server:
+  servlet:
+    context-path: /prost
+    session:
+      persistent: false
+  forward-headers-strategy: native
 
 logging:
   level:

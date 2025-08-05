@@ -1,0 +1,5 @@
+type: object
+description: test response
+properties:
+  data:
+    type: string
