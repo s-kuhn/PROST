@@ -52,7 +52,7 @@ services:
 #    ports:
 #      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
     networks:
-      - prost-vnet
+      - prod-prost-vnet
     restart: unless-stopped
     healthcheck: *db_healthcheck
     volumes:
@@ -82,14 +82,15 @@ services:
       - traefik.http.routers.prost-prod-keycloak.rule=Host(`keycloak.prost.home.s-kuhn.de`)
       - traefik.http.routers.prost-prod-keycloak.entrypoints=websecure
       - traefik.http.services.prost-prod-keycloak.loadbalancer.server.port=8081
+      - traefik.docker.network=frontend
     volumes:
       - ./keycloak:/opt/keycloak/data/import
     depends_on:
       database:
         condition: service_healthy
     networks:
-      - prost-vnet
       - frontend
+      - prod-prost-vnet
 #    ports: # Not needed, Traefik will handle the routing
 #      - "443:443"
     restart: unless-stopped
@@ -101,7 +102,7 @@ services:
     #      - "1025:1025"
     #      - "8025:8025"
     networks:
-      - prost-vnet
+      - prod-prost-vnet
     restart: unless-stopped
 
   backend:
@@ -113,7 +114,7 @@ services:
     #    ports:
     #      - "443:8080"
     networks:
-      - prost-vnet
+      - prod-prost-vnet
     depends_on:
       database:
         condition: service_healthy
@@ -132,8 +133,8 @@ services:
     environment:
       <<: *frontend_env
     networks:
-      - prost-vnet
       - frontend
+      - prod-prost-vnet
 #    ports: # Not needed, Traefik will handle the routing
 #      - "443:443"
     depends_on:
@@ -146,11 +147,13 @@ services:
       - traefik.http.routers.prost-frontend.tls.certresolver=cloudflare
       - traefik.http.routers.prost-frontend.rule=Host(`prost.home.s-kuhn.de`)
       - traefik.http.routers.prost-frontend.entrypoints=websecure
+      - traefik.http.services.prost-dev-frontend.loadbalancer.server.port=443
+      - traefik.docker.network=frontend
 
 networks:
-  prost-vnet:
   frontend:
     external: true
+  prod-prost-vnet:
 
 volumes:
   postgres-data:
