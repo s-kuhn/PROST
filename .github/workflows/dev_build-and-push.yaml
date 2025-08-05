@@ -36,6 +36,7 @@ jobs:
     outputs:
       version: ${{ steps.get_version.outputs.version }}
       has_changes: ${{ needs.changes.outputs.backend }}
+      deploy_tag: ${{ steps.set_deploy_tag.outputs.tag }}
 
     steps:
       - name: Checkout code
@@ -50,13 +51,29 @@ jobs:
           echo "Current version from POM: $version"
           echo "version=$version" >> $GITHUB_OUTPUT
 
+      - name: Set deployment tag
+        id: set_deploy_tag
+        run: |
+          if [ "${{ needs.changes.outputs.backend }}" == "true" ]; then
+            echo "tag=${{ steps.get_version.outputs.version }}" >> $GITHUB_OUTPUT
+            echo "Will use version tag: ${{ steps.get_version.outputs.version }}"
+          else
+            echo "tag=latest-dev" >> $GITHUB_OUTPUT
+            echo "Will use latest-dev tag (no changes detected)"
+          fi
+
       - name: Create Git Tag
         if: needs.changes.outputs.backend == 'true'
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git tag -a "v${{ steps.get_version.outputs.version }}" -m "Version ${{ steps.get_version.outputs.version }} from PR #${{ github.event.pull_request.number }}"
-          git push origin "v${{ steps.get_version.outputs.version }}"
+          # Only create tag if it doesn't exist
+          if ! git rev-parse "v${{ steps.get_version.outputs.version }}" >/dev/null 2>&1; then
+            git tag -a "v${{ steps.get_version.outputs.version }}" -m "Backend version ${{ steps.get_version.outputs.version }} (commit ${{ github.sha }})"
+            git push origin "v${{ steps.get_version.outputs.version }}"
+          else
+            echo "Tag v${{ steps.get_version.outputs.version }} already exists, skipping tag creation"
+          fi
 
       - name: Login to GitHub container registry
         uses: docker/login-action@v3
@@ -91,7 +108,7 @@ jobs:
           if [ "${{ needs.changes.outputs.backend }}" == "true" ]; then
             echo "Backend changes detected - new image built with version ${{ steps.get_version.outputs.version }}"
           else
-            echo "No backend changes - will use existing version ${{ steps.get_version.outputs.version }}"
+            echo "No backend changes - will use existing latest-dev image"
           fi
 
   # Build und Tag für Frontend
@@ -102,6 +119,7 @@ jobs:
     outputs:
       version: ${{ steps.get_version.outputs.version }}
       has_changes: ${{ needs.changes.outputs.frontend }}
+      deploy_tag: ${{ steps.set_deploy_tag.outputs.tag }}
 
     steps:
       - name: Checkout code
@@ -113,6 +131,17 @@ jobs:
           version=$(jq -r '.version' frontend/prost-frontend/package.json)
           echo "Current version from package.json: $version"
           echo "version=$version" >> $GITHUB_OUTPUT
+
+      - name: Set deployment tag
+        id: set_deploy_tag
+        run: |
+          if [ "${{ needs.changes.outputs.frontend }}" == "true" ]; then
+            echo "tag=${{ steps.get_version.outputs.version }}" >> $GITHUB_OUTPUT
+            echo "Will use version tag: ${{ steps.get_version.outputs.version }}"
+          else
+            echo "tag=latest-dev" >> $GITHUB_OUTPUT
+            echo "Will use latest-dev tag (no changes detected)"
+          fi
 
       - name: Login to GitHub container registry
         uses: docker/login-action@v3
@@ -149,7 +178,7 @@ jobs:
           if [ "${{ needs.changes.outputs.frontend }}" == "true" ]; then
             echo "Frontend changes detected - new image built with version ${{ steps.get_version.outputs.version }}"
           else
-            echo "No frontend changes - will use existing version ${{ steps.get_version.outputs.version }}"
+            echo "No frontend changes - will use existing latest-dev image"
           fi
 
   deploy-dev:
@@ -158,13 +187,13 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
     env:
-      VERSION_TAG_BACKEND: ${{ needs.build-and-tag-backend.outputs.version }}
-      VERSION_TAG_FRONTEND: ${{ needs.build-and-tag-frontend.outputs.version }}
+      VERSION_TAG_BACKEND: ${{ needs.build-and-tag-backend.outputs.deploy_tag }}
+      VERSION_TAG_FRONTEND: ${{ needs.build-and-tag-frontend.outputs.deploy_tag }}
 
     steps:
       - name: Log deployment info
         run: |
-          echo "Deploying with versions:"
+          echo "Deploying with tags:"
           echo "Backend: ${{ env.VERSION_TAG_BACKEND }} (Changes: ${{ needs.build-and-tag-backend.outputs.has_changes }})"
           echo "Frontend: ${{ env.VERSION_TAG_FRONTEND }} (Changes: ${{ needs.build-and-tag-frontend.outputs.has_changes }})"
 
