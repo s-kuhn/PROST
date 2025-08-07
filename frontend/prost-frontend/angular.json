@@ -70,6 +70,8 @@
               ]
             },
             "dev": {
+              "outputHashing": "all",
+              "namedChunks": false,
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
