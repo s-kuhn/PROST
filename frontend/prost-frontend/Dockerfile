@@ -27,7 +27,7 @@ RUN apk add --no-cache gettext
 COPY nginx.conf.template /etc/nginx/nginx.conf.template
 
 # Copy built application - Angular 20 puts files in browser/ subdirectory
-COPY --from=build /app/dist/prost-frontend/browser /usr/share/nginx/html
+COPY --from=build /app/dist/prost-frontend/browser/ /usr/share/nginx/html
 
 # Copy and make executable the entrypoint script
 COPY docker-entrypoint.sh /docker-entrypoint.sh
