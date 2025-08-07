@@ -79,15 +79,15 @@ services:
       <<: *keycloak_env
     labels:
       - traefik.enable=true
+      - traefik.docker.network=frontend
+      - traefik.http.middlewares.compresstraefik.compress=true
       - traefik.http.routers.prost-dev-keycloak.tls=true
       - traefik.http.routers.prost-dev-keycloak.tls.certresolver=cloudflare
       - traefik.http.routers.prost-dev-keycloak.rule=Host(`keycloak.dev.prost.home.s-kuhn.de`)
       - traefik.http.routers.prost-dev-keycloak.entrypoints=websecure
-      - traefik.http.services.prost-dev-keycloak.loadbalancer.server.port=8081
       - traefik.http.routers.prost-dev-keycloak.middlewares=compresstraefik
-      - traefik.http.middlewares.compresstraefik.compress=true
+      - traefik.http.services.prost-dev-keycloak.loadbalancer.server.port=8081
       - traefik.http.services.prost-dev-keycloak.loadbalancer.passhostheader=true
-      - traefik.docker.network=frontend
     volumes:
       - ./keycloak:/opt/keycloak/data/import
     depends_on:
@@ -154,12 +154,12 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.prost-dev-frontend.tls=true
-      - traefik.http.routers.prost-dev-frontend.tls.certresolver=cloudflare
+      - traefik.docker.network=frontend
       - traefik.http.routers.prost-dev-frontend.rule=Host(`dev.prost.home.s-kuhn.de`)
       - traefik.http.routers.prost-dev-frontend.entrypoints=websecure
+      - traefik.http.routers.prost-dev-frontend.tls=true
+      - traefik.http.routers.prost-dev-frontend.tls.certresolver=cloudflare
       - traefik.http.services.prost-dev-frontend.loadbalancer.server.port=80
-      - traefik.docker.network=frontend
 
 networks:
   frontend:
