@@ -122,7 +122,7 @@ jobs:
           echo $CR_PAT | docker login ghcr.io -u ${{ secrets.GH_REPOSITORY_OWNER }} --password-stdin
 
       - name: Deploy to server via SSH
-        uses: appleboy/ssh-action@v1.2.2
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
           username: ${{ secrets.DEPLOY_SERVER_USER }}
