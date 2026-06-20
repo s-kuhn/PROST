@@ -116,11 +116,6 @@ jobs:
           strip_components: 1
           overwrite: true
 
-      - name: Log in to the Container registry
-        run: |
-          export CR_PAT=${{ secrets.GHCR_TOKEN }}
-          echo $CR_PAT | docker login ghcr.io -u ${{ secrets.GH_REPOSITORY_OWNER }} --password-stdin
-
       - name: Deploy to server via SSH
         uses: appleboy/ssh-action@v1.2.5
         with:
@@ -131,6 +126,7 @@ jobs:
           script: |
             export PATH=$PATH:/snap/bin
             cd ${{ secrets.DEPLOY_SERVER_PATH }}
+            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GH_REPOSITORY_OWNER }}" --password-stdin
             docker image prune -a --force
             cat > docker/.env <<EOF
             VERSION_TAG_BACKEND=${{ needs.sync-main.outputs.version_tag }}
