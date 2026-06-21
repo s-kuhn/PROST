@@ -10,7 +10,7 @@ import {
 import {environment} from '../environments/environment';
 
 const localhostCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
-  urlPattern: /^(http:\/\/localhost:8080)(\/.*)?$/i
+  urlPattern: /^(http:\/\/localhost:8080|\/prost\/api)(\/.*)?$/i
 });
 
 export const provideKeycloakAngular = () =>
