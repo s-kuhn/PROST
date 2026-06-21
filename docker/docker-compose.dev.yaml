@@ -148,5 +148,5 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ./data/db-dev
+      device: ../data/db-dev
       o: bind

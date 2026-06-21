@@ -234,6 +234,7 @@ jobs:
             export PATH=$PATH:/snap/bin
             cd ${{ secrets.DEPLOY_SERVER_PATH }}
             echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GH_REPOSITORY_OWNER }}" --password-stdin
+            mkdir -p data/db-dev
             docker image prune -a --force
             cat > docker/.env <<EOF
             VERSION_TAG_BACKEND=${{ env.VERSION_TAG_BACKEND }}
