@@ -56,7 +56,7 @@ jobs:
           install: true
 
       - name: Build and push Backend
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: docker/Dockerfile
@@ -67,7 +67,7 @@ jobs:
             ghcr.io/${{ github.repository_owner }}/prost_backend:latest
 
       - name: Build and push Frontend
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./frontend/prost-frontend
           file: ./frontend/prost-frontend/Dockerfile
