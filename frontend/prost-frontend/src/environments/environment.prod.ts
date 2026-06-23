@@ -6,5 +6,5 @@ export const environment = {
     realm: 'prost',
     clientId: 'prost-frontend',
   },
-  apiUrl: 'http://backend:8080/prost/api',
+  apiUrl: '/prost/api',
 };
