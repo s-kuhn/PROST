@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       - dev
-    types: [closed]
+    types: [ closed ]
 
 concurrency:
   group: "dev-build-and-tag-${{ github.event.pull_request.number || github.ref }}"
@@ -18,7 +18,7 @@ jobs:
       frontend: ${{ steps.changed-files.outputs.frontend_any_changed }}
     if: github.event.pull_request.merged == true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v47
@@ -40,7 +40,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -76,28 +76,28 @@ jobs:
           fi
 
       - name: Login to GitHub container registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
         with:
           driver: docker-container
           install: true
 
       - name: Build and push backend
         if: needs.changes.outputs.backend == 'true'
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: docker/Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/prost_backend_dev:${{ steps.get_version.outputs.version }}
@@ -123,7 +123,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Read version from package.json
         id: get_version
@@ -144,28 +144,28 @@ jobs:
           fi
 
       - name: Login to GitHub container registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
         with:
           driver: docker-container
           install: true
 
       - name: Build and push frontend
         if: needs.changes.outputs.frontend == 'true'
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: ./frontend/prost-frontend
           file: ./frontend/prost-frontend/Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           tags: |
             ghcr.io/${{ github.repository_owner }}/prost_frontend_dev:${{ steps.get_version.outputs.version }}
@@ -183,7 +183,7 @@ jobs:
 
   deploy-dev:
     environment: dev
-    needs: [build-and-tag-backend, build-and-tag-frontend]
+    needs: [ build-and-tag-backend, build-and-tag-frontend ]
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
     env:
@@ -198,7 +198,7 @@ jobs:
           echo "Frontend: ${{ env.VERSION_TAG_FRONTEND }} (Changes: ${{ needs.build-and-tag-frontend.outputs.has_changes }})"
 
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - name: Copy Docker Files to Server
         uses: appleboy/scp-action@v1.0.0
@@ -223,13 +223,8 @@ jobs:
           strip_components: 1
           overwrite: true
 
-      - name: Log in to the Container registry
-        run: |
-          export CR_PAT=${{ secrets.GHCR_TOKEN }}
-          echo $CR_PAT | docker login ghcr.io -u ${{ secrets.GH_REPOSITORY_OWNER }} --password-stdin
-
       - name: Deploy to server via SSH
-        uses: appleboy/ssh-action@v1.2.2
+        uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
           username: ${{ secrets.DEPLOY_SERVER_USER }}
@@ -238,6 +233,8 @@ jobs:
           script: |
             export PATH=$PATH:/snap/bin
             cd ${{ secrets.DEPLOY_SERVER_PATH }}
+            echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GH_REPOSITORY_OWNER }}" --password-stdin
+            mkdir -p data/db-dev
             docker image prune -a --force
             cat > docker/.env <<EOF
             VERSION_TAG_BACKEND=${{ env.VERSION_TAG_BACKEND }}
