@@ -77,27 +77,15 @@ services:
         --http-port=8081
     environment:
       <<: *keycloak_env
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=frontend
-      - traefik.http.middlewares.compresstraefik.compress=true
-      - traefik.http.routers.prost-prod-keycloak.tls=true
-      - traefik.http.routers.prost-prod-keycloak.tls.certresolver=cloudflare
-      - traefik.http.routers.prost-prod-keycloak.rule=Host(`keycloak.prost.home.s-kuhn.de`)
-      - traefik.http.routers.prost-prod-keycloak.entrypoints=websecure
-      - traefik.http.routers.prost-prod-keycloak.middlewares=compresstraefik
-      - traefik.http.services.prost-prod-keycloak.loadbalancer.server.port=8081
-      - traefik.http.services.prost-prod-keycloak.loadbalancer.passhostheader=true
     volumes:
       - ./keycloak:/opt/keycloak/data/import
     depends_on:
       database:
         condition: service_healthy
     networks:
-      - frontend
       - prod-prost-vnet
-#    ports: # Not needed, Traefik will handle the routing
-#      - "443:443"
+    ports:
+      - "10.0.50.21:8081:8081"
     healthcheck:
       test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/8081"]
       interval: 30s
@@ -144,26 +132,15 @@ services:
     environment:
       <<: *frontend_env
     networks:
-      - frontend
       - prod-prost-vnet
-#    ports: # Not needed, Traefik will handle the routing
-#      - "443:443"
+    ports:
+      - "10.0.50.21:80:80"
     depends_on:
       - backend
       - keycloak
     restart: unless-stopped
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.prost-prod-frontend.tls=true
-      - traefik.http.routers.prost-prod-frontend.tls.certresolver=cloudflare
-      - traefik.http.routers.prost-prod-frontend.rule=Host(`prost.home.s-kuhn.de`)
-      - traefik.http.routers.prost-prod-frontend.entrypoints=websecure
-      - traefik.http.services.prost-prod-frontend.loadbalancer.server.port=80
-      - traefik.docker.network=frontend
 
 networks:
-  frontend:
-    external: true
   prod-prost-vnet:
 
 volumes:
@@ -171,5 +148,5 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: ./data/db-prod
+      device: ../data/db-prod
       o: bind
