@@ -2,8 +2,8 @@
   <header>
     <h1>Welcome to the PROST App!</h1>
     <p class="description">This is the public homepage.</p>
-    <a [routerLink]="['/']">
-      <img class="brand-logo" src="assets/header.png" alt="logo" aria-hidden="true"/>
+    <a [routerLink]="['/']" aria-label="Go to home page">
+      <img class="brand-logo" src="assets/header.png" alt="PROST home" aria-hidden="true"/>
     </a>
   </header>
 
@@ -26,7 +26,7 @@
         </li>
       </ul>
     </section>
-    @if (copyMessage$ | async; as copyMessage) {
+    @if (copyMessage(); as copyMessage) {
       <div class="message-box">
         {{ copyMessage }}
       </div>

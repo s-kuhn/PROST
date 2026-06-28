@@ -1,6 +1,6 @@
 <div class="section">
   <header>
-    <h1>Welcome, {{ user?.name }}</h1>
+    <h1>Welcome, {{ user.value()?.name }}</h1>
     <p class="description">
       This page is protected by an Auth Guard and uses the <code>*kaHasRoles</code> structural directive to restrict
       access based on user roles.
@@ -8,11 +8,17 @@
   </header>
 
   <main>
-    <section class="profile-card">
-      <h2>Profile Details</h2>
-      <p><strong>Name:</strong> {{ user?.name }}</p>
-      <p><strong>Email:</strong> {{ user?.email }}</p>
-      <p><strong>Username:</strong> {{ user?.username }}</p>
-    </section>
+    @if (user.isLoading()) {
+      <p>Loading profile...</p>
+    } @else if (user.error()) {
+      <p>Could not load profile.</p>
+    } @else if (user.value(); as profile) {
+      <section class="profile-card">
+        <h2>Profile Details</h2>
+        <p><strong>Name:</strong> {{ profile.name }}</p>
+        <p><strong>Email:</strong> {{ profile.email }}</p>
+        <p><strong>Username:</strong> {{ profile.username }}</p>
+      </section>
+    }
   </main>
 </div>

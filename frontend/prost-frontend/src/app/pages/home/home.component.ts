@@ -1,8 +1,7 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, OnDestroy, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {BehaviorSubject, timer} from 'rxjs';
-import {environment} from "../../../environments/environment";
-import {RouterLink} from "@angular/router";
+import {environment} from '../../../environments/environment';
+import {RouterLink} from '@angular/router';
 
 @Component({
     selector: 'app-home',
@@ -11,23 +10,31 @@ import {RouterLink} from "@angular/router";
     imports: [CommonModule, RouterLink]
 })
 export class HomeComponent implements OnDestroy {
-    url = environment.keycloak.uri;
-    private copyMessageSubject = new BehaviorSubject<string | null>(null);
-    copyMessage$ = this.copyMessageSubject.asObservable(); // Expose as Observable
+    readonly url = environment.keycloak.uri;
+    readonly copyMessage = signal<string | null>(null);
+    private copyMessageTimeout: ReturnType<typeof setTimeout> | undefined;
 
     copyToClipboard(text: string): void {
         navigator.clipboard
             .writeText(text)
             .then(() => {
-                this.copyMessageSubject.next(`"${text}" copied to clipboard!`);
-                timer(3000).subscribe(() => this.copyMessageSubject.next(null));
+                this.copyMessage.set(`"${text}" copied to clipboard!`);
+                this.clearCopyMessageTimeout();
+                this.copyMessageTimeout = setTimeout(() => this.copyMessage.set(null), 3000);
             })
-            .catch((err) => {
-                this.copyMessageSubject.next('Failed to copy text. Please try again.');
+            .catch(() => {
+                this.copyMessage.set('Failed to copy text. Please try again.');
             });
     }
 
     ngOnDestroy(): void {
-        this.copyMessageSubject.complete();
+        this.clearCopyMessageTimeout();
+    }
+
+    private clearCopyMessageTimeout(): void {
+        if (this.copyMessageTimeout !== undefined) {
+            clearTimeout(this.copyMessageTimeout);
+            this.copyMessageTimeout = undefined;
+        }
     }
 }
