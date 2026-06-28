@@ -1,15 +1,20 @@
-import {ApplicationConfig, provideZoneChangeDetection} from '@angular/core';
+import {ApplicationConfig, inject, provideEnvironmentInitializer, provideZonelessChangeDetection} from '@angular/core';
 import {routes} from './app.routes';
 import {provideRouter} from '@angular/router';
 import {provideKeycloakAngular} from './keycloak.config';
-import {provideHttpClient, withInterceptors} from '@angular/common/http';
+import {provideHttpClient, withInterceptors, withXhr} from '@angular/common/http';
 import {includeBearerTokenInterceptor} from 'keycloak-angular';
+import {FaviconService} from './services/favicon.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideKeycloakAngular(),
-    provideZoneChangeDetection({eventCoalescing: true}),
+    provideZonelessChangeDetection(),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([includeBearerTokenInterceptor]))
+      // TODO: withXhr() / withFetch()
+    provideHttpClient(withXhr(), withInterceptors([includeBearerTokenInterceptor])),
+    provideEnvironmentInitializer(() => {
+      inject(FaviconService);
+    })
   ],
 };

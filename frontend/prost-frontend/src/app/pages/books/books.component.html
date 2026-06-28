@@ -11,11 +11,15 @@
   </header>
 
   <main>
-    @if (books.length === 0) {
+    @if (books.isLoading()) {
+      <p class="no-books">Loading books...</p>
+    } @else if (books.error()) {
+      <p class="no-books">Could not load books. Did you start the <code>example-server</code> project?</p>
+    } @else if (books.value().length === 0) {
       <p class="no-books">No books found. Did you start the <code>example-server</code> project?</p>
     } @else {
       <ul class="book-list">
-        @for (book of books; track book.id) {
+        @for (book of books.value(); track book.id) {
           <li class="book-item">
             <strong>{{ book.title }}</strong> by {{ book.author }} ({{ book.year }})
           </li>
