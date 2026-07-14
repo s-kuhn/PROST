@@ -29,8 +29,8 @@ class CustomEventListenerProvider : EventListenerProvider {
     private fun sendAuthenticatedRequest() {
         val token = getAccessToken() ?: return
         logger.info { "Access Token: ${token.take(4)}****${token.takeLast(4)}" }
-        val backendHostname = System.getenv("BACKEND_HOSTNAME") ?: "backend" // TODO: exception
-        val fullUrl = "http://$backendHostname:8080/prost/api/v1/sec"
+        val backendInternalUrl = System.getenv("BACKEND_INTERNAL_URL") ?: "http://backend:8080"
+        val fullUrl = "$backendInternalUrl/prost/api/v1/sec"
         val request = HttpRequest.newBuilder()
             .uri(URI.create(fullUrl))
             .header("Authorization", "Bearer $token")
@@ -50,10 +50,12 @@ class CustomEventListenerProvider : EventListenerProvider {
     private fun getAccessToken(): String? {
         val clientId = "event-listener"
         val clientSecret = System.getenv("KEYCLOAK_EVENT_LISTENER_SECRET")
-        val tokenHostname = System.getenv("KEYCLOAK_HOSTNAME")
-        val tokenUrl = "http://$tokenHostname:8081/realms/prost/protocol/openid-connect/token" // Keycloak calls itself
+        val keycloakInternalUrl = System.getenv("KEYCLOAK_INTERNAL_URL") ?: "http://keycloak:8081"
+        val keycloakRealm = System.getenv("KEYCLOAK_REALM") ?: "prost"
+        val tokenUrl = "$keycloakInternalUrl/realms/$keycloakRealm/protocol/openid-connect/token"
 
-        val requestBody = "grant_type=client_credentials&client_id=$clientId&client_secret=$clientSecret"
+        val requestBody =
+            "grant_type=client_credentials&client_id=$clientId&client_secret=$clientSecret"
 
         val request = HttpRequest.newBuilder()
             .uri(URI.create(tokenUrl))

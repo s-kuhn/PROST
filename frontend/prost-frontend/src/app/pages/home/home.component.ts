@@ -1,7 +1,7 @@
 import {Component, OnDestroy, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {environment} from '../../../environments/environment';
 import {RouterLink} from '@angular/router';
+import {getRuntimeConfig} from '../../runtime-config';
 
 @Component({
     selector: 'app-home',
@@ -10,7 +10,7 @@ import {RouterLink} from '@angular/router';
     imports: [CommonModule, RouterLink]
 })
 export class HomeComponent implements OnDestroy {
-    readonly url = environment.keycloak.uri;
+    readonly url = getRuntimeConfig().keycloak.url;
     readonly copyMessage = signal<string | null>(null);
     private copyMessageTimeout: ReturnType<typeof setTimeout> | undefined;
 
