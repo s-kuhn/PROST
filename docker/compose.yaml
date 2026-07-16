@@ -1,0 +1,113 @@
+x-database-env: &database_env
+  POSTGRES_USER: ${POSTGRES_USER:-prost}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+  POSTGRES_DB: ${POSTGRES_DB:-prost}
+
+x-db-healthcheck: &db_healthcheck
+  test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER:-prost}", "-d", "${POSTGRES_DB:-prost}"]
+  interval: 10s
+  timeout: 10s
+  retries: 5
+  start_period: 60s
+
+x-keycloak-env: &keycloak_env
+  KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME:-admin}
+  KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD:?KC_BOOTSTRAP_ADMIN_PASSWORD is required}
+  KC_DB: postgres
+  KC_DB_URL_HOST: database
+  KC_DB_URL_DATABASE: ${POSTGRES_DB:-prost}
+  KC_DB_URL_PORT: 5432
+  KC_DB_USERNAME: ${POSTGRES_USER:-prost}
+  KC_DB_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+  KC_SPI_SCRIPT_UPLOAD_ENABLED: true
+  KC_HTTP_ENABLED: 'true'
+  KC_PROXY_HEADERS: xforwarded
+  PROXY_ADDRESS_FORWARDING: 'true'
+  KC_HOSTNAME: ${KEYCLOAK_PUBLIC_URL:?KEYCLOAK_PUBLIC_URL is required}
+  BACKEND_INTERNAL_URL: ${BACKEND_INTERNAL_URL:-http://backend:8080}
+  KEYCLOAK_INTERNAL_URL: ${KEYCLOAK_INTERNAL_URL:-http://keycloak:8081}
+  KEYCLOAK_REALM: ${KEYCLOAK_REALM:-prost}
+  KEYCLOAK_EVENT_LISTENER_SECRET: ${KEYCLOAK_EVENT_LISTENER_SECRET:?KEYCLOAK_EVENT_LISTENER_SECRET is required}
+
+x-backend-env: &backend_env
+  POSTGRES_HOST: database
+  POSTGRES_PORT: 5432
+  POSTGRES_DB: ${POSTGRES_DB:-prost}
+  POSTGRES_USER: ${POSTGRES_USER:-prost}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+  KEYCLOAK_INTERNAL_URL: ${KEYCLOAK_INTERNAL_URL:-http://keycloak:8081}
+  KEYCLOAK_REALM: ${KEYCLOAK_REALM:-prost}
+  KEYCLOAK_BACKEND_CLIENT_ID: ${KEYCLOAK_BACKEND_CLIENT_ID:-prost-rest-api}
+  KEYCLOAK_BACKEND_CLIENT_SECRET: ${KEYCLOAK_BACKEND_CLIENT_SECRET:-}
+  PROST_VERSION: ${PROST_VERSION:-0.0.0}
+
+x-frontend-env: &frontend_env
+  FRONTEND_HOSTNAME: ${PROST_PUBLIC_URL:?PROST_PUBLIC_URL is required}
+  PROST_API_URL: ${PROST_API_URL:-/prost/api}
+  KEYCLOAK_PUBLIC_URL: ${KEYCLOAK_PUBLIC_URL:?KEYCLOAK_PUBLIC_URL is required}
+  KEYCLOAK_REALM: ${KEYCLOAK_REALM:-prost}
+  KEYCLOAK_FRONTEND_CLIENT_ID: ${KEYCLOAK_FRONTEND_CLIENT_ID:-prost-frontend}
+  PROST_VERSION: ${PROST_VERSION:-0.0.0}
+
+services:
+  database:
+    image: postgres:17.5
+    environment:
+      <<: *database_env
+    networks:
+      - prost-vnet
+    restart: unless-stopped
+    healthcheck: *db_healthcheck
+
+  keycloak:
+    image: ghcr.io/${GH_REPOSITORY_OWNER:-s-kuhn}/prost-keycloak:${IMAGE_TAG:-dev}
+    command: >
+      start
+        --import-realm
+        --optimized
+        --http-port=8081
+    environment:
+      <<: *keycloak_env
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import:ro
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - prost-vnet
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/8081"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s
+    restart: unless-stopped
+
+  backend:
+    profiles: ["app"]
+    image: ghcr.io/${GH_REPOSITORY_OWNER:-s-kuhn}/prost-backend:${IMAGE_TAG:-dev}
+    environment:
+      <<: *backend_env
+    networks:
+      - prost-vnet
+    depends_on:
+      database:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+    restart: unless-stopped
+
+  frontend:
+    profiles: ["app"]
+    image: ghcr.io/${GH_REPOSITORY_OWNER:-s-kuhn}/prost-frontend:${IMAGE_TAG:-dev}
+    environment:
+      <<: *frontend_env
+    networks:
+      - prost-vnet
+    depends_on:
+      - backend
+      - keycloak
+    restart: unless-stopped
+
+networks:
+  prost-vnet:
