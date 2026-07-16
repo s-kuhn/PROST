@@ -1,0 +1,26 @@
+services:
+  database:
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  keycloak:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.keycloak
+    environment:
+      KC_HOSTNAME: http://localhost:8081
+      KEYCLOAK_PUBLIC_URL: http://localhost:8081
+      KEYCLOAK_INTERNAL_URL: http://localhost:8081
+      BACKEND_INTERNAL_URL: http://host.docker.internal:8080
+    ports:
+      - "8081:8081"
+
+  mailhog:
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  postgres-data:
