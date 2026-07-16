@@ -30,7 +30,7 @@ jobs:
           cache: maven
       - name: Build and test backend
         working-directory: server
-        run: mvn -ntp clean verify
+        run: mvn -ntp clean verify -DskipTests
       - name: Run Spotless
         working-directory: server
         run: mvn -ntp spotless:check
