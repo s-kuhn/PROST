@@ -83,12 +83,6 @@ services:
       start_period: 90s
     restart: unless-stopped
 
-  mailhog:
-    image: mailhog/mailhog
-    networks:
-      - prost-vnet
-    restart: unless-stopped
-
   backend:
     profiles: ["app"]
     image: ghcr.io/${GH_REPOSITORY_OWNER:-s-kuhn}/prost-backend:${IMAGE_TAG:-dev}
