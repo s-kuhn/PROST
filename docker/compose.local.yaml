@@ -17,10 +17,5 @@ services:
     ports:
       - "8081:8081"
 
-  mailhog:
-    ports:
-      - "1025:1025"
-      - "8025:8025"
-
 volumes:
   postgres-data:
