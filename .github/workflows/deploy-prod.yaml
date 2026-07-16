@@ -1,0 +1,112 @@
+name: Deploy Prod
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: prod-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      ref: ${{ github.ref_name }}
+      backend_tags: ${{ steps.tags.outputs.backend_tags }}
+      frontend_tags: ${{ steps.tags.outputs.frontend_tags }}
+      keycloak_tags: ${{ steps.tags.outputs.keycloak_tags }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Read version
+        id: version
+        run: |
+          version=$(tr -d '[:space:]' < VERSION)
+          if [ -z "$version" ]; then
+            echo 'VERSION must not be empty' >&2
+            exit 1
+          fi
+          if git rev-parse "v$version" >/dev/null 2>&1; then
+            echo "Git tag v$version already exists" >&2
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Calculate image tags
+        id: tags
+        run: |
+          version='${{ steps.version.outputs.version }}'
+          for image in backend frontend keycloak; do
+            output_name="${image}_tags"
+            {
+              echo "${output_name}<<EOF"
+              echo "ghcr.io/${{ github.repository_owner }}/prost-${image}:$version"
+              echo "ghcr.io/${{ github.repository_owner }}/prost-${image}:latest"
+              echo 'EOF'
+            } >> "$GITHUB_OUTPUT"
+          done
+
+  build-backend:
+    needs: prepare
+    uses: ./.github/workflows/_build-image.yaml
+    with:
+      ref: ${{ needs.prepare.outputs.ref }}
+      image_name: prost-backend
+      context: .
+      dockerfile: docker/Dockerfile
+      tags: ${{ needs.prepare.outputs.backend_tags }}
+
+  build-frontend:
+    needs: prepare
+    uses: ./.github/workflows/_build-image.yaml
+    with:
+      ref: ${{ needs.prepare.outputs.ref }}
+      image_name: prost-frontend
+      context: ./frontend/prost-frontend
+      dockerfile: ./frontend/prost-frontend/Dockerfile
+      tags: ${{ needs.prepare.outputs.frontend_tags }}
+
+  build-keycloak:
+    needs: prepare
+    uses: ./.github/workflows/_build-image.yaml
+    with:
+      ref: ${{ needs.prepare.outputs.ref }}
+      image_name: prost-keycloak
+      context: .
+      dockerfile: docker/Dockerfile.keycloak
+      tags: ${{ needs.prepare.outputs.keycloak_tags }}
+
+  deploy:
+    needs: [prepare, build-backend, build-frontend, build-keycloak]
+    uses: ./.github/workflows/_deploy-compose.yaml
+    with:
+      ref: ${{ needs.prepare.outputs.ref }}
+      environment_name: prod
+      compose_file: compose.prod.yaml
+      project_name: prod_prost
+      image_tag: ${{ needs.prepare.outputs.version }}
+      prost_version: ${{ needs.prepare.outputs.version }}
+    secrets: inherit
+
+  create-tag:
+    needs: [prepare, deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+      - name: Create Git tag
+        run: |
+          git config user.name 'GitHub Actions'
+          git config user.email 'actions@github.com'
+          git tag "v${{ needs.prepare.outputs.version }}"
+          git push origin "v${{ needs.prepare.outputs.version }}"
