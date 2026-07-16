@@ -1,0 +1,25 @@
+services:
+  database:
+    volumes:
+      - ../data/db-dev:/var/lib/postgresql/data
+
+  keycloak:
+    environment:
+      KC_HOSTNAME: https://keycloak-dev.home.s-kuhn.de
+      KEYCLOAK_INTERNAL_URL: http://keycloak:8081
+      BACKEND_INTERNAL_URL: http://backend:8080
+    ports:
+      - "10.0.50.30:8081:8081"
+
+  frontend:
+    ports:
+      - "10.0.50.30:80:80"
+    environment:
+      FRONTEND_HOSTNAME: prost-dev.home.s-kuhn.de
+      PROST_API_URL: /prost/api
+      KEYCLOAK_PUBLIC_URL: https://keycloak-dev.home.s-kuhn.de
+
+  backend:
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      KEYCLOAK_INTERNAL_URL: http://keycloak:8081

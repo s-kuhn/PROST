@@ -1,0 +1,100 @@
+name: Deploy Dev
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Branch, tag or commit to deploy
+        required: true
+        default: dev
+
+concurrency:
+  group: dev-deploy
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      ref: ${{ steps.ref.outputs.ref }}
+      sha_tag: ${{ steps.tags.outputs.sha_tag }}
+      backend_tags: ${{ steps.tags.outputs.backend_tags }}
+      frontend_tags: ${{ steps.tags.outputs.frontend_tags }}
+      keycloak_tags: ${{ steps.tags.outputs.keycloak_tags }}
+    steps:
+      - name: Resolve ref
+        id: ref
+        run: |
+          ref='${{ github.event.inputs.ref || github.ref_name }}'
+          echo "ref=$ref" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ steps.ref.outputs.ref }}
+
+      - name: Calculate image tags
+        id: tags
+        run: |
+          sha_tag="sha-$(git rev-parse --short=7 HEAD)"
+          echo "sha_tag=$sha_tag" >> "$GITHUB_OUTPUT"
+          for image in backend frontend keycloak; do
+            output_name="${image}_tags"
+            {
+              echo "${output_name}<<EOF"
+              echo "ghcr.io/${{ github.repository_owner }}/prost-${image}:$sha_tag"
+              if [ '${{ github.event_name }}' = 'push' ]; then
+                echo "ghcr.io/${{ github.repository_owner }}/prost-${image}:dev"
+              fi
+              echo 'EOF'
+            } >> "$GITHUB_OUTPUT"
+          done
+
+  build-backend:
+    needs: prepare
+    uses: ./.github/workflows/_build-image.yaml
+    with:
+      ref: ${{ needs.prepare.outputs.ref }}
+      image_name: prost-backend
+      context: .
+      dockerfile: docker/Dockerfile
+      tags: ${{ needs.prepare.outputs.backend_tags }}
+
+  build-frontend:
+    needs: prepare
+    uses: ./.github/workflows/_build-image.yaml
+    with:
+      ref: ${{ needs.prepare.outputs.ref }}
+      image_name: prost-frontend
+      context: ./frontend/prost-frontend
+      dockerfile: ./frontend/prost-frontend/Dockerfile
+      tags: ${{ needs.prepare.outputs.frontend_tags }}
+
+  build-keycloak:
+    needs: prepare
+    uses: ./.github/workflows/_build-image.yaml
+    with:
+      ref: ${{ needs.prepare.outputs.ref }}
+      image_name: prost-keycloak
+      context: .
+      dockerfile: docker/Dockerfile.keycloak
+      tags: ${{ needs.prepare.outputs.keycloak_tags }}
+
+  deploy:
+    needs: [prepare, build-backend, build-frontend, build-keycloak]
+    uses: ./.github/workflows/_deploy-compose.yaml
+    with:
+      ref: ${{ needs.prepare.outputs.ref }}
+      environment_name: dev
+      compose_file: compose.dev.yaml
+      project_name: dev_prost
+      image_tag: ${{ needs.prepare.outputs.sha_tag }}
+      prost_version: ${{ needs.prepare.outputs.sha_tag }}
+    secrets: inherit
