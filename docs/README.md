@@ -46,7 +46,8 @@ also aimed at associations that want to keep track of their members' debts and c
 - Clone the repository
 - Install Docker
 - Setup environment variables (see [.env.example](/.env.example))
-- Start the database in the [docker-compose.yaml](../docker/docker-compose.yaml)
+- Start the local infrastructure with
+  `docker compose --env-file .env.example -f ./docker/compose.yaml -f ./docker/compose.local.yaml up`
 - Load maven project
 - Run the application
 
@@ -68,26 +69,29 @@ Branch-conventions:
     - `bugfix`
 
 ## How to start dev env local
+
 TODO: update
+
 ```bash
-docker compose --env-file .env.dev -p "dev_prost" -f "./docker/docker-compose.dev.yaml" up
+docker compose --env-file .env.dev -p "dev_prost" -f "./docker/compose.yaml" -f "./docker/compose.dev.yaml" --profile app up
 ```
 
 ## How to start prod env local
 
 ```bash
-docker compose --env-file .env.prod -p "prod_prost" -f "./docker/docker-compose.prod.yaml" up
+docker compose --env-file .env.prod -p "prod_prost" -f "./docker/compose.yaml" -f "./docker/compose.prod.yaml" --profile app up
 ```
 
 ## Keycloak
 
-- Container is available at either `http://dev-prost-keycloak.local:8081` or `http://prod-prost-keycloak.local:8081`
+- Container is available at either `http://dev-prost-keycloak.local:8081` or
+  `http://prod-prost-keycloak.local:8081`
 - Entry in host file is required
 - User registration is enabled (only through browser 😪)
 - Mapping of Keycloak users with Domain users is done via an event listener plugin in keycloak
-- As a result, the event listener calls the backend API through the `host.docker.internal` or `backend` hostname to
-  access the locally
-  running backend (local development only) or in container (dev/production)
+- As a result, the event listener calls the backend API through the `host.docker.internal` or
+  `backend` hostname to access the locally running backend (local development only) or in
+  container (dev/production)
 
 ```bash
 127.0.0.1 dev-prost-keycloak.local

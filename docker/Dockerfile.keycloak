@@ -9,7 +9,7 @@ COPY keycloak-webhook-event-listener/src ./src
 RUN mvn clean package -DskipTests -B
 
 
-FROM quay.io/keycloak/keycloak:26.2.5 AS keycloak-base
+FROM quay.io/keycloak/keycloak:26.6.4 AS keycloak-base
 WORKDIR /opt/keycloak
 
 COPY --from=builder /build/target/webhook-event-listener-*.jar \

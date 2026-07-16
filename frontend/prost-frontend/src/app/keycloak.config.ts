@@ -7,18 +7,23 @@ import {
   UserActivityService,
   withAutoRefreshToken
 } from 'keycloak-angular';
-import {environment} from '../environments/environment';
+import {getRuntimeConfig} from './runtime-config';
 
-const localhostCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
-  urlPattern: /^(http:\/\/localhost:8080|\/prost\/api)(\/.*)?$/i
-});
+function escapeRegex(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
-export const provideKeycloakAngular = () =>
-  provideKeycloak({
+export const provideKeycloakAngular = () => {
+  const runtimeConfig = getRuntimeConfig();
+  const apiCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
+    urlPattern: new RegExp(`^${escapeRegex(runtimeConfig.apiUrl)}(/.*)?$`, 'i')
+  });
+
+  return provideKeycloak({
     config: {
-      url: environment.keycloak.uri,
-      realm: environment.keycloak.realm,
-      clientId: environment.keycloak.clientId,
+      url: runtimeConfig.keycloak.url,
+      realm: runtimeConfig.keycloak.realm,
+      clientId: runtimeConfig.keycloak.clientId,
     },
     initOptions: {
       onLoad: 'check-sso',
@@ -36,7 +41,8 @@ export const provideKeycloakAngular = () =>
       UserActivityService,
       {
         provide: INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
-        useValue: [localhostCondition]
+        useValue: [apiCondition]
       }
     ]
   });
+};
