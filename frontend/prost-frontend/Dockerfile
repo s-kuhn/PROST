@@ -1,5 +1,5 @@
 # Multi-stage build for Angular Frontend
-FROM node:20-alpine AS build
+FROM node:24.15-alpine AS build
 
 # Set working directory
 WORKDIR /app
@@ -26,7 +26,7 @@ RUN apk add --no-cache gettext
 # Copy nginx template
 COPY nginx.conf.template /etc/nginx/nginx.conf.template
 
-# Copy built application - Angular 20 puts files in browser/ subdirectory
+# Copy built application - Angular puts files in browser/ subdirectory
 COPY --from=build /app/dist/prost-frontend/browser/ /usr/share/nginx/html
 
 # Copy and make executable the entrypoint script

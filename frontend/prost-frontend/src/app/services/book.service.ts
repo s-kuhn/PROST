@@ -3,13 +3,13 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 
 import {Book} from '../models/book.model';
-import {environment} from '../../environments/environment';
+import {getRuntimeConfig} from '../runtime-config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookService {
-  private apiUrl = environment.apiUrl + '/v1/test';
+  private apiUrl = getRuntimeConfig().apiUrl + '/v1/test';
   private http = inject(HttpClient);
 
   listBooks(): Observable<Book[]> {

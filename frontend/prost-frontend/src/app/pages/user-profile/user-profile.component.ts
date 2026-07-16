@@ -1,4 +1,4 @@
-import {Component, OnInit, inject} from '@angular/core';
+import {Component, inject, resource} from '@angular/core';
 import {User} from '../../models/user.model';
 import Keycloak from 'keycloak-js';
 
@@ -7,20 +7,22 @@ import Keycloak from 'keycloak-js';
   templateUrl: 'user-profile.component.html',
   styleUrls: [`user-profile.component.css`]
 })
-export class UserProfileComponent implements OnInit {
+export class UserProfileComponent {
   private readonly keycloak = inject(Keycloak);
 
-  user: User | undefined;
+  readonly user = resource<User | undefined, void>({
+    loader: async () => {
+      if (!this.keycloak.authenticated) {
+        return undefined;
+      }
 
-  async ngOnInit() {
-    if (this.keycloak?.authenticated) {
       const profile = await this.keycloak.loadUserProfile();
 
-      this.user = {
-        name: `${profile?.firstName} ${profile.lastName}`,
-        email: profile?.email,
-        username: profile?.username
+      return {
+        name: `${profile.firstName ?? ''} ${profile.lastName ?? ''}`.trim(),
+        email: profile.email,
+        username: profile.username
       };
     }
-  }
+  });
 }

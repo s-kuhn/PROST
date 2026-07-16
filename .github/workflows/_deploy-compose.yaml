@@ -1,0 +1,110 @@
+name: Deploy Compose
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        required: true
+        type: string
+      environment_name:
+        required: true
+        type: string
+      compose_file:
+        required: true
+        type: string
+      project_name:
+        required: true
+        type: string
+      image_tag:
+        required: true
+        type: string
+      prost_version:
+        required: true
+        type: string
+    secrets:
+      DEPLOY_SERVER_HOST:
+        required: true
+      DEPLOY_SERVER_USER:
+        required: true
+      DEPLOY_SERVER_SSH_KEY:
+        required: true
+      DEPLOY_SERVER_PATH:
+        required: true
+      POSTGRES_PASSWORD:
+        required: true
+      KC_BOOTSTRAP_ADMIN_PASSWORD:
+        required: true
+      KEYCLOAK_BACKEND_CLIENT_SECRET:
+        required: true
+      KEYCLOAK_EVENT_LISTENER_SECRET:
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    environment: ${{ inputs.environment_name }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Copy Docker files to server
+        uses: appleboy/scp-action@v1.0.0
+        with:
+          host: ${{ secrets.DEPLOY_SERVER_HOST }}
+          username: ${{ secrets.DEPLOY_SERVER_USER }}
+          key: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
+          port: 22
+          source: "docker/compose.yaml,docker/${{ inputs.compose_file }},docker/keycloak/"
+          target: ${{ secrets.DEPLOY_SERVER_PATH }}
+          overwrite: true
+
+      - name: Deploy to server via SSH
+        uses: appleboy/ssh-action@v1.2.5
+        with:
+          host: ${{ secrets.DEPLOY_SERVER_HOST }}
+          username: ${{ secrets.DEPLOY_SERVER_USER }}
+          key: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
+          port: 22
+          script: |
+            set -eu
+            export PATH=$PATH:/snap/bin
+            cd ${{ secrets.DEPLOY_SERVER_PATH }}
+            mkdir -p data/db-${{ inputs.environment_name }}
+            mkdir -p docker
+            printf '%s\n' \
+              'GH_REPOSITORY_OWNER=${{ github.repository_owner }}' \
+              'IMAGE_TAG=${{ inputs.image_tag }}' \
+              'PROST_VERSION=${{ inputs.prost_version }}' \
+              'POSTGRES_USER=prost' \
+              'POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}' \
+              'POSTGRES_DB=prost' \
+              'KEYCLOAK_REALM=prost' \
+              'KEYCLOAK_BACKEND_CLIENT_ID=prost-rest-api' \
+              'KEYCLOAK_BACKEND_CLIENT_SECRET=${{ secrets.KEYCLOAK_BACKEND_CLIENT_SECRET }}' \
+              'KEYCLOAK_FRONTEND_CLIENT_ID=prost-frontend' \
+              'KC_BOOTSTRAP_ADMIN_USERNAME=admin' \
+              'KC_BOOTSTRAP_ADMIN_PASSWORD=${{ secrets.KC_BOOTSTRAP_ADMIN_PASSWORD }}' \
+              'KEYCLOAK_EVENT_LISTENER_SECRET=${{ secrets.KEYCLOAK_EVENT_LISTENER_SECRET }}' \
+              'PROST_API_URL=/prost/api' \
+              'BACKEND_INTERNAL_URL=http://backend:8080' \
+              'KEYCLOAK_INTERNAL_URL=http://keycloak:8081' \
+              > docker/.env
+            if [ '${{ inputs.environment_name }}' = 'prod' ]; then
+              printf '%s\n' \
+                'PROST_PUBLIC_URL=https://prost.home.s-kuhn.de' \
+                'KEYCLOAK_PUBLIC_URL=https://keycloak.home.s-kuhn.de' \
+                >> docker/.env
+            else
+              printf '%s\n' \
+                'PROST_PUBLIC_URL=https://prost-dev.home.s-kuhn.de' \
+                'KEYCLOAK_PUBLIC_URL=https://keycloak-dev.home.s-kuhn.de' \
+                >> docker/.env
+            fi
+            docker compose --env-file docker/.env -f docker/compose.yaml -f docker/${{ inputs.compose_file }} --profile app -p "${{ inputs.project_name }}" pull
+            docker compose --env-file docker/.env -f docker/compose.yaml -f docker/${{ inputs.compose_file }} --profile app -p "${{ inputs.project_name }}" up -d --remove-orphans
+            docker image prune --force
