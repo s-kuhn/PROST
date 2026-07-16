@@ -28,6 +28,8 @@ on:
         required: true
       DEPLOY_SERVER_SSH_KEY:
         required: true
+      DEPLOY_SERVER_PORT:
+        required: true
       DEPLOY_SERVER_PATH:
         required: true
       POSTGRES_PASSWORD:
@@ -58,7 +60,7 @@ jobs:
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
           username: ${{ secrets.DEPLOY_SERVER_USER }}
           key: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
-          port: 22
+          port: ${{ secrets.DEPLOY_SERVER_PORT }}
           source: "docker/compose.yaml,docker/${{ inputs.compose_file }},docker/keycloak/"
           target: ${{ secrets.DEPLOY_SERVER_PATH }}
           overwrite: true
@@ -69,7 +71,7 @@ jobs:
           host: ${{ secrets.DEPLOY_SERVER_HOST }}
           username: ${{ secrets.DEPLOY_SERVER_USER }}
           key: ${{ secrets.DEPLOY_SERVER_SSH_KEY }}
-          port: 22
+          port: ${{ secrets.DEPLOY_SERVER_PORT }}
           script: |
             set -eu
             export PATH=$PATH:/snap/bin
