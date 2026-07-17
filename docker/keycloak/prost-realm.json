@@ -2810,7 +2810,7 @@
     "scimApiEnabled": "false",
     "adminEventsExpiration": "900"
   },
-  "keycloakVersion": "26.6.3",
+  "keycloakVersion": "26.7.0",
   "userManagedAccessAllowed": false,
   "organizationsEnabled": false,
   "verifiableCredentialsEnabled": false,
