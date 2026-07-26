@@ -62,7 +62,7 @@ scope.
 | [BR-002](business-rules/BR-002-tally-lifecycle.md)              | Tally Lifecycle              | draft     |
 | [BR-003](business-rules/BR-003-product-pricing.md)              | Product Pricing              | draft     |
 | [BR-004](business-rules/BR-004-settlement-and-corrections.md)   | Settlement And Corrections   | draft     |
-| [BR-005](business-rules/BR-005-balance-and-suspension.md)       | Balance And Suspension       | in-review |
+| [BR-005](business-rules/BR-005-balance-and-suspension.md)       | Balance And Suspension       | accepted  |
 | [BR-006](business-rules/BR-006-product-lifecycle.md)            | Product Lifecycle            | draft     |
 | [BR-007](business-rules/BR-007-privacy-and-pseudonymization.md) | Privacy And Pseudonymization | draft     |
 

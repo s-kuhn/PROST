@@ -1,7 +1,7 @@
 ---
 id: BR-005
 title: Balance And Suspension
-status: in-review
+status: accepted
 source: Product-owner interview on 2026-07-26
 ---
 
