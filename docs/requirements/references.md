@@ -16,6 +16,13 @@ The repository demonstrates an established workflow that generates a paper tally
 Consumers and Products, enters counted consumption in a batch, derives balances from transactions,
 records money manually, and sends balance emails.
 
+The upstream generator uses ReportLab flowables on an A3 landscape page. It specifies quarter-inch
+page margins, a two-inch existing-name column, one-third-inch Consumer rows, equal-width Product
+columns, an automatically sized heading row, and a separate handwritten-registration table. These
+correspond to approximately 6.35 mm margins, a 50.8 mm name column, and 8.47 mm rows. It does not
+repeat a split table's heading, validate physical marking width, generate a preview, or place QR codes.
+Observed deployment PDFs may contain local changes not present in the upstream repository.
+
 PROST does not treat DrinkIt code, terminology, data structures, or incidental behavior as
 requirements. This requirements set was elicited from the product owner and deliberately differs in
 areas such as self-service account access, explicit Tally state, audited corrections,

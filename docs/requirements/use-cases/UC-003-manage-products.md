@@ -2,7 +2,7 @@
 id: UC-003
 title: Manage Products
 status: draft
-source: Product-owner interview on 2026-07-26
+source: Product-owner interviews on 2026-07-26 and 2026-07-27
 ---
 
 # UC-003: Manage Products
@@ -39,18 +39,21 @@ Organization Manager
 ## Quality Scenarios
 
 - `QS-COR-002`
+- `QS-USA-004`
 
 ## Acceptance Criteria
 
 1. Product prices use exact EUR-cent values.
 2. Print order is manager-defined and stable.
-3. Width weights are positive and previewable.
-4. Product changes made while a Tally is Issued or in Settlement Draft do not alter its Tally
+3. Width weights are previewable whole numbers from 1 through 5; values outside that range are
+   rejected.
+4. The preview shows the physical width resulting from each Product's weight. Issuance is rejected if
+   any Product column would be narrower than 17 mm in the applicable layout profile.
+5. Product changes made while a Tally is Issued or in Settlement Draft do not alter its Tally
    Snapshot.
-5. Historical Settlements retain the Product name and price printed at issuance.
-6. A negative Product price is rejected.
+6. Historical Settlements retain the Product name and price printed at issuance.
+7. A negative Product price is rejected.
 
 ## Open Questions
 
 - Are complimentary zero-price Products needed?
-- What physical minimum width makes a Product column markable?

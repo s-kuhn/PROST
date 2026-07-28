@@ -63,7 +63,7 @@ scope.
 | [BR-003](business-rules/BR-003-product-pricing.md)              | Product Pricing              | draft     |
 | [BR-004](business-rules/BR-004-settlement-and-corrections.md)   | Settlement And Corrections   | draft     |
 | [BR-005](business-rules/BR-005-balance-and-suspension.md)       | Balance And Suspension       | accepted  |
-| [BR-006](business-rules/BR-006-product-lifecycle.md)            | Product Lifecycle            | draft     |
+| [BR-006](business-rules/BR-006-product-lifecycle.md)            | Product Lifecycle            | accepted |
 | [BR-007](business-rules/BR-007-privacy-and-pseudonymization.md) | Privacy And Pseudonymization | draft     |
 
 ## Writing Rules

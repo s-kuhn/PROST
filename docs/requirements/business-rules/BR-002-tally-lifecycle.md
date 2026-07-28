@@ -21,17 +21,21 @@ Preview is not a Tally state and has no business effect.
 ## Invariants
 
 1. At most one Tally may be Issued or in Settlement Draft for an Organization.
-2. Issuance stores the Organization title, instruction and contact text, Consumer rows, Product
-   display names, prices, ordering, width weights, and issue timestamp that appear on paper.
+2. Issuance stores the Organization title, instruction and contact text, registration destination,
+   optional payment-link label and destination, QR-code content and placement, Consumer rows, Product
+   display names, prices, ordering, width weights, layout profile, and generation timestamp that appear
+   on paper.
 3. An Issued Tally has no planned end date and may remain open indefinitely.
-4. The final PDF for an Issued Tally may be downloaded again without creating another Tally.
-5. A Tally may be canceled whether or not it was physically posted, but cancellation requires a
+4. The printed `Generated at` value is fixed when the confirmed preview is rendered. The internal
+   `Issued at` value records when the Organization Manager confirms that preview and is not printed.
+5. The final PDF for an Issued Tally may be downloaded again without creating another Tally.
+6. A Tally may be canceled whether or not it was physically posted, but cancellation requires a
    reason, confirmation, actor, and timestamp.
-6. Cancellation has no financial effect. Transferring surviving marks to a replacement is a human
+7. Cancellation has no financial effect. Transferring surviving marks to a replacement is a human
    responsibility.
-7. A replacement is a new Tally with a new snapshot.
-8. A Settled or Canceled Tally cannot be settled again.
-9. The system cannot recover marks from a lost physical sheet; that loss must remain explicit rather
+8. A replacement is a new Tally with a new snapshot.
+9. A Settled or Canceled Tally cannot be settled again.
+10. The system cannot recover marks from a lost physical sheet; that loss must remain explicit rather
    than generating estimated Consumer charges.
 
 ## Open Questions

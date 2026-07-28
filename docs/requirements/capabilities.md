@@ -24,6 +24,7 @@ source: Product-owner interview on 2026-07-26 and initial PROST README
 | `CAP-014` | External sales price calculation                 | No, future      | Initial README candidate; requirements not specified                                                                                                                |
 | `CAP-015` | Inter-organization goods exchange calculation    | No, future      | Initial README candidate; requirements not specified                                                                                                                |
 | `CAP-016` | Operational reporting                            | No, future      | Initial README candidate for sales by day, week, month, or year and bottle-loss reporting; requirements not specified                                               |
+| `CAP-017` | Digital point-of-consumption terminal            | No, future      | Consumer and Product selection without paper-column constraints; change scenario `QS-MNT-003`                                                                       |
 
 Capabilities describe product outcomes, not software modules. Architecture boundaries will be
 decided only after the supporting requirements are accepted.

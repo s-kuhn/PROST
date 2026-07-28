@@ -8,7 +8,7 @@ Status: draft
 |-------------------------------------------------------------------------|--------------------------------------------------------------------------|
 | One Organization per MVP deployment                                     | Multi-organization SaaS isolation is not an MVP goal.                    |
 | One Tally in Issued or Settlement Draft state and one physical location | Matches the replacement workflow and limits initial complexity.          |
-| Up to 50 Consumers and roughly 2-10 active Products                     | Current expected operating scale.                                        |
+| Up to 50 Consumers and 1-5 active Products                              | Current expected operating scale.                                        |
 | A3 landscape paper                                                      | Required physical format for Consumer rows and Product mark columns.     |
 | EUR with cent precision                                                 | MVP monetary scope.                                                      |
 | English and German UI, German final fallback                            | Initial usage context and broader accessibility.                         |

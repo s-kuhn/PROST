@@ -37,7 +37,7 @@ Ordered by priority:
 ## MVP Scope
 
 The MVP supports one Organization, one tally location, one Tally in Issued or Settlement Draft state
-at a time, up to 50 Consumers, and approximately two to ten active Products. It provides:
+at a time, up to 50 Consumers, and one to five active Products. It provides:
 
 - self-registration, verified email, profile completion, and manager approval;
 - Consumer lifecycle and role management;
