@@ -2,7 +2,7 @@
 id: UC-010
 title: Manage Organization
 status: draft
-source: Product-owner interview on 2026-07-26
+source: Product-owner interviews on 2026-07-26 and 2026-07-29
 ---
 
 # UC-010: Manage Organization
@@ -73,8 +73,18 @@ Organization Manager
 9. Disabling automatic debt suspension retains its maximum-debt amount without applying it;
    re-enabling prepopulates that retained amount.
 10. Confirmation based on a stale preview has no effect and requires a new preview.
+11. While a Tally is Issued or in Settlement Draft, the Organization Manager may change the
+    Organization display title, printed Tally instruction and contact text, and Payment Link label or
+    destination. A confirmed change becomes the current Organization configuration immediately but
+    does not alter the open Tally Snapshot or its final PDF; it is first reflected in the next Tally
+    preview.
+12. Confirmed automatic debt-suspension changes and their resulting Consumer state transitions take
+    effect upon confirmation. They affect Consumer inclusion only in the next Tally preview; they do
+    not alter the open Tally Snapshot or final PDF, and marks for Consumers in that Snapshot remain
+    eligible for Settlement.
+13. Confirmed Organization Manager and Treasurer role changes take effect without waiting for the
+    open Tally to be Settled or Canceled.
 
 ## Open Questions
 
 - `OQ-012`: How is the first Organization Manager established securely?
-- `OQ-013`: Which settings, if any, may change while a Tally is Issued or in Settlement Draft?

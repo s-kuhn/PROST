@@ -2,7 +2,7 @@
 id: BR-002
 title: Tally Lifecycle
 status: draft
-source: Product-owner interview on 2026-07-26
+source: Product-owner interviews on 2026-07-26 and 2026-07-29
 ---
 
 # BR-002: Tally Lifecycle
@@ -36,7 +36,11 @@ Preview is not a Tally state and has no business effect.
 8. A replacement is a new Tally with a new snapshot.
 9. A Settled or Canceled Tally cannot be settled again.
 10. The system cannot recover marks from a lost physical sheet; that loss must remain explicit rather
-   than generating estimated Consumer charges.
+    than generating estimated Consumer charges.
+11. While a Tally is Issued or in Settlement Draft, changes to the Organization display title,
+    printed Tally instruction and contact text, and Payment Link label or destination become current
+    Organization configuration immediately but do not alter that Tally Snapshot or its final PDF.
+    The changed values are first reflected in the next Tally preview.
 
 ## Open Questions
 

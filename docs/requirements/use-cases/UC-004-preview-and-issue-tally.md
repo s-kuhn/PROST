@@ -40,7 +40,7 @@ Organization Manager
    and scannable QR-code placement.
 8. If any rendered input or the layout profile changed after preview, PROST rejects confirmation
    without creating a Tally and requires a new preview.
-9. Otherwise PROST atomically creates the immutable Tally Snapshot and final PDF from the confirmed
+9. Otherwise, PROST atomically creates the immutable Tally Snapshot and final PDF from the confirmed
    preview inputs.
 10. PROST records the internal `Issued at` timestamp and makes the Tally Issued. This internal value is
     not printed.

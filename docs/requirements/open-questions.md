@@ -17,7 +17,6 @@ that an architect or developer may decide silently.
 | `OQ-010` | Medium   | What duration expires a Settlement Draft edit lock?                                                                                                                                  | `BR-002`, `BR-004`, `UC-006`                         |
 | `OQ-011` | Low      | Is the software license `AGPL-3.0-only` or `AGPL-3.0-or-later`, and who owns copyright?                                                                                              | Arc42 section 2, release governance                  |
 | `OQ-012` | High     | How is the first Organization Manager established securely without allowing an untrusted registrant to claim the Organization?                                                        | `BR-001`, `UC-010`, identity ADR                     |
-| `OQ-013` | Medium   | Which Organization settings may change while a Tally is Issued or in Settlement Draft, and when do those changes take effect?                                                         | `UC-010`, `BR-002`, `BR-003`                         |
 
 Resolved questions should be removed from this register only after their outcome is represented in
 the affected requirements and reviewed for consistency.
