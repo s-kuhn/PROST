@@ -69,8 +69,9 @@ Status: draft
 
 #### QS-SEC-002: Privileged MFA
 
-- Source: User with Organization Manager or Treasurer role.
-- Stimulus: Attempts organization-wide privileged access.
+- Source: Prospective first Organization Manager or user with Organization Manager or Treasurer
+  role.
+- Stimulus: Requests initial-manager bootstrap or attempts Organization-wide privileged access.
 - Environment: Local identity or configured OIDC path.
 - Response: PROST accepts access only when the authentication context satisfies the accepted MFA
   policy.
@@ -115,10 +116,14 @@ Status: draft
 - Source: Volunteer Deployment Operator.
 - Stimulus: Installs PROST on a prepared Linux host with required DNS and SMTP access.
 - Environment: Documented supported configuration.
-- Response: The operator configures public URLs and secrets, starts the system, verifies health, and
-  bootstraps the first manager without editing application source.
+- Response: The operator configures public URLs and secrets, starts the system, and verifies health.
+  After a prospective manager has completed registration, email verification, profile completion,
+  and privileged-MFA enrollment, the operator completes `UC-013` without editing application source
+  or directly modifying application data.
 - Measure: Approximately 60 minutes is an adjustable target measured with pilot evidence, not a
   release gate; failures provide actionable diagnostics.
+- Detailed
+  requirement: [UC-013: Bootstrap First Organization Manager](../../requirements/use-cases/UC-013-bootstrap-first-organization-manager.md).
 
 #### QS-OPS-002: Provider-Neutral Integration
 
@@ -135,7 +140,9 @@ Status: draft
 - Stimulus: Restores a valid backup to a clean supported host after failure.
 - Environment: Original host unavailable; operator has required configuration and secrets.
 - Response: Documented commands validate and restore consistent application and bundled identity
-  state, and documentation identifies the artifact as sensitive data requiring protected storage.
+  state, including the initial-manager bootstrap state defined by
+  [UC-013](../../requirements/use-cases/UC-013-bootstrap-first-organization-manager.md), and
+  documentation identifies the artifact as sensitive data requiring protected storage.
 - Measure: A corrupted or incomplete artifact is rejected before destructive restore, and same-day
   restoration is achievable in a rehearsed supported setup. Operator-selected backup schedules
   determine possible data loss. Privacy reconciliation after restoring older data remains blocked by
@@ -167,11 +174,11 @@ Status: draft
 #### QS-MNT-003: Increase Supported Tally Products
 
 - Source: Product Owner.
-- Stimulus: Increases the supported number of active paper-Tally Products beyond five or introduces a
-  digital point-of-consumption terminal.
+- Stimulus: Increases the supported number of active paper-Tally Products beyond five or introduces
+  a digital point-of-consumption terminal.
 - Environment: Post-MVP evolution.
-- Response: Settlement and account rules continue to operate on a variable Product collection without
-  assuming the MVP limit or duplicating financial logic.
+- Response: Settlement and account rules continue to operate on a variable Product collection
+  without assuming the MVP limit or duplicating financial logic.
 - Measure: The change may replace or extend the presentation workflow but does not require rewriting
   accepted Product-pricing, Settlement, or balance invariants.
 
@@ -210,16 +217,16 @@ Status: draft
 #### QS-USA-004: Printable Tally Legibility
 
 - Source: Organization Manager.
-- Stimulus: Previews a Tally containing up to 50 Consumers and 5 active Products with relative
-  width weights.
+- Stimulus: Previews a Tally containing up to 50 Consumers and 5 active Products with relative width
+  weights.
 - Environment: A3 landscape output.
 - Response: PROST applies the physical layout baseline in
   [BR-006](../../requirements/business-rules/BR-006-product-lifecycle.md), wraps complete Product
   names, shrinks Product headings from 12 pt to no less than 10 pt, keeps the complete repeated
-  grid-heading row between 8.5 mm and 25.5 mm, repeats headings on vertical pages, preserves the 6 mm
-  page margins, 8.5 mm minimum row height, 51 mm Tally Name column, and 17 mm minimum Product-column
-  width, keeps all Product columns together, and places labeled registration and optional payment QR
-  codes in a dedicated first-page area outside the Tally grid.
+  grid-heading row between 8.5 mm and 25.5 mm, repeats headings on vertical pages, preserves the 6
+  mm page margins, 8.5 mm minimum row height, 51 mm Tally Name column, and 17 mm minimum
+  Product-column width, keeps all Product columns together, and places labeled registration and
+  optional payment QR codes in a dedicated first-page area outside the Tally grid.
 - Measure: Except for a non-layout preview indicator, preview and final A3 landscape PDF have
   identical printable content and layout. Issuance is blocked outside the one-to-five active Product
   range, when a Product column would be narrower than 17 mm, or when complete headers cannot fit at

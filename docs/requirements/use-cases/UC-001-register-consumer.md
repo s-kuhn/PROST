@@ -52,8 +52,8 @@ Consumer
 
 ## Acceptance Criteria
 
-1. A verified person can complete the PROST profile without an Organization Manager creating the
-   identity.
+1. A person who has authenticated through an allowed authentication source and whose email address
+   is verified can complete the PROST profile without an Organization Manager creating the identity.
 2. Duplicate Tally Names are rejected within the Organization.
 3. A new Consumer is Pending Approval and absent from regular rows of the current and future Tally
    until approved.
@@ -62,5 +62,5 @@ Consumer
 
 ## Open Questions
 
-- What proof is required to link local and OIDC identities?
+- See `OQ-005` in the [Open Question Register](../open-questions.md).
 - Which profile attributes are mandatory besides Tally Name and verified email?

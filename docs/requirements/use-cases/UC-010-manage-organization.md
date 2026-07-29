@@ -40,10 +40,13 @@ Organization Manager
 
 ## Role Management
 
+The first Organization Manager is established through
+[UC-013](UC-013-bootstrap-first-organization-manager.md). After that bootstrap:
+
 1. An existing Organization Manager may grant or revoke Organization Manager and Treasurer roles.
 2. Organization-wide roles require MFA before privileged access.
 3. The last Organization Manager cannot remove their own Organization Manager role.
-4. Consumer, Organization Manager, and Treasurer roles may be combined.
+4. A Consumer may hold the Organization Manager role, the Treasurer role, or both.
 
 ## Business Rules
 
@@ -58,12 +61,15 @@ Organization Manager
 
 ## Acceptance Criteria
 
-1. Only Organization Managers may change Organization configuration or application roles.
+1. Except for initial Organization Manager bootstrap through
+   [UC-013](UC-013-bootstrap-first-organization-manager.md), only Organization Managers may change
+   Organization configuration or application roles.
 2. The payment link accepts HTTPS URLs only and has no automatic payment effect.
 3. Enabling, disabling, or changing automatic debt suspension persists the setting, all resulting
    Consumer state transitions, and the audit record atomically.
 4. Role and consequential setting changes are auditable.
-5. An Organization cannot be left without an Organization Manager.
+5. After successful initial bootstrap in the current application state, an Organization cannot be
+   left without an Organization Manager.
 6. Initial Organization setup defaults automatic debt suspension to disabled and leaves the
    maximum-debt amount empty.
 7. Enabling automatic debt suspension is rejected until a maximum-debt amount is provided or
@@ -74,17 +80,13 @@ Organization Manager
    re-enabling prepopulates that retained amount.
 10. Confirmation based on a stale preview has no effect and requires a new preview.
 11. While a Tally is Issued or in Settlement Draft, the Organization Manager may change the
-    Organization display title, printed Tally instruction and contact text, and Payment Link label or
-    destination. A confirmed change becomes the current Organization configuration immediately but
-    does not alter the open Tally Snapshot or its final PDF; it is first reflected in the next Tally
-    preview.
+    Organization display title, printed Tally instruction and contact text, and Payment Link label
+    or destination. A confirmed change becomes the current Organization configuration immediately
+    but does not alter the open Tally Snapshot or its final PDF; it is first reflected in the next
+    Tally preview.
 12. Confirmed automatic debt-suspension changes and their resulting Consumer state transitions take
     effect upon confirmation. They affect Consumer inclusion only in the next Tally preview; they do
     not alter the open Tally Snapshot or final PDF, and marks for Consumers in that Snapshot remain
     eligible for Settlement.
 13. Confirmed Organization Manager and Treasurer role changes take effect without waiting for the
     open Tally to be Settled or Canceled.
-
-## Open Questions
-
-- `OQ-012`: How is the first Organization Manager established securely?

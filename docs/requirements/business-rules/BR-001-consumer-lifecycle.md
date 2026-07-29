@@ -2,7 +2,7 @@
 id: BR-001
 title: Consumer Lifecycle
 status: draft
-source: Product-owner interview on 2026-07-26
+source: Product-owner interviews on 2026-07-26 and 2026-07-29
 ---
 
 # BR-001: Consumer Lifecycle
@@ -11,13 +11,13 @@ source: Product-owner interview on 2026-07-26
 
 A Consumer has exactly one participation state:
 
-| State              | Meaning                                                                                                                                                                      |
-|--------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Pending Approval` | The person has authenticated, verified their email, completed the PROST profile, and chosen a unique Tally Name, but an Organization Manager has not approved participation. |
-| `Active`           | The Consumer is eligible for inclusion on newly issued Tallies.                                                                                                              |
-| `Suspended`        | PROST excluded the Consumer from new Tallies because their balance reached the configured debt threshold.                                                                    |
-| `Inactive`         | An Organization Manager or the Consumer ended active participation for a reason independent of automatic debt suspension.                                                    |
-| `Pseudonymized`    | Terminal state after an Inactive zero-balance Consumer's login and direct profile identifiers have been irreversibly removed or unlinked.                                    |
+| State              | Meaning                                                                                                                                                                                      |
+|--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Pending Approval` | The person has authenticated, verified their email, completed the PROST profile, and chosen a unique Tally Name, but participation has not yet been approved through an authorized workflow. |
+| `Active`           | The Consumer is eligible for inclusion on newly issued Tallies.                                                                                                                              |
+| `Suspended`        | PROST excluded the Consumer from new Tallies because their balance reached the configured debt threshold.                                                                                    |
+| `Inactive`         | An Organization Manager or the Consumer ended active participation for a reason independent of automatic debt suspension.                                                                    |
+| `Pseudonymized`    | Terminal state after an Inactive zero-balance Consumer's login and direct profile identifiers have been irreversibly removed or unlinked.                                                    |
 
 ## Invariants
 
@@ -37,9 +37,13 @@ A Consumer has exactly one participation state:
    refundable.
 9. A manually Inactive Consumer cannot be automatically activated by a deposit.
 10. Pseudonymization transitions an Inactive Consumer to Pseudonymized and cannot be reversed.
+11. [UC-013](../use-cases/UC-013-bootstrap-first-organization-manager.md) is the only
+    initial-manager bootstrap path. Its successful confirmation atomically changes the selected
+    Consumer from Pending Approval to Active, assigns the Organization Manager role, records the
+    Audit Trail, and closes initial-manager bootstrap in the current application state. Restoring an
+    older backup reproduces the bootstrap state contained in that backup.
 
 ## Open Questions
 
-- `OQ-012`: How is the first Organization Manager bootstrapped?
 - May a Pending Approval registration be rejected and deleted, and after what period?
 - How are duplicate local and OIDC identities linked safely?

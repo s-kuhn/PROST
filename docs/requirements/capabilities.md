@@ -1,7 +1,7 @@
 ---
 title: Business Capabilities
 status: draft
-source: Product-owner interview on 2026-07-26 and initial PROST README
+source: Product-owner interviews on 2026-07-26 and 2026-07-29 and initial PROST README
 ---
 
 # Business Capabilities
@@ -13,7 +13,7 @@ source: Product-owner interview on 2026-07-26 and initial PROST README
 | `CAP-003` | Paper Tally lifecycle                            | Yes             | [UC-004](use-cases/UC-004-preview-and-issue-tally.md), [UC-005](use-cases/UC-005-cancel-and-replace-tally.md)                                                       |
 | `CAP-004` | Consumption Settlement                           | Yes             | [UC-006](use-cases/UC-006-settle-tally.md), [UC-007](use-cases/UC-007-correct-settlement.md)                                                                        |
 | `CAP-005` | Consumer account management                      | Yes             | [UC-008](use-cases/UC-008-record-account-transaction.md), [UC-009](use-cases/UC-009-view-own-account.md)                                                            |
-| `CAP-006` | Organization administration                      | Yes             | [UC-010](use-cases/UC-010-manage-organization.md)                                                                                                                   |
+| `CAP-006` | Organization administration                      | Yes             | [UC-010](use-cases/UC-010-manage-organization.md), [UC-013](use-cases/UC-013-bootstrap-first-organization-manager.md)                                               |
 | `CAP-007` | Financial oversight                              | Yes, anonymized | [UC-011](use-cases/UC-011-view-financial-aggregates.md)                                                                                                             |
 | `CAP-008` | Organizational Units and coordinated procurement | No, future      | Change scenario `QS-MNT-001`                                                                                                                                        |
 | `CAP-009` | Inventory, supplier, and invoice management      | No, future      | Initial README candidate includes entering supplier invoices; requirements not specified                                                                            |
