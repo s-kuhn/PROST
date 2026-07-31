@@ -11,6 +11,9 @@ permission:
     "docs/architecture/arc42/10-*": allow
     "docs/architecture/arc42/11-*": allow
     "docs/architecture/arc42/12-*": allow
+    "docs/governance/README.md": allow
+    "docs/governance/licensing.md": allow
+    "docs/governance/release-governance.md": allow
   bash: deny
   webfetch: ask
 ---

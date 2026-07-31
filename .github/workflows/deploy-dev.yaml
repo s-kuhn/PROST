@@ -40,6 +40,9 @@ jobs:
         with:
           ref: ${{ steps.ref.outputs.ref }}
 
+      - name: Check REUSE compliance
+        uses: fsfe/reuse-action@v6
+
       - name: Calculate image tags
         id: tags
         run: |

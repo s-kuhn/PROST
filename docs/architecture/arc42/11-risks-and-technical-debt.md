@@ -44,8 +44,9 @@ See [Current Technical State](../current-state.md) for details.
 
 ## Governance Risks
 
-- AGPL-3.0 `only` versus `or-later` is unresolved.
-- Copyright ownership is unresolved.
+- Repository license artifacts and file-level metadata can drift from the
+  [licensing policy](../../governance/licensing.md); release verification must detect
+  inconsistencies.
 - Future Organizational Units could force broad rework if MVP boundaries assume all data is globally
   owned.
 - Architecture chapters could drift toward the prototype before requirements and ADRs are accepted.

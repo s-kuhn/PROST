@@ -15,7 +15,6 @@ that an architect or developer may decide silently.
 | `OQ-007` | Medium   | How must restoration handle privacy actions that occurred after an older backup was created?                                                                                         | `BR-007`, `QS-OPS-003`                                   |
 | `OQ-009` | Medium   | Which browser versions and viewport sizes are supported?                                                                                                                             | `UC-009`, `QS-USA-001`                                   |
 | `OQ-010` | Medium   | What duration expires a Settlement Draft edit lock?                                                                                                                                  | `BR-002`, `BR-004`, `UC-006`                             |
-| `OQ-011` | Low      | Is the software license `AGPL-3.0-only` or `AGPL-3.0-or-later`, and who owns copyright?                                                                                              | Arc42 section 2, release governance                      |
 
 Resolved questions should be removed from this register only after their outcome is represented in
 the affected requirements and reviewed for consistency.
