@@ -1,2 +1,3 @@
 /mvnw text eol=lf
 *.cmd text eol=crlf
+/LICENSES/CC-BY-SA-4.0.txt whitespace=-blank-at-eof

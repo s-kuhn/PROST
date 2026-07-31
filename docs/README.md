@@ -15,8 +15,13 @@ architecture candidates, not accepted product decisions.
 - [Arc42 architecture documentation](architecture/arc42/README.md)
 - [Architecture decisions](architecture/decisions/README.md)
 - [Current technical state](architecture/current-state.md)
+- [Project governance](governance/README.md)
 
 ## Status
 
-All initial requirements and architecture material are drafts. Only the human product owner may
-accept requirements or architecture decisions.
+Status is maintained per artifact. Consult the linked requirement, architecture-decision, Arc42, and
+governance indexes for the current status of each item. Only the human product owner may accept
+requirements, architecture decisions, or governance policies.
+
+The implementation remains a technical prototype unless an accepted requirement and architecture
+decision explicitly establish otherwise.

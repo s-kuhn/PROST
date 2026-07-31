@@ -40,14 +40,16 @@ Status: draft
 
 - Documentation, canonical domain terms, APIs, and code use English.
 - Architecture documentation follows Arc42 and uses Mermaid.
-- PROST will use AGPL-3.0 network copyleft; `only` versus `or-later` remains open.
+- Original PROST software releases shall use `AGPL-3.0-or-later`; original PROST documentation
+  releases shall use `CC-BY-SA-4.0`. Copyright ownership and third-party treatment are defined
+  in [Licensing And Copyright](../../governance/licensing.md); release gates are defined
+  in [Release Governance](../../governance/release-governance.md).
 - The human product owner alone accepts requirements and ADRs.
 - Existing Kotlin, Spring, Angular, Keycloak, PostgreSQL, OpenAPI, Docker, and GitHub Actions
   choices are prototype facts, not target constraints.
 
 ## Open Constraints
 
-- Copyright ownership and exact AGPL SPDX expression.
 - Legal or Organization-specific retention periods.
 - Supported host architectures and minimum resource envelope.
 - Browser support policy.

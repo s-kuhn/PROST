@@ -1,59 +1,59 @@
-# ProstFrontend
+# PROST Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.3.
+This directory contains the Angular frontend technical prototype for PROST. The prototype explores
+routing, runtime configuration, Keycloak integration, and communication with the backend. It is not
+an accepted product architecture or a source of business requirements.
 
-## Development server
+See the [current technical state](../../docs/architecture/current-state.md) for known limitations and
+the [requirements index](../../docs/requirements/README.md) for authoritative product requirements.
 
-To start a local development server, run:
+## Local Development
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Install the locked dependencies:
 
 ```bash
-ng generate component component-name
+npm ci
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Start the frontend with its local configuration:
 
 ```bash
-ng generate --help
+npm run start:local
 ```
 
-## Building
+The development server is available at <http://localhost:4200/>. Features that call the API or use
+authentication also require the backend at `http://localhost:8080/prost/api` and Keycloak at
+`http://localhost:8081`.
 
-To build the project run:
+## Runtime Configuration
+
+At startup, the application loads `/assets/config.json`. The checked-in local configuration is
+[`src/assets/config.json`](src/assets/config.json). The container entrypoint generates this file from
+deployment environment variables when the frontend image starts.
+
+The runtime configuration contains:
+
+- the PROST API URL;
+- the public Keycloak URL;
+- the Keycloak realm;
+- the frontend client ID.
+
+## Verification
+
+Run the frontend checks with:
 
 ```bash
-ng build
+npm run lint
+npm run test:ci
+npm run build:prod
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+The repository's current verification baseline and known test gaps are documented in the
+[current technical state](../../docs/architecture/current-state.md#verification-baseline).
 
-## Running unit tests
+## Licensing
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+This documentation is licensed under
+[CC-BY-SA-4.0](../../LICENSES/CC-BY-SA-4.0.txt). Software and third-party files in this directory may
+have different licenses; consult the repository's
+[licensing policy](../../docs/governance/licensing.md) and `REUSE.toml` for file-level classification.
