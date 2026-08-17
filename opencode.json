@@ -1,0 +1,61 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "requirements-analyst",
+  "share": "disabled",
+  "autoupdate": "notify",
+  "instructions": [
+    "AGENTS.md",
+    "docs/requirements/README.md",
+    "docs/architecture/arc42/README.md"
+  ],
+  "watcher": {
+    "ignore": [
+      "**/.git/**",
+      "**/node_modules/**",
+      "**/target/**",
+      "**/dist/**",
+      "**/.angular/**",
+      "docker/data/**"
+    ]
+  },
+  "permission": {
+    "external_directory": "deny",
+    "webfetch": "ask",
+    "read": {
+      "*": "allow",
+      ".env*": "deny",
+      "**/.env*": "deny",
+      ".env.example": "allow",
+      "**/.env.example": "allow"
+    },
+    "edit": {
+      "*": "ask",
+      ".env*": "deny",
+      "**/.env*": "deny",
+      ".env.example": "ask",
+      "**/.env.example": "ask",
+      "**/node_modules/**": "deny",
+      "**/target/**": "deny",
+      "**/dist/**": "deny",
+      "**/.angular/**": "deny"
+    },
+    "bash": {
+      "*": "ask",
+      "git status*": "allow",
+      "git diff*": "allow",
+      "git log*": "allow",
+      "git ls-files*": "allow",
+      "git commit*": "deny",
+      "git push*": "deny",
+      "git tag*": "deny",
+      "git reset*": "deny",
+      "git clean*": "deny",
+      "gh pr merge*": "deny",
+      "gh release*": "deny",
+      "gh workflow run *deploy*": "deny",
+      "docker stack deploy*": "deny",
+      "sudo*": "deny",
+      "rm -rf*": "deny"
+    }
+  }
+}

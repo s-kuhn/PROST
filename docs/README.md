@@ -1,100 +1,29 @@
-# PROST
+# PROST Documentation
 
-Planning, Reporting, Ordering, Stock, Tally (web app aimed primarily at volunteer associations)
+PROST is a requirements-first application for volunteer organizations that use paper tally sheets to
+account for shared consumable products and personal balances.
 
-This is a web application for associations to manage their drinks and snacks. It is aimed at
-associations that have a bar or a canteen and want to keep track of their stock and sales. It is
-also aimed at associations that want to keep track of their members' debts and credits.
+PROST stands for Planning, Reporting, Ordering, Stock, and Tally. The expansion reflects the broader
+product vision and does not imply that every named capability is included in the MVP.
 
-## Use cases:
+The repository currently contains a technical prototype. Its implementation technologies are
+architecture candidates, not accepted product decisions.
 
-- Create members (invitation via one-time-link)
-- Create a tally (printable template)
-- Keeping a balance sheet of the members
-- Provide members with insight (own balance sheet only, payment options)
-- Create a stock (add new items, remove items, etc.)
-- Order from suppliers (if API available)
-- Input invoices
-- Keep balance sheet of the association
-- Price calculation for internal sales
-- Price calculation for external sales
-- Calculation for exchange of goods between associations
-- Reporting (e.g. sales per day, week, month, year, loss of bottles, etc.)
+## Documentation
 
-## Technologies:
+- [Product requirements](requirements/README.md)
+- [Arc42 architecture documentation](architecture/arc42/README.md)
+- [Architecture decisions](architecture/decisions/README.md)
+- [Current technical state](architecture/current-state.md)
+- [Project governance](governance/README.md)
 
-- Backend:
-    - Kotlin
-    - Spring Boot Modulith & WebMVC
-    - Maven
-    - Auth via [Keycloak](https://www.keycloak.org/)
-    - OpenAPI
-- Frontend:
-    - tbd (Angular, Vue, Flutter)
-- Database:
-    - PostgreSQL
-    - Flyway
-- DevOps:
-    - Semantic Versioning
-    - Docker
-    - GitHub Actions (CI/CD, Secrets, Environments)
-    - Dependabot
-    - CodeStyle
+## Status
 
-## Installation:
+Controlled artifacts follow [Specification Governance](governance/specification-governance.md).
+The `main` branch is authoritative; status changes on other branches are proposals. Only the human
+Product Owner may accept specifications, architecture decisions, or governance policies through the
+defined pull-request process.
 
-- Clone the repository
-- Install Docker
-- Setup environment variables (see [.env.example](/.env.example))
-- Start the local infrastructure with
-  `docker compose --env-file .env.example -f ./docker/compose.yaml -f ./docker/compose.local.yaml up`
-- Load maven project
-- Run the application
-
-## Versioning and Branch-Strategy
-
-Branch-conventions:
-
-- `main`: Contains stabile version for production.
-- `dev`: Contains features and bugfixes used for testing.
-  Versioning strategies:
-- `MAJOR.MINOR.PATCH`:
-    - **PATCH** is incremented for bugfixes.
-    - **MINOR** is incremented for new features without breaking changes.
-    - **MAJOR** is incremented manually for breaking changes.
-- Automatic incrementation via labels on PRs into `dev`.
-- Only one of the following labels can be set at a time:
-    - `breaking-changes`
-    - `feature`
-    - `bugfix`
-
-## How to start dev env local
-
-TODO: update
-
-```bash
-docker compose --env-file .env.dev -p "dev_prost" -f "./docker/compose.yaml" -f "./docker/compose.dev.yaml" --profile app up
-```
-
-## How to start prod env local
-
-```bash
-docker compose --env-file .env.prod -p "prod_prost" -f "./docker/compose.yaml" -f "./docker/compose.prod.yaml" --profile app up
-```
-
-## Keycloak
-
-- Container is available at either `http://dev-prost-keycloak.local:8081` or
-  `http://prod-prost-keycloak.local:8081`
-- Entry in host file is required
-- User registration is enabled (only through browser 😪)
-- Mapping of Keycloak users with Domain users is done via an event listener plugin in keycloak
-- As a result, the event listener calls the backend API through the `host.docker.internal` or
-  `backend` hostname to access the locally running backend (local development only) or in
-  container (dev/production)
-
-```bash
-127.0.0.1 dev-prost-keycloak.local
-127.0.0.1 prod-prost-keycloak.local
-127.0.0.1 prost-keycloak.local
-```
+Arc42 is a derived view and cannot accept a requirement or architecture decision. The implementation
+remains a technical prototype unless a complete work-item gate demonstrates implementation readiness
+against accepted and active sources.
