@@ -5,7 +5,7 @@ description: PROST domain modeling and ubiquitous language. Use when defining or
 
 # PROST Domain Modeling
 
-- Start with `docs/architecture/arc42/12-glossary.md` and linked business rules.
+- Start with `docs/requirements/glossary.md` and linked business rules.
 - Distinguish identity accounts from PROST Consumer profiles.
 - Prefer domain events and invariants over persistence or framework terminology.
 - Challenge ambiguous synonyms and update the canonical glossary when the product owner decides a

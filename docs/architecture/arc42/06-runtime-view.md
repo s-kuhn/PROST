@@ -1,6 +1,6 @@
 # 6. Runtime View
 
-Status: not decided
+Documentation coverage: placeholder
 
 Runtime views will be added after building blocks and contracts are proposed. Mermaid sequence
 diagrams should focus on architecture-relevant scenarios rather than duplicating every use-case

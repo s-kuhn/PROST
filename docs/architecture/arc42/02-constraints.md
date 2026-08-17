@@ -1,6 +1,10 @@
 # 2. Constraints
 
-Status: draft
+Documentation coverage: partial
+
+This chapter summarizes candidate and accepted constraints from the detailed
+[requirements](../../requirements/README.md), quality scenarios, and governance policies. A summary
+here does not establish or accept a constraint; consult each linked source and its maturity.
 
 ## Product Constraints
 

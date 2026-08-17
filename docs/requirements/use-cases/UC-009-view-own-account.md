@@ -1,7 +1,10 @@
 ---
 id: UC-009
 title: View Own Account
-status: draft
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-started
 source: Product-owner interview on 2026-07-26
 ---
 
@@ -38,10 +41,10 @@ Consumer
 
 ## Quality Scenarios
 
-- `QS-COR-002`
-- `QS-SEC-001`
-- `QS-USA-001`
-- `QS-USA-003`
+- [QS-COR-002](../quality-scenarios/QS-COR-002-exact-balance.md)
+- [QS-SEC-001](../quality-scenarios/QS-SEC-001-consumer-isolation.md)
+- [QS-USA-001](../quality-scenarios/QS-USA-001-consumer-device-and-language.md)
+- [QS-USA-003](../quality-scenarios/QS-USA-003-accessibility-baseline.md)
 
 ## Acceptance Criteria
 
@@ -53,5 +56,5 @@ Consumer
 
 ## Open Questions
 
-- Is pagination required for long transaction histories in the MVP?
-- Should Consumers be able to download a personal statement after the MVP?
+- See `OQ-023` for MVP transaction-history pagination.
+- See `OQ-024` for a post-MVP personal statement download.

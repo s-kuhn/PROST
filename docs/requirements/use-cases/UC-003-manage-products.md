@@ -1,7 +1,10 @@
 ---
 id: UC-003
 title: Manage Products
-status: draft
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-started
 source: Product-owner interviews on 2026-07-26 and 2026-07-27
 ---
 
@@ -38,8 +41,8 @@ Organization Manager
 
 ## Quality Scenarios
 
-- `QS-COR-002`
-- `QS-USA-004`
+- [QS-COR-002](../quality-scenarios/QS-COR-002-exact-balance.md)
+- [QS-USA-004](../quality-scenarios/QS-USA-004-printable-tally-legibility.md)
 
 ## Acceptance Criteria
 
@@ -56,4 +59,4 @@ Organization Manager
 
 ## Open Questions
 
-- Are complimentary zero-price Products needed?
+- See `OQ-020` for complimentary zero-price Products.

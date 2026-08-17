@@ -8,18 +8,22 @@ No target-architecture decision has been accepted yet.
 ADR-0001-short-title.md
 ```
 
-## Status
+## Lifecycle
 
-- `proposed`: decision is under review.
-- `accepted`: approved by the human product owner.
-- `superseded`: replaced by another accepted ADR.
+ADRs follow [Specification Governance](../../governance/specification-governance.md) and use its
+independent `revision`, `spec_maturity`, `lifecycle_status`, and `delivery_status` fields.
 
-Agents may draft and review ADRs but may not accept them.
+Architecture options may be researched from draft drivers when clearly marked non-normative. An ADR
+may move to `in-review` only when its requirement and quality-scenario drivers are accepted and no
+linked open question blocks architecture. Only the human Product Owner may make ADR acceptance or
+supersession authoritative through the pull-request process. Materially changing an accepted
+decision requires a successor revision or ADR; accepted history is not rewritten.
 
 ## Required Content
 
 - Context and decision drivers.
 - Linked requirement and quality-scenario IDs.
+- Exact open-question blockers.
 - Credible options considered.
 - Decision and rationale.
 - Positive and negative consequences.

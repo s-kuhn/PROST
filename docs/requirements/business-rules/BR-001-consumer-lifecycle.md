@@ -1,7 +1,10 @@
 ---
 id: BR-001
 title: Consumer Lifecycle
-status: draft
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-started
 source: Product-owner interviews on 2026-07-26 and 2026-07-29
 ---
 
@@ -45,5 +48,5 @@ A Consumer has exactly one participation state:
 
 ## Open Questions
 
-- May a Pending Approval registration be rejected and deleted, and after what period?
-- How are duplicate local and OIDC identities linked safely?
+- See `OQ-021` for rejection and retention of Pending Approval registrations.
+- See `OQ-005` for safe linking of local and OIDC identities.

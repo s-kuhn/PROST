@@ -1,7 +1,10 @@
 ---
 id: UC-002
 title: Manage Consumer Status
-status: draft
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-started
 source: Product-owner interview on 2026-07-26
 ---
 
@@ -56,5 +59,5 @@ Approval may also occur while mapping a handwritten row during [UC-006](UC-006-s
 
 ## Open Questions
 
-- Should rejection be a state or deletion of an unused pending profile?
-- Must the Consumer receive an activation notification inside PROST?
+- See `OQ-021` for rejection or deletion of an unused pending profile.
+- See `OQ-022` for an in-product activation notification.

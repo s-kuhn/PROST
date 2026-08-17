@@ -1,6 +1,6 @@
 # 11. Risks And Technical Debt
 
-Status: draft
+Documentation coverage: partial
 
 ## Product And Domain Risks
 

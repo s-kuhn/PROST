@@ -10,6 +10,8 @@ description: PROST Architecture Decision Records. Use when proposing, comparing,
 3. Compare at least two credible options when a genuine choice exists.
 4. Record positive and negative consequences, operational cost, security impact, and migration
    implications.
-5. Use `ADR-####-short-title.md` and statuses `proposed`, `accepted`, or `superseded`.
+5. Use `ADR-####-short-title.md` and the revision, maturity, lifecycle, and delivery fields from
+   Specification Governance.
 6. Link affected `UC`, `BR`, and `QS` identifiers.
-7. Only the human product owner may mark an ADR accepted.
+7. Only the human Product Owner may make ADR acceptance or supersession authoritative through the
+   pull-request process.

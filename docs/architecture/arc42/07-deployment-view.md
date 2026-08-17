@@ -1,6 +1,6 @@
 # 7. Deployment View
 
-Status: not decided
+Documentation coverage: placeholder
 
 No packaging, orchestration, network topology, identity deployment, database layout, or TLS
 component is accepted.

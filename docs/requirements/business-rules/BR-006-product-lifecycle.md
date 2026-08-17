@@ -1,7 +1,10 @@
 ---
 id: BR-006
 title: Product Lifecycle
-status: accepted
+revision: 1
+spec_maturity: accepted
+lifecycle_status: active
+delivery_status: not-started
 source: Product-owner interviews on 2026-07-26 and 2026-07-27
 ---
 
@@ -49,7 +52,7 @@ source: Product-owner interviews on 2026-07-26 and 2026-07-27
 ## Future Considerations
 
 - Support for more than five active paper-Tally Products must not require rewriting Settlement or
-  account rules. See `QS-MNT-003`.
+  account rules. See [QS-MNT-003](../quality-scenarios/QS-MNT-003-increase-supported-tally-products.md).
 - The dimensions above are the current MVP acceptance baseline. Pilot evidence may justify a future
   reviewed requirement change and a new layout profile; it does not permit an implementation to vary
   the dimensions silently.

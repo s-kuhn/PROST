@@ -1,7 +1,10 @@
 ---
 id: UC-008
 title: Record Account Transaction
-status: draft
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-started
 source: Product-owner interview on 2026-07-26
 ---
 
@@ -51,8 +54,8 @@ Organization Manager
 
 ## Quality Scenarios
 
-- `QS-COR-002`
-- `QS-COR-004`
+- [QS-COR-002](../quality-scenarios/QS-COR-002-exact-balance.md)
+- [QS-COR-004](../quality-scenarios/QS-COR-004-idempotent-account-transaction.md)
 
 ## Acceptance Criteria
 
@@ -68,7 +71,7 @@ Organization Manager
 
 ## Open Questions
 
-- Which structured payment methods are initially offered?
-- May future-dated entries be recorded?
-- Are direct-edit revisions or explicit void-and-replace records preferred as the persistence model?
-  The user-visible behavior and audit outcome remain the same.
+- See `OQ-030` for initially supported structured payment methods.
+- See `OQ-031` for future-dated entries.
+- See `OQ-026` for correctable fields and user-visible revision semantics. The persistence mechanism
+  remains an architecture decision constrained by those semantics.

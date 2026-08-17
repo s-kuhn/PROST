@@ -1,7 +1,10 @@
 ---
 id: BR-007
 title: Privacy And Pseudonymization
-status: draft
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-started
 source: Product-owner interview on 2026-07-26
 ---
 
@@ -41,7 +44,7 @@ source: Product-owner interview on 2026-07-26
 
 ## Open Questions
 
-- Which audit actor attributes remain after a former Organization Manager is pseudonymized?
-- What legal or organization-defined retention period can delay pseudonymization?
-- Is self-service data export required after the MVP?
-- See `OQ-003`, `OQ-006`, and `OQ-007` in the [Open Question Register](../open-questions.md).
+- See `OQ-036` for retained audit actor attributes.
+- See `OQ-006` for retention that may delay pseudonymization.
+- See `OQ-037` for post-MVP self-service data export.
+- See `OQ-003` and `OQ-007` for historical Tally and restore treatment.

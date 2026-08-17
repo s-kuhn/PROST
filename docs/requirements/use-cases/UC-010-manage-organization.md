@@ -1,8 +1,11 @@
 ---
 id: UC-010
 title: Manage Organization
-status: draft
-source: Product-owner interviews on 2026-07-26 and 2026-07-29
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-started
+source: Product-owner interviews on 2026-07-26, 2026-07-29, and 2026-08-03
 ---
 
 # UC-010: Manage Organization
@@ -22,20 +25,24 @@ Organization Manager
 - Printed Tally instruction and contact text.
 - Automatic debt-suspension enabled state and, when enabled, a maximum-debt amount in EUR.
 - Optional payment-link label and HTTPS URL.
+- Settlement Draft edit-lock inactivity duration in whole minutes.
 - Organization Manager and Treasurer role assignments.
 
 ## Main Flow
 
 1. The manager opens Organization settings.
 2. The manager changes one or more values.
-3. When automatic debt suspension is enabled without a retained amount, PROST requires a nonnegative
+3. PROST rejects a Settlement Draft edit-lock inactivity duration outside the range defined by
+   [BR-004](../business-rules/BR-004-settlement-and-corrections.md).
+4. When automatic debt suspension is enabled without a retained amount, PROST requires a nonnegative
    maximum-debt amount with cent precision.
-4. PROST previews consequential changes, including Consumer state changes caused by enabling,
+5. PROST previews consequential changes, including Consumer state changes caused by enabling,
    disabling, or changing automatic debt suspension.
-5. The manager confirms.
-6. If the suspension configuration or an affected Consumer balance or state changed after preview,
+6. The manager confirms.
+7. If the suspension configuration or an affected Consumer balance or state changed after preview,
    PROST rejects confirmation without applying any change and requires a new preview.
-7. Otherwise, PROST atomically persists the suspension configuration, all resulting Consumer state
+8. Otherwise, PROST persists the confirmed Organization configuration changes. For a suspension
+   configuration change, PROST atomically persists the setting, all resulting Consumer state
    transitions, and the audit record.
 
 ## Role Management
@@ -51,13 +58,14 @@ The first Organization Manager is established through
 ## Business Rules
 
 - [BR-001](../business-rules/BR-001-consumer-lifecycle.md)
+- [BR-004](../business-rules/BR-004-settlement-and-corrections.md)
 - [BR-005](../business-rules/BR-005-balance-and-suspension.md)
 - [BR-007](../business-rules/BR-007-privacy-and-pseudonymization.md)
 
 ## Quality Scenarios
 
-- `QS-SEC-002`
-- `QS-OPS-002`
+- [QS-SEC-002](../quality-scenarios/QS-SEC-002-privileged-mfa.md)
+- [QS-OPS-002](../quality-scenarios/QS-OPS-002-provider-neutral-integration.md)
 
 ## Acceptance Criteria
 
@@ -90,3 +98,9 @@ The first Organization Manager is established through
     eligible for Settlement.
 13. Confirmed Organization Manager and Treasurer role changes take effect without waiting for the
     open Tally to be Settled or Canceled.
+14. A new Organization has the default Settlement Draft edit-lock inactivity duration defined by
+    [BR-004](../business-rules/BR-004-settlement-and-corrections.md). An Organization Manager can
+    configure either inclusive boundary value, while a value outside the range or a fractional-minute
+    value is rejected without changing the current setting.
+15. Changing the inactivity duration does not alter an edit lock that is already held. A lock acquired
+    after the configuration change uses the changed duration.

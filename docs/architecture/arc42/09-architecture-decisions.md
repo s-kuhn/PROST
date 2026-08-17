@@ -1,6 +1,6 @@
 # 9. Architecture Decisions
 
-Status: not decided
+Documentation coverage: placeholder
 
 Architecture decisions are maintained as
 separate [Architecture Decision Records](../decisions/README.md).

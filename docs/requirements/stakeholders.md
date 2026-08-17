@@ -1,6 +1,9 @@
 ---
 title: Stakeholders
-status: draft
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-applicable
 source: Product-owner interview on 2026-07-26
 ---
 

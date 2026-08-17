@@ -1,7 +1,10 @@
 ---
 id: UC-005
 title: Cancel And Replace Tally
-status: draft
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-started
 source: Product-owner interview on 2026-07-26
 ---
 
@@ -47,5 +50,5 @@ Organization Manager
 
 ## Open Questions
 
-- Should an unposted Tally have a less severe cancellation confirmation than a posted one?
-- Is a structured cancellation reason useful in addition to free text?
+- See `OQ-019` for posted-state recording and cancellation confirmation.
+- See `OQ-035` for a structured cancellation reason.

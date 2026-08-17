@@ -1,8 +1,11 @@
 ---
 id: BR-002
 title: Tally Lifecycle
-status: draft
-source: Product-owner interviews on 2026-07-26 and 2026-07-29
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-started
+source: Product-owner interviews on 2026-07-26, 2026-07-29, and 2026-08-03
 ---
 
 # BR-002: Tally Lifecycle
@@ -44,5 +47,4 @@ Preview is not a Tally state and has no business effect.
 
 ## Open Questions
 
-- Should the Organization Manager explicitly record whether a Tally was physically posted?
-- How long may a Settlement Draft edit lock remain inactive before takeover?
+- See `OQ-019` for recording whether a Tally was physically posted and its cancellation effect.

@@ -1,6 +1,9 @@
 ---
 title: Licensing And Copyright
-status: accepted
+revision: 1
+spec_maturity: accepted
+lifecycle_status: active
+delivery_status: not-applicable
 source: Product-owner decisions and ownership statements resolving OQ-011 on 2026-07-30
 ---
 

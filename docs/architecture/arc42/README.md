@@ -1,9 +1,10 @@
 # PROST Arc42 Documentation
 
-Status: accepted
+Documentation coverage: partial
 
-This directory documents the target architecture. The current prototype is described separately
-in [Current Technical State](../current-state.md).
+This directory is a derived view of the target architecture. Accepted requirements, quality
+scenarios, Architecture Decision Records, and governance policies remain authoritative. The current
+prototype is described separately in [Current Technical State](../current-state.md).
 
 ## Chapters
 
@@ -25,11 +26,14 @@ in [Current Technical State](../current-state.md).
 - Accepted detailed requirements in [`docs/requirements/`](../../requirements/README.md) are the
   product source of truth.
 - Arc42 summarizes architecture-relevant requirements and links to details.
+- Chapter documentation coverage is `placeholder`, `partial`, or `current`; it is not specification
+  acceptance and cannot establish a product requirement or architecture decision.
 - Mermaid is the diagram source format.
 - Undecided target architecture remains explicit rather than being inferred from the prototype.
 - Important choices are recorded as ADRs under [
   `docs/architecture/decisions/`](../decisions/README.md).
-- Only the human product owner may accept requirements or ADRs.
+- Only the human Product Owner may accept controlled specifications or ADRs through the governed
+  pull-request process.
 
 ## Arc42 Attribution
 

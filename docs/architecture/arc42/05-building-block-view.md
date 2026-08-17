@@ -1,6 +1,6 @@
 # 5. Building Block View
 
-Status: not decided
+Documentation coverage: placeholder
 
 No target building blocks or module boundaries are accepted.
 

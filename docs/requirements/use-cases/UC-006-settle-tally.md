@@ -1,8 +1,11 @@
 ---
 id: UC-006
 title: Settle Tally
-status: draft
-source: Product-owner interview on 2026-07-26
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-started
+source: Product-owner interviews on 2026-07-26 and 2026-08-03
 ---
 
 # UC-006: Settle Tally
@@ -34,7 +37,8 @@ Organization Manager
 7. PROST warns but permits mapping a Suspended or Inactive Consumer without changing that state.
 8. The manager records unresolved handwritten rows as distinct Unallocated Consumption with label,
    counts, and reason.
-9. The manager saves and resumes the draft as needed.
+9. PROST automatically preserves entered field values while communication is available. The manager
+   may explicitly save a checkpoint and resume the draft as needed.
 10. PROST presents itemized Consumer charges, unallocated value, and totals.
 11. The manager confirms.
 12. PROST atomically posts all charges exactly once, applies automatic debt suspension, records
@@ -45,6 +49,15 @@ Organization Manager
 - An expired edit lock may be taken over explicitly; the takeover is audited.
 - While a nonexpired lock is held, another manager receives a read-only view and cannot save stale
   counts.
+- When the edit lock expires, the latest preserved values remain available for the next Organization
+  Manager, including the original editor, who acquires a lock.
+- Deliberately leaving after a successful explicit save releases the edit lock immediately.
+- Attempting a detectable departure with changes made after the last successful explicit save
+  presents a confirmation. Confirming departure restores that checkpoint and releases the edit lock;
+  remaining preserves the changes. For a newly started draft without an explicit save, confirmed
+  departure leaves none of its entered field values.
+- After interrupted communication, the latest field values PROST successfully received remain
+  available when the lock expires; values it did not receive cannot be preserved.
 - Validation failures return to the draft without changing balances.
 - The manager may cancel instead through [UC-005](UC-005-cancel-and-replace-tally.md).
 
@@ -58,10 +71,10 @@ Organization Manager
 
 ## Quality Scenarios
 
-- `QS-COR-001`
-- `QS-COR-002`
-- `QS-COR-003`
-- `QS-USA-002`
+- [QS-COR-001](../quality-scenarios/QS-COR-001-atomic-settlement.md)
+- [QS-COR-002](../quality-scenarios/QS-COR-002-exact-balance.md)
+- [QS-COR-003](../quality-scenarios/QS-COR-003-audited-correction.md)
+- [QS-USA-002](../quality-scenarios/QS-USA-002-settlement-entry.md)
 
 ## Acceptance Criteria
 
@@ -73,8 +86,10 @@ Organization Manager
 6. Issued, handwritten mapped, and unallocated rows remain distinguishable.
 7. A manager cannot overwrite a Settlement Draft held by another manager or based on a newer
    revision.
+8. Edit-lock configuration, inactivity, renewal, expiry, takeover, warning, and release behavior
+   satisfies the observable criteria
+   in [BR-004](../business-rules/BR-004-settlement-and-corrections.md).
 
 ## Open Questions
 
-- What edit-lock inactivity duration is appropriate?
-- Is the Settlement effective date the confirmation date or a manager-selected date?
+- See `OQ-025` for the Settlement effective date.

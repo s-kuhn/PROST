@@ -1,7 +1,10 @@
 ---
 id: UC-013
 title: Bootstrap First Organization Manager
-status: draft
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-started
 source: Product-owner interview on 2026-07-29
 ---
 
@@ -119,10 +122,10 @@ bootstrap remains open.
 
 ## Quality Scenarios
 
-- `QS-SEC-002`
-- `QS-OPS-001`
-- `QS-OPS-002`
-- `QS-OPS-003`
+- [QS-SEC-002](../quality-scenarios/QS-SEC-002-privileged-mfa.md)
+- [QS-OPS-001](../quality-scenarios/QS-OPS-001-reproducible-installation.md)
+- [QS-OPS-002](../quality-scenarios/QS-OPS-002-provider-neutral-integration.md)
+- [QS-OPS-003](../quality-scenarios/QS-OPS-003-portable-recovery.md)
 
 ## Acceptance Criteria
 

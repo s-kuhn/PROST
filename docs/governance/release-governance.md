@@ -1,6 +1,9 @@
 ---
 title: Release Governance
-status: accepted
+revision: 1
+spec_maturity: accepted
+lifecycle_status: active
+delivery_status: not-applicable
 source: Product-owner decisions resolving OQ-011 on 2026-07-30; compatibility-gate clarification on 2026-08-03
 ---
 

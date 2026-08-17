@@ -1,7 +1,10 @@
 ---
 id: UC-007
 title: Correct Settlement
-status: draft
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-started
 source: Product-owner interview on 2026-07-26
 ---
 
@@ -47,7 +50,7 @@ Organization Manager
 
 ## Quality Scenarios
 
-- `QS-COR-003`
+- [QS-COR-003](../quality-scenarios/QS-COR-003-audited-correction.md)
 
 ## Acceptance Criteria
 

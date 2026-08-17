@@ -19,9 +19,11 @@ architecture candidates, not accepted product decisions.
 
 ## Status
 
-Status is maintained per artifact. Consult the linked requirement, architecture-decision, Arc42, and
-governance indexes for the current status of each item. Only the human product owner may accept
-requirements, architecture decisions, or governance policies.
+Controlled artifacts follow [Specification Governance](governance/specification-governance.md).
+The `main` branch is authoritative; status changes on other branches are proposals. Only the human
+Product Owner may accept specifications, architecture decisions, or governance policies through the
+defined pull-request process.
 
-The implementation remains a technical prototype unless an accepted requirement and architecture
-decision explicitly establish otherwise.
+Arc42 is a derived view and cannot accept a requirement or architecture decision. The implementation
+remains a technical prototype unless a complete work-item gate demonstrates implementation readiness
+against accepted and active sources.

@@ -1,7 +1,10 @@
 ---
 id: UC-004
 title: Preview And Issue Tally
-status: draft
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-started
 source: Product-owner interviews on 2026-07-26 and 2026-07-27
 ---
 
@@ -73,7 +76,7 @@ Organization Manager
 
 ## Quality Scenarios
 
-- `QS-USA-004`
+- [QS-USA-004](../quality-scenarios/QS-USA-004-printable-tally-legibility.md)
 
 ## Acceptance Criteria
 
@@ -121,6 +124,6 @@ Organization Manager
 
 ## Open Questions
 
-- Must the PDF contain a human-readable Tally identifier on every page?
-- Should the final PDF be stored as an artifact or reproducibly generated from the snapshot?
+- See `OQ-033` for a human-readable Tally identifier on every page.
+- See `OQ-034` for PDF artifact retention or reproducible generation.
 - See `OQ-003` in the [Open Question Register](../open-questions.md).

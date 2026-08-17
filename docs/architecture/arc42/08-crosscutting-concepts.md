@@ -1,6 +1,6 @@
 # 8. Crosscutting Concepts
 
-Status: not decided
+Documentation coverage: placeholder
 
 Crosscutting implementation concepts require accepted architecture decisions. This chapter will
 eventually describe consistent approaches for:

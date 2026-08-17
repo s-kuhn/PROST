@@ -1,7 +1,10 @@
 ---
 id: UC-011
 title: View Financial Aggregates
-status: draft
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-started
 source: Product-owner interview on 2026-07-26
 ---
 
@@ -39,8 +42,8 @@ Treasurer
 
 ## Quality Scenarios
 
-- `QS-SEC-002`
-- `QS-SEC-005`
+- [QS-SEC-002](../quality-scenarios/QS-SEC-002-privileged-mfa.md)
+- [QS-SEC-005](../quality-scenarios/QS-SEC-005-anonymous-treasurer-aggregates.md)
 
 ## Acceptance Criteria
 
@@ -54,9 +57,5 @@ Treasurer
 
 ## Open Questions
 
-- At what group size could aggregate combinations indirectly identify a Consumer?
-- Are date-range filters required for the MVP?
-- Is Product-level aggregate information required, and should it be suppressed below a privacy
-  threshold?
-- These questions are acceptance blockers under `OQ-002` in
-  the [Open Question Register](../open-questions.md).
+- See `OQ-002` for cohort, differencing, and Product-level suppression policy.
+- See `OQ-029` for MVP date-range filters.

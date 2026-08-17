@@ -1,6 +1,9 @@
 # 1. Introduction And Goals
 
-Status: accepted
+Documentation coverage: partial
+
+This chapter summarizes sources from the [requirements index](../../requirements/README.md). Its
+statements inherit the maturity of those sources and do not become accepted through Arc42.
 
 ## 1.1 Requirements Overview
 
@@ -31,7 +34,8 @@ scope and exclusions are summarized in [Vision And Scope](../../requirements/vis
 | 4        | Maintainability and extensibility | The MVP can evolve toward Organizational Units, coordinated ordering, and broader manager devices without rewriting its core accounting rules.      |
 | 5        | Usability and accessibility       | Paper remains low-friction, Consumer self-service works on mobile and desktop, and manager entry is keyboard-efficient with baseline accessibility. |
 
-Detailed scenarios are defined in [section 10](10-quality-requirements.md).
+Controlled quality scenarios are indexed in [section 10](10-quality-requirements.md) and maintained
+with the detailed [requirements](../../requirements/README.md).
 
 ## 1.3 Stakeholders
 

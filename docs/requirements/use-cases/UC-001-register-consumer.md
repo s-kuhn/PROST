@@ -1,7 +1,10 @@
 ---
 id: UC-001
 title: Register Consumer
-status: draft
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-started
 source: Product-owner interview on 2026-07-26
 ---
 
@@ -47,8 +50,8 @@ Consumer
 
 ## Quality Scenarios
 
-- `QS-OPS-002`
-- `QS-USA-001`
+- [QS-OPS-002](../quality-scenarios/QS-OPS-002-provider-neutral-integration.md)
+- [QS-USA-001](../quality-scenarios/QS-USA-001-consumer-device-and-language.md)
 
 ## Acceptance Criteria
 
@@ -63,4 +66,4 @@ Consumer
 ## Open Questions
 
 - See `OQ-005` in the [Open Question Register](../open-questions.md).
-- Which profile attributes are mandatory besides Tally Name and verified email?
+- See `OQ-028` for mandatory Consumer profile attributes.

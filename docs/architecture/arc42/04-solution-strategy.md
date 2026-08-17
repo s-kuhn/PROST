@@ -1,6 +1,6 @@
 # 4. Solution Strategy
 
-Status: not decided
+Documentation coverage: placeholder
 
 No target solution strategy is accepted. The current prototype must not fill this section by
 default.

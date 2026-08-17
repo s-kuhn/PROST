@@ -1,6 +1,6 @@
 ---
 title: Research References
-status: draft
+document_status: research
 source: Repository research on 2026-07-26
 ---
 

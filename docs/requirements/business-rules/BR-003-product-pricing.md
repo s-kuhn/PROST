@@ -1,7 +1,10 @@
 ---
 id: BR-003
 title: Product Pricing
-status: draft
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-started
 source: Product-owner interviews on 2026-07-26 and 2026-07-29
 ---
 
@@ -10,7 +13,7 @@ source: Product-owner interviews on 2026-07-26 and 2026-07-29
 ## Rules
 
 1. Every active Product has a nonnegative EUR price with cent precision. Whether zero is permitted
-   remains open; a negative Product price is invalid.
+   remains open through `OQ-020`; a negative Product price is invalid.
 2. The price stored in the issued Tally Snapshot is the price charged for marks on that Tally.
 3. A Product price cannot change while a Tally is Issued or in Settlement Draft.
 4. Settling or cancelling the current Tally permits a price change before the next Tally is issued.
@@ -28,6 +31,5 @@ marks ambiguous and could silently change debt.
 
 ## Open Questions
 
-- Is a zero-priced Product valid for complimentary items, or must every active Product have a
-  positive price?
-- Are prices tax-inclusive by definition, or is taxation outside the product scope?
+- See `OQ-020` for complimentary zero-price Products.
+- See `OQ-032` for taxation and Product-price semantics.

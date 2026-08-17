@@ -1,7 +1,10 @@
 ---
 id: UC-012
 title: Close And Pseudonymize Account
-status: draft
+revision: 1
+spec_maturity: draft
+lifecycle_status: active
+delivery_status: not-started
 source: Product-owner interview on 2026-07-26
 ---
 
@@ -44,7 +47,7 @@ Consumer
 
 ## Quality Scenarios
 
-- `QS-SEC-004`
+- [QS-SEC-004](../quality-scenarios/QS-SEC-004-pseudonymization.md)
 
 ## Acceptance Criteria
 

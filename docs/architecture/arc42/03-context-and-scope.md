@@ -1,6 +1,10 @@
 # 3. Context And Scope
 
-Status: draft
+Documentation coverage: partial
+
+This chapter summarizes the current, predominantly draft requirements. The diagrams and boundary
+lists are architecture context candidates, not accepted system boundaries. Their detailed sources
+and maturity remain authoritative in the [requirements index](../../requirements/README.md).
 
 ## 3.1 Business Context
 

@@ -1,7 +1,10 @@
 ---
 id: BR-005
 title: Balance And Suspension
-status: accepted
+revision: 1
+spec_maturity: accepted
+lifecycle_status: active
+delivery_status: not-started
 source: Product-owner interview on 2026-07-26
 ---
 
