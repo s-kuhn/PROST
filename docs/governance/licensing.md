@@ -9,7 +9,9 @@ source: Product-owner decisions and ownership statements resolving OQ-011 on 202
 
 # Licensing And Copyright
 
-This policy records the outcome of `OQ-011` and the target licensing state for future releases.
+This policy records the outcome of
+[OQ-011](../requirements/open-questions/OQ-011-licensing-copyright.md) and the target licensing
+state for future releases.
 
 ## OQ-011 Resolution
 

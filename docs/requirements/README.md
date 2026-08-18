@@ -29,13 +29,13 @@ authorize implementation.
 
 ## Identifier Scheme
 
-| Prefix              | Artifact                                                                                 |
-|---------------------|------------------------------------------------------------------------------------------|
-| `CAP-###`           | Business capability                                                                      |
-| `UC-###`            | Use case                                                                                 |
-| `BR-###`            | Reusable business rule                                                                   |
-| `QS-<category>-###` | Quality scenario                                                                        |
-| `ADR-####`          | Architecture decision                                                                    |
+| Prefix              | Artifact               |
+|---------------------|------------------------|
+| `CAP-###`           | Business capability    |
+| `UC-###`            | Use case               |
+| `BR-###`            | Reusable business rule |
+| `QS-<category>-###` | Quality scenario       |
+| `ADR-####`          | Architecture decision  |
 
 ## Requirement Index
 
@@ -48,13 +48,15 @@ The controlled [Glossary](glossary.md) defines the working Ubiquitous Language.
 
 ### Supporting Specifications
 
-| Artifact                              | Maturity | Lifecycle | Delivery       |
-|---------------------------------------|----------|-----------|----------------|
-| [Vision And Scope](vision-and-scope.md) | draft  | active    | not-applicable |
-| [Business Capabilities](capabilities.md) | draft  | active    | not-applicable |
-| [Stakeholders](stakeholders.md)         | draft  | active    | not-applicable |
-| [Glossary](glossary.md)                 | draft  | active    | not-applicable |
-| [Open Question Register](open-questions.md) | accepted | active | not-applicable |
+| Artifact                                 | Maturity | Lifecycle | Delivery       |
+|------------------------------------------|----------|-----------|----------------|
+| [Vision And Scope](vision-and-scope.md)  | draft    | active    | not-applicable |
+| [Business Capabilities](capabilities.md) | draft    | active    | not-applicable |
+| [Stakeholders](stakeholders.md)          | draft    | active    | not-applicable |
+| [Glossary](glossary.md)                  | draft    | active    | not-applicable |
+
+The [Open Question Index](open-questions.md) is a derived view of individually versioned records
+under [`open-questions/`](open-questions/).
 
 ### Use Cases
 
@@ -88,27 +90,27 @@ The controlled [Glossary](glossary.md) defines the working Ubiquitous Language.
 
 ### Quality Scenarios
 
-| ID                                                                                                      | Title                                         | Maturity | Lifecycle | Delivery    |
-|---------------------------------------------------------------------------------------------------------|-----------------------------------------------|----------|-----------|-------------|
-| [QS-COR-001](quality-scenarios/QS-COR-001-atomic-settlement.md)                                         | Atomic Settlement                             | draft    | active    | not-started |
-| [QS-COR-002](quality-scenarios/QS-COR-002-exact-balance.md)                                             | Exact Balance                                 | draft    | active    | not-started |
-| [QS-COR-003](quality-scenarios/QS-COR-003-audited-correction.md)                                        | Audited Correction                            | draft    | active    | not-started |
-| [QS-COR-004](quality-scenarios/QS-COR-004-idempotent-account-transaction.md)                             | Idempotent Account Transaction                | draft    | active    | not-started |
-| [QS-SEC-001](quality-scenarios/QS-SEC-001-consumer-isolation.md)                                        | Consumer Isolation                            | draft    | active    | not-started |
-| [QS-SEC-002](quality-scenarios/QS-SEC-002-privileged-mfa.md)                                            | Privileged MFA                                | draft    | active    | not-started |
-| [QS-SEC-003](quality-scenarios/QS-SEC-003-transport-boundary.md)                                        | Transport Boundary                            | draft    | active    | not-started |
-| [QS-SEC-004](quality-scenarios/QS-SEC-004-pseudonymization.md)                                          | Pseudonymization                              | draft    | active    | not-started |
-| [QS-SEC-005](quality-scenarios/QS-SEC-005-anonymous-treasurer-aggregates.md)                             | Anonymous Treasurer Aggregates                | draft    | active    | not-started |
-| [QS-OPS-001](quality-scenarios/QS-OPS-001-reproducible-installation.md)                                 | Reproducible Installation                     | draft    | active    | not-started |
-| [QS-OPS-002](quality-scenarios/QS-OPS-002-provider-neutral-integration.md)                              | Provider-Neutral Integration                  | draft    | active    | not-started |
-| [QS-OPS-003](quality-scenarios/QS-OPS-003-portable-recovery.md)                                        | Portable Recovery                             | draft    | active    | not-started |
-| [QS-MNT-001](quality-scenarios/QS-MNT-001-organizational-units-and-coordinated-ordering.md)              | Organizational Units And Coordinated Ordering | draft    | active    | not-started |
-| [QS-MNT-002](quality-scenarios/QS-MNT-002-mobile-manager-workflows.md)                                  | Mobile Manager Workflows                      | draft    | active    | not-started |
-| [QS-MNT-003](quality-scenarios/QS-MNT-003-increase-supported-tally-products.md)                          | Increase Supported Tally Products             | draft    | active    | not-started |
-| [QS-USA-001](quality-scenarios/QS-USA-001-consumer-device-and-language.md)                               | Consumer Device And Language                  | draft    | active    | not-started |
-| [QS-USA-002](quality-scenarios/QS-USA-002-settlement-entry.md)                                          | Settlement Entry                              | draft    | active    | not-started |
-| [QS-USA-003](quality-scenarios/QS-USA-003-accessibility-baseline.md)                                    | Accessibility Baseline                        | draft    | active    | not-started |
-| [QS-USA-004](quality-scenarios/QS-USA-004-printable-tally-legibility.md)                                | Printable Tally Legibility                    | draft    | active    | not-started |
+| ID                                                                                          | Title                                         | Maturity | Lifecycle | Delivery    |
+|---------------------------------------------------------------------------------------------|-----------------------------------------------|----------|-----------|-------------|
+| [QS-COR-001](quality-scenarios/QS-COR-001-atomic-settlement.md)                             | Atomic Settlement                             | draft    | active    | not-started |
+| [QS-COR-002](quality-scenarios/QS-COR-002-exact-balance.md)                                 | Exact Balance                                 | draft    | active    | not-started |
+| [QS-COR-003](quality-scenarios/QS-COR-003-audited-correction.md)                            | Audited Correction                            | draft    | active    | not-started |
+| [QS-COR-004](quality-scenarios/QS-COR-004-idempotent-account-transaction.md)                | Idempotent Account Transaction                | draft    | active    | not-started |
+| [QS-SEC-001](quality-scenarios/QS-SEC-001-consumer-isolation.md)                            | Consumer Isolation                            | draft    | active    | not-started |
+| [QS-SEC-002](quality-scenarios/QS-SEC-002-privileged-mfa.md)                                | Privileged MFA                                | draft    | active    | not-started |
+| [QS-SEC-003](quality-scenarios/QS-SEC-003-transport-boundary.md)                            | Transport Boundary                            | draft    | active    | not-started |
+| [QS-SEC-004](quality-scenarios/QS-SEC-004-pseudonymization.md)                              | Pseudonymization                              | draft    | active    | not-started |
+| [QS-SEC-005](quality-scenarios/QS-SEC-005-anonymous-treasurer-aggregates.md)                | Anonymous Treasurer Aggregates                | draft    | active    | not-started |
+| [QS-OPS-001](quality-scenarios/QS-OPS-001-reproducible-installation.md)                     | Reproducible Installation                     | draft    | active    | not-started |
+| [QS-OPS-002](quality-scenarios/QS-OPS-002-provider-neutral-integration.md)                  | Provider-Neutral Integration                  | draft    | active    | not-started |
+| [QS-OPS-003](quality-scenarios/QS-OPS-003-portable-recovery.md)                             | Portable Recovery                             | draft    | active    | not-started |
+| [QS-MNT-001](quality-scenarios/QS-MNT-001-organizational-units-and-coordinated-ordering.md) | Organizational Units And Coordinated Ordering | draft    | active    | not-started |
+| [QS-MNT-002](quality-scenarios/QS-MNT-002-mobile-manager-workflows.md)                      | Mobile Manager Workflows                      | draft    | active    | not-started |
+| [QS-MNT-003](quality-scenarios/QS-MNT-003-increase-supported-tally-products.md)             | Increase Supported Tally Products             | draft    | active    | not-started |
+| [QS-USA-001](quality-scenarios/QS-USA-001-consumer-device-and-language.md)                  | Consumer Device And Language                  | draft    | active    | not-started |
+| [QS-USA-002](quality-scenarios/QS-USA-002-settlement-entry.md)                              | Settlement Entry                              | draft    | active    | not-started |
+| [QS-USA-003](quality-scenarios/QS-USA-003-accessibility-baseline.md)                        | Accessibility Baseline                        | draft    | active    | not-started |
+| [QS-USA-004](quality-scenarios/QS-USA-004-printable-tally-legibility.md)                    | Printable Tally Legibility                    | draft    | active    | not-started |
 
 ## Writing Rules
 
@@ -116,14 +118,14 @@ The controlled [Glossary](glossary.md) defines the working Ubiquitous Language.
 - Keep business requirements independent of implementation technology unless documenting an accepted
   constraint.
 - Link reusable rules instead of duplicating them.
-- Register every unresolved normative uncertainty with a stable `OQ-*` identifier.
+- Register every unresolved normative uncertainty in an individual, linked `OQ-*` record.
 - Make acceptance criteria observable and unambiguous.
 - Reference applicable `UC`, `BR`, `QS`, and `ADR` IDs in implementation tasks and tests.
 
 ## Open Questions
 
-Acceptance blockers and cross-cutting unresolved decisions are tracked in
-the [Open Question Register](open-questions.md).
+Acceptance blockers and cross-cutting unresolved decisions are tracked in individual records through
+the derived [Open Question Index](open-questions.md).
 
 ## Research Inputs
 

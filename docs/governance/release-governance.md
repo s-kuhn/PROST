@@ -9,6 +9,9 @@ source: Product-owner decisions resolving OQ-011 on 2026-07-30; compatibility-ga
 
 # Release Governance
 
+This policy incorporates the resolution of
+[OQ-011](../requirements/open-questions/OQ-011-licensing-copyright.md).
+
 No release may be published until the release process verifies all of the following against the
 [Licensing And Copyright](licensing.md) policy:
 

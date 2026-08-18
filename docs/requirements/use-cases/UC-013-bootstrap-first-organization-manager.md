@@ -159,7 +159,11 @@ bootstrap remains open.
 
 ## Open Questions
 
-- `OQ-004` defines acceptable privileged MFA factors, enrollment, recovery, authentication age, and
-  assurance evidence.
-- `OQ-005` defines safe handling of duplicate local and OIDC identities.
-- `OQ-006` defines retention for the bootstrap Audit Trail and related security records.
+- [OQ-004](../open-questions/OQ-004-privileged-mfa-assurance.md) defines acceptable privileged MFA
+  factors, enrollment, recovery, authentication age, and assurance evidence.
+- [OQ-005](../open-questions/OQ-005-identity-linking.md) defines safe handling of duplicate local
+  and OIDC identities.
+- [OQ-006](../open-questions/OQ-006-retention-rules.md) defines retention for the bootstrap Audit
+  Trail and related security records.
+- The resolved [OQ-012](../open-questions/OQ-012-first-manager-bootstrap.md) records first-manager
+  bootstrap traceability.

@@ -47,4 +47,13 @@ Preview is not a Tally state and has no business effect.
 
 ## Open Questions
 
-- See `OQ-019` for recording whether a Tally was physically posted and its cancellation effect.
+- See [OQ-019](../open-questions/OQ-019-physical-posting-record.md) for recording whether a Tally was
+  physically posted and its cancellation effect.
+- See [OQ-003](../open-questions/OQ-003-pseudonymized-tally-names.md) for historical Tally-name and PDF
+  treatment after pseudonymization.
+- See [OQ-010](../open-questions/OQ-010-settlement-draft-connectivity.md) for interrupted Settlement
+  Draft behavior.
+- See the resolved [OQ-013](../open-questions/OQ-013-settings-effective-time.md) for settings
+  effective-time traceability.
+- See [OQ-034](../open-questions/OQ-034-final-pdf-retention.md) for final PDF retention.
+- See [OQ-035](../open-questions/OQ-035-cancellation-reason.md) for structured cancellation reasons.

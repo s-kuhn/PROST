@@ -50,8 +50,8 @@ Organization Manager
 2. Print order is manager-defined and stable.
 3. Width weights are previewable whole numbers from 1 through 5; values outside that range are
    rejected.
-4. The preview shows the physical width resulting from each Product's weight. Issuance is rejected if
-   any Product column would be narrower than 17 mm in the applicable layout profile.
+4. The preview shows the physical width resulting from each Product's weight. Issuance is rejected
+   if any Product column would be narrower than 17 mm in the applicable layout profile.
 5. Product changes made while a Tally is Issued or in Settlement Draft do not alter its Tally
    Snapshot.
 6. Historical Settlements retain the Product name and price printed at issuance.
@@ -59,4 +59,5 @@ Organization Manager
 
 ## Open Questions
 
-- See `OQ-020` for complimentary zero-price Products.
+- See [OQ-020](../open-questions/OQ-020-zero-price-products.md) for complimentary zero-price
+  Products.

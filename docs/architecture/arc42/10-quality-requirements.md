@@ -55,6 +55,6 @@ acceptance effect; accepted scenario revisions remain authoritative.
 - [QS-USA-003: Accessibility Baseline](../../requirements/quality-scenarios/QS-USA-003-accessibility-baseline.md)
 - [QS-USA-004: Printable Tally Legibility](../../requirements/quality-scenarios/QS-USA-004-printable-tally-legibility.md)
 
-The [Open Question Register](../../requirements/open-questions.md) is authoritative for unresolved
-quality targets and acceptance blockers. Arc42 does not accept or complete a quality scenario by
-summarizing it here.
+The derived [Open Question Index](../../requirements/open-questions.md) links the authoritative
+individual records for unresolved quality targets and acceptance blockers. Arc42 does not accept or
+complete a quality scenario by summarizing it here.

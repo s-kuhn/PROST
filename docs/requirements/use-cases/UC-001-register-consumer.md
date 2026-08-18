@@ -65,5 +65,6 @@ Consumer
 
 ## Open Questions
 
-- See `OQ-005` in the [Open Question Register](../open-questions.md).
-- See `OQ-028` for mandatory Consumer profile attributes.
+- See [OQ-005](../open-questions/OQ-005-identity-linking.md).
+- See [OQ-028](../open-questions/OQ-028-mandatory-profile-attributes.md) for mandatory Consumer
+  profile attributes.

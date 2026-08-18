@@ -8,7 +8,8 @@ description: PROST requirements elicitation and review. Use when discussing scop
 1. Read `docs/requirements/README.md`, `docs/requirements/glossary.md`, the relevant requirement
    files, and Arc42 sections 1, 2, 3, and 10.
 2. Treat the human product owner as the only acceptance authority.
-3. Ask focused questions and preserve unresolved matters as explicit open questions.
+3. Ask focused questions and preserve each unresolved normative matter as an individual record under
+   `docs/requirements/open-questions/`.
 4. Follow `docs/governance/specification-governance.md` for revisions, maturity, lifecycle,
    delivery, and readiness. Keep acceptance-blocked artifacts in `draft`.
 5. Use `CAP-###`, `UC-###`, and `BR-###` identifiers consistently.
@@ -18,3 +19,8 @@ description: PROST requirements elicitation and review. Use when discussing scop
 8. Check effects on identity, authorization, money, audit, privacy, operation, and future change
    scenarios.
 9. Never infer business behavior from the prototype or the DrinkIt reference.
+10. Prepare Product Owner reviews with
+    `docs/governance/templates/specification-review-packet.md`; keep reviewer findings and their
+    dispositions explicit.
+11. Treat Open Question answers, deferrals, supersessions, reopenings, resolutions, and
+    blocker-scope reductions as Product Owner actions. Agents may prepare but not authorize them.

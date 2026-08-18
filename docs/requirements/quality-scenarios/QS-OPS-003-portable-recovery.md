@@ -24,4 +24,4 @@ source: Existing Arc42 quality scenario migrated on 2026-08-17
 - Measure: A corrupted or incomplete artifact is rejected before destructive restore, and same-day
   restoration is achievable in a rehearsed supported setup. Operator-selected backup schedules
   determine possible data loss. Privacy reconciliation after restoring older data remains blocked by
-  `OQ-007`.
+  [OQ-007](../open-questions/OQ-007-restore-after-privacy-actions.md).

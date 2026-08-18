@@ -57,5 +57,6 @@ Treasurer
 
 ## Open Questions
 
-- See `OQ-002` for cohort, differencing, and Product-level suppression policy.
-- See `OQ-029` for MVP date-range filters.
+- See [OQ-002](../open-questions/OQ-002-anonymous-treasurer-aggregates.md) for cohort, differencing,
+  and Product-level suppression policy.
+- See [OQ-029](../open-questions/OQ-029-aggregate-date-filters.md) for MVP date-range filters.

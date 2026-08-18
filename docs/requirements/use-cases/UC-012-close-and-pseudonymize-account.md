@@ -58,8 +58,11 @@ Consumer
    Consumer.
 5. Re-registration after pseudonymization creates a new Consumer profile rather than reconnecting
    ordinary application history.
-6. Historical Tally-name handling is not acceptance-ready until `OQ-003` is resolved.
+6. Historical Tally-name handling is not acceptance-ready until
+   [OQ-003](../open-questions/OQ-003-pseudonymized-tally-names.md) is resolved.
 
 ## Open Questions
 
-- See `OQ-003`, `OQ-006`, and `OQ-007` in the [Open Question Register](../open-questions.md).
+- See [OQ-003](../open-questions/OQ-003-pseudonymized-tally-names.md),
+  [OQ-006](../open-questions/OQ-006-retention-rules.md), and
+  [OQ-007](../open-questions/OQ-007-restore-after-privacy-actions.md).

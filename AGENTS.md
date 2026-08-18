@@ -34,6 +34,8 @@ source to fit a lower-level implementation.
 - Only the human Product Owner may make acceptance, supersession, or withdrawal authoritative by the
   pull-request process. Agents may prepare proposals but may not perform the acceptance action or
   merge an acceptance pull request.
+- Only the human Product Owner may answer, defer, supersede, reopen, resolve, or reduce the blocking
+  scope of an Open Question authoritatively.
 - Record unknowns as open questions. Do not turn assumptions into requirements.
 - Treat legacy DrinkIt behavior and the existing PROST code as research input only.
 
@@ -126,6 +128,10 @@ command, not evidence that the existing prototype passes it.
 - Use Mermaid for diagrams.
 - Use relative links within the repository.
 - Keep controlled-artifact maturity, lifecycle, delivery, and revision metadata explicit.
+- Keep each normative uncertainty in an individual `OQ-*` record and link to it rather than
+  duplicating the question.
+- Use the governed Specification Review Packet for Product Owner review and acceptance pull
+  requests.
 - Keep Arc42 requirement summaries concise and link to detailed requirements.
 - Avoid duplicating business rules across files; reference their stable IDs.
 

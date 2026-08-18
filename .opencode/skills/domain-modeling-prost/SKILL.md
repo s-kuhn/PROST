@@ -14,3 +14,5 @@ description: PROST domain modeling and ubiquitous language. Use when defining or
 - Do not introduce `Drinker`, `AStA`, or `Student Council` as canonical domain concepts.
 - Record unresolved aggregate, lifecycle, and consistency choices as architecture inputs rather than
   silently deciding them.
+- When contributing to a Specification Review Packet, identify findings as `DOM-F-###` and leave
+  disposition to the review owner and Product Owner process.

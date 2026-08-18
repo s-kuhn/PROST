@@ -50,5 +50,7 @@ Organization Manager
 
 ## Open Questions
 
-- See `OQ-019` for posted-state recording and cancellation confirmation.
-- See `OQ-035` for a structured cancellation reason.
+- See [OQ-019](../open-questions/OQ-019-physical-posting-record.md) for posted-state recording and
+  cancellation confirmation.
+- See [OQ-035](../open-questions/OQ-035-cancellation-reason.md) for a structured cancellation
+  reason.

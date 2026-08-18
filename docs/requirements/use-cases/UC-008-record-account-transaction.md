@@ -71,7 +71,9 @@ Organization Manager
 
 ## Open Questions
 
-- See `OQ-030` for initially supported structured payment methods.
-- See `OQ-031` for future-dated entries.
-- See `OQ-026` for correctable fields and user-visible revision semantics. The persistence mechanism
-  remains an architecture decision constrained by those semantics.
+- See [OQ-030](../open-questions/OQ-030-payment-methods.md) for initially supported structured
+  payment methods.
+- See [OQ-031](../open-questions/OQ-031-future-dated-transactions.md) for future-dated entries.
+- See [OQ-026](../open-questions/OQ-026-transaction-correction-semantics.md) for correctable fields
+  and user-visible revision semantics. The persistence mechanism remains an architecture decision
+  constrained by those semantics.
