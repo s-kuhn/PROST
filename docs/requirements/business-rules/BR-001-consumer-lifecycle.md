@@ -48,5 +48,11 @@ A Consumer has exactly one participation state:
 
 ## Open Questions
 
-- See `OQ-021` for rejection and retention of Pending Approval registrations.
-- See `OQ-005` for safe linking of local and OIDC identities.
+- See [OQ-021](../open-questions/OQ-021-pending-consumer-removal.md) for rejection and retention of
+  Pending Approval registrations.
+- See [OQ-005](../open-questions/OQ-005-identity-linking.md) for safe linking of local and OIDC
+  identities.
+- See the resolved [OQ-012](../open-questions/OQ-012-first-manager-bootstrap.md) for first-manager
+  bootstrap traceability.
+- See [OQ-028](../open-questions/OQ-028-mandatory-profile-attributes.md) for mandatory Consumer
+  profile attributes.

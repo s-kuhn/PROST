@@ -56,5 +56,9 @@ Consumer
 
 ## Open Questions
 
-- See `OQ-023` for MVP transaction-history pagination.
-- See `OQ-024` for a post-MVP personal statement download.
+- See [OQ-023](../open-questions/OQ-023-transaction-history-pagination.md) for MVP
+  transaction-history pagination.
+- See [OQ-024](../open-questions/OQ-024-personal-statement.md) for a post-MVP personal statement
+  download.
+- See [OQ-009](../open-questions/OQ-009-browser-viewport-support.md) for supported browsers and
+  viewport sizes.

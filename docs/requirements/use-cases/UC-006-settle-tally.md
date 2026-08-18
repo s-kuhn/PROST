@@ -92,4 +92,7 @@ Organization Manager
 
 ## Open Questions
 
-- See `OQ-025` for the Settlement effective date.
+- See [OQ-025](../open-questions/OQ-025-settlement-effective-date.md) for the Settlement effective
+  date.
+- See [OQ-010](../open-questions/OQ-010-settlement-draft-connectivity.md) for interrupted Settlement
+  Draft behavior.

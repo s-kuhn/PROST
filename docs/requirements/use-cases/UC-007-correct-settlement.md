@@ -65,4 +65,8 @@ Organization Manager
 
 - Whether corrections use locking or optimistic version checks is an architecture decision; stale
   changes must be rejected either way.
-- Treasurer visibility depends on the anonymity policy in `OQ-002`.
+- Treasurer visibility depends on the anonymity policy in
+  [OQ-002](../open-questions/OQ-002-anonymous-treasurer-aggregates.md).
+- See [OQ-026](../open-questions/OQ-026-transaction-correction-semantics.md) for Account Transaction
+  correction semantics.
+- See [OQ-027](../open-questions/OQ-027-correction-limits.md) for the correction horizon.

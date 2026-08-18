@@ -21,5 +21,8 @@ source: Existing Arc42 quality scenario migrated on 2026-08-17
 - Response: PROST irreversibly removes or unlinks direct profile and login identifiers, changes the
   Consumer to Pseudonymized, and retains non-identifying records required for consistency.
 - Measure: The former Consumer cannot authenticate. Ordinary-view, historical Tally, and backup
-  treatment must satisfy the policies resolved through `OQ-003`, `OQ-006`, and `OQ-007` before this
-  scenario is acceptance-ready.
+  treatment must satisfy the policies resolved through
+  [OQ-003](../open-questions/OQ-003-pseudonymized-tally-names.md),
+  [OQ-006](../open-questions/OQ-006-retention-rules.md), and
+  [OQ-007](../open-questions/OQ-007-restore-after-privacy-actions.md) before this scenario is
+  acceptance-ready.

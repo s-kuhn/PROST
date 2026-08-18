@@ -18,4 +18,5 @@ source: Existing Arc42 quality scenario migrated on 2026-08-17
 - Response: Domain and application contracts remain usable without changing financial rules or
   duplicating business logic in a client.
 - Measure: No quantitative effort target is accepted; architecture evaluation must compare client
-  coupling explicitly. The target remains open through `OQ-016`.
+  coupling explicitly. The target remains open through
+  [OQ-016](../open-questions/OQ-016-maintainability-targets.md).

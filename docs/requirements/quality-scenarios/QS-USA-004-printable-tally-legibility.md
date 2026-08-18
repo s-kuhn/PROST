@@ -36,3 +36,6 @@ source: Existing Arc42 quality scenario migrated on 2026-08-17
   and one iOS device receiving vendor security updates. A failed qualification prevents use of the
   layout profile. Version-linked evidence records the fixture, environment, devices, attempts, and
   results and demonstrates that only a passing profile is available for issuance.
+- Decision traceability: The resolved
+  [OQ-008](../open-questions/OQ-008-printable-product-columns.md) records the printable
+  Product-column decision.

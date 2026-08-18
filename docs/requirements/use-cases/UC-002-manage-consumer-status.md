@@ -59,5 +59,7 @@ Approval may also occur while mapping a handwritten row during [UC-006](UC-006-s
 
 ## Open Questions
 
-- See `OQ-021` for rejection or deletion of an unused pending profile.
-- See `OQ-022` for an in-product activation notification.
+- See [OQ-021](../open-questions/OQ-021-pending-consumer-removal.md) for rejection or deletion of an
+  unused pending profile.
+- See [OQ-022](../open-questions/OQ-022-activation-notification.md) for an in-product activation
+  notification.

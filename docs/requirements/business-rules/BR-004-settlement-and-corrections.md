@@ -90,12 +90,19 @@ source: Product-owner interviews on 2026-07-26 and 2026-08-03
    financial exception to the printed price.
 8. Manual Account Transactions may be corrected through the same user-visible audited revision
    principles. The exact correctable fields and user-visible revision semantics remain blocked by
-   `OQ-026`.
+   [OQ-026](../open-questions/OQ-026-transaction-correction-semantics.md).
 9. A correction based on a stale Settlement or Account Transaction revision is rejected rather than
    overwriting a newer revision.
 10. Retrying a correction cannot duplicate its financial effect.
 
 ## Open Questions
 
-- See `OQ-006` for audit-history retention after pseudonymization.
-- See `OQ-027` for the correction horizon.
+- See [OQ-006](../open-questions/OQ-006-retention-rules.md) for audit-history retention after
+  pseudonymization.
+- See [OQ-027](../open-questions/OQ-027-correction-limits.md) for the correction horizon.
+- See [OQ-010](../open-questions/OQ-010-settlement-draft-connectivity.md) for interrupted Settlement
+  Draft behavior.
+- See the resolved [OQ-013](../open-questions/OQ-013-settings-effective-time.md) for settings
+  effective-time traceability.
+- See [OQ-025](../open-questions/OQ-025-settlement-effective-date.md) for the Settlement effective
+  date.

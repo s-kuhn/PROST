@@ -11,4 +11,9 @@ Review requirements independently. Report findings first, ordered by severity, w
 requirement references. Look for contradictions, hidden assumptions, missing failure paths,
 unverifiable criteria, terminology drift, absent traceability, unregistered open questions, and
 invalid lifecycle transitions. An artifact is `in-review` only when no known acceptance blocker
-remains. Do not rewrite files or approve decisions.
+remains. Use stable packet-local finding IDs `REQ-F-###`, state whether each finding blocks the
+requested Product Owner action, and re-review resolution references before considering a finding
+resolved. Verify that every `ready-for-decision` question has credible options, consequences, and a
+recommendation. Record concurrence or continued objection for proposed dispositions; a continued
+blocking objection keeps the packet blocked. Do not rewrite files, dispose of your own findings, or
+approve decisions.

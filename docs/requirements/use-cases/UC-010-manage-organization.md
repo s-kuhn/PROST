@@ -100,7 +100,15 @@ The first Organization Manager is established through
     open Tally to be Settled or Canceled.
 14. A new Organization has the default Settlement Draft edit-lock inactivity duration defined by
     [BR-004](../business-rules/BR-004-settlement-and-corrections.md). An Organization Manager can
-    configure either inclusive boundary value, while a value outside the range or a fractional-minute
-    value is rejected without changing the current setting.
-15. Changing the inactivity duration does not alter an edit lock that is already held. A lock acquired
-    after the configuration change uses the changed duration.
+    configure either inclusive boundary value, while a value outside the range or a
+    fractional-minute value is rejected without changing the current setting.
+15. Changing the inactivity duration does not alter an edit lock that is already held. A lock
+    acquired after the configuration change uses the changed duration.
+
+## Open Questions
+
+- See [OQ-004](../open-questions/OQ-004-privileged-mfa-assurance.md) for privileged MFA assurance.
+- See the resolved [OQ-012](../open-questions/OQ-012-first-manager-bootstrap.md) for first-manager
+  bootstrap traceability.
+- See the resolved [OQ-013](../open-questions/OQ-013-settings-effective-time.md) for settings
+  effective-time traceability.

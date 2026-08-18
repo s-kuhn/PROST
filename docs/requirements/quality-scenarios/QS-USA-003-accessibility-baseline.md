@@ -19,4 +19,4 @@ source: Existing Arc42 quality scenario migrated on 2026-08-17
   color-only meaning.
 - Measure: These criteria are reviewed and tested for critical flows. PROST does not claim formal
   WCAG conformance in the MVP. Exact critical flows and measurable baselines remain open through
-  `OQ-017`.
+  [OQ-017](../open-questions/OQ-017-accessibility-baseline.md).

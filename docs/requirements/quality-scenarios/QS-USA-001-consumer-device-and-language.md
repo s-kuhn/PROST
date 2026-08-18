@@ -18,4 +18,5 @@ source: Existing Arc42 quality scenario migrated on 2026-08-17
 - Response: The interface uses the saved preference, otherwise a supported browser locale, otherwise
   German.
 - Measure: All Consumer MVP flows work at supported mobile and desktop viewport sizes in both
-  languages. Supported environments remain open through `OQ-009`.
+  languages. Supported environments remain open through
+  [OQ-009](../open-questions/OQ-009-browser-viewport-support.md).

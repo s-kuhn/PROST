@@ -17,5 +17,6 @@ source: Existing Arc42 quality scenario migrated on 2026-08-17
 - Environment: Any supported Organization size, including sparse cohorts and repeated observations.
 - Response: PROST suppresses data that could identify an individual under the accepted cohort and
   differencing policy.
-- Measure: No aggregate is returned unless it satisfies the policy resolved through `OQ-002`; this
-  scenario is not acceptance-ready until that policy is defined.
+- Measure: No aggregate is returned unless it satisfies the policy resolved through
+  [OQ-002](../open-questions/OQ-002-anonymous-treasurer-aggregates.md); this scenario is not
+  acceptance-ready until that policy is defined.

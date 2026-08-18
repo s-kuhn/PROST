@@ -19,4 +19,5 @@ source: Existing Arc42 quality scenario migrated on 2026-08-17
 - Response: The architecture can introduce scoped products, roles, and procurement workflows without
   rewriting the established Tally and account invariants.
 - Measure: A future ADR must identify bounded changes and migrations before implementation; a
-  quantitative effort limit remains open through `OQ-016`.
+  quantitative effort limit remains open through
+  [OQ-016](../open-questions/OQ-016-maintainability-targets.md).
